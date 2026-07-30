@@ -1,0 +1,5 @@
+interface:
+  display_name: "Write Skill"
+  short_description: "Create or edit a skill against the writing-great-skills principles"
+policy:
+  allow_implicit_invocation: false
