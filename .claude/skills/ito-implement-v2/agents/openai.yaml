@@ -1,5 +1,0 @@
-interface:
-  display_name: "Implement V2"
-  short_description: "Build a feature or fix a bug from a spec or tickets"
-policy:
-  allow_implicit_invocation: false

@@ -1,5 +1,0 @@
-interface:
-  display_name: "Ito Search"
-  short_description: "Multi-source research producing a TL;DR, an explanation, and references"
-policy:
-  allow_implicit_invocation: false
