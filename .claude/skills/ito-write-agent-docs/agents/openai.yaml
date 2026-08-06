@@ -1,5 +1,5 @@
 interface:
-  display_name: "Write Agent Docs"
+  display_name: "ito-write-agent-docs"
   short_description: "Create or edit instructions for coding agents"
   default_prompt: "Use $ito-write-agent-docs to create or revise agent instructions for this repository."
 policy:

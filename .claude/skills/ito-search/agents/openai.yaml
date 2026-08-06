@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-search"
+  short_description: "Get concise research backed by authoritative sources"
+  default_prompt: "Use $ito-search to research my question and cite the strongest sources."
+policy:
+  allow_implicit_invocation: false
