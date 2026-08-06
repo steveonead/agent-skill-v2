@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
-# 把 .claude/skills 的內容搬到 .agents/skills，再把 .claude/skills 換成指向它的 symlink。
+# 真檔放在 .claude/skills，.agents/skills 換成指向它的 symlink。
 set -euo pipefail
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
-SRC=".claude/skills"
-DST=".agents/skills"
+SRC=".agents/skills"    # 這個最後會變成 symlink
+DST=".claude/skills"    # 真正放檔案的地方
 
 if [ -L "$SRC" ]; then
   echo "$SRC 已經是 symlink 了，什麼都不用做。"
   exit 0
+fi
+
+# 舊方向的殘留：.claude/skills 是 symlink，先拆掉
+if [ -L "$DST" ]; then
+  echo "偵測到舊方向的 symlink：${DST}，先移除。"
+  rm "$DST"
 fi
 
 if [ ! -d "$SRC" ]; then
