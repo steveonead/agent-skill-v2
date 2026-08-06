@@ -1,0 +1,5 @@
+interface:
+  display_name: "Batch Grilling"
+  short_description: "Stress-test thinking a round of questions at a time"
+  default_prompt: "Use $batch-grilling to stress-test my plan a round of questions at a time."
+  

@@ -1,6 +1,7 @@
 ---
 name: ito-write-agent-docs
 description: Create or edit a SKILL.md, AGENTS.md, or CLAUDE.md using predictable agent-writing principles.
+argument-hint: "想要寫 SKILL.md、AGENTS.md 或 CLAUDE.md？ 我幫你寫，或幫你修改現有的文件。"
 disable-model-invocation: true
 ---
 
@@ -73,6 +74,7 @@ Write the complete candidate file tree to an operating-system temporary director
 - Read `WRITING-PRINCIPLES.md` in full before reviewing the draft.
 - Run the no-op test on every sentence in isolation. Return a keep-or-cut verdict for each sentence and a one-line reason for every cut.
 - Report duplication, irrelevant lines, stale caches of repository facts, weak context pointers, and negation that can be stated positively.
+- Report every em dash and every semicolon, each with the replacement punctuation named in `WRITING-PRINCIPLES.md`.
 
 When delegation runs, apply its verdicts and record every sentence kept against a cut verdict with the reason. When delegation is unavailable, record that fresh-eyes pruning did not run. Remove the temporary path after either branch.
 

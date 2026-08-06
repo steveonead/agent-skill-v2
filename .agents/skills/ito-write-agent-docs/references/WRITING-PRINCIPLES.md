@@ -45,6 +45,10 @@ A leading word is a compact, established concept that recruits useful prior know
 
 **Negation** frames an instruction around unwanted behavior, making that behavior more available. State the required behavior positively. For a hard safety or authorization boundary, state the required behavior first, then add the prohibition when the boundary remains ambiguous.
 
+## Punctuation
+
+Punctuate with commas, colons, periods, and parentheses. Replace an em dash with a colon, a comma, or a sentence break. Replace a semicolon with a period.
+
 ## Pruning
 
 **Duplication** gives one meaning multiple authoritative homes. Restore a **single source of truth** by keeping one authoritative place.
