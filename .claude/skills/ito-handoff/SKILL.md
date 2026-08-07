@@ -1,6 +1,6 @@
 ---
 name: ito-handoff
-description: "Handoff: compact the current conversation into continuation context for a fresh agent session. Use when the user asks to hand off work, preserve session context, or prepare next-session notes."
+description: "Compact the current conversation into continuation context for a fresh agent session. Use when the user asks to hand off work（交接文件 in Chinese）, preserve session context, or prepare next-session notes."
 argument-hint: "下一個工作階段要處理什麼？加上 --os 存到系統暫存目錄。"
 ---
 
