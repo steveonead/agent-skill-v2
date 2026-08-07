@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-debug"
+  short_description: "Diagnose bugs with evidence before repair"
+  default_prompt: "Use $ito-debug to diagnose this error before proposing a repair."
+policy:
+  allow_implicit_invocation: false
