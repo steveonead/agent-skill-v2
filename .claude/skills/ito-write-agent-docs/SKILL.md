@@ -1,7 +1,7 @@
 ---
 name: ito-write-agent-docs
 description: Create or edit a SKILL.md, AGENTS.md, or CLAUDE.md using predictable agent-writing principles.
-argument-hint: "想要寫 SKILL.md、AGENTS.md 或 CLAUDE.md？ 我幫你寫，或幫你修改現有的文件。"
+argument-hint: "想寫或改哪份文件？SKILL.md、AGENTS.md，還是 CLAUDE.md？"
 disable-model-invocation: true
 ---
 

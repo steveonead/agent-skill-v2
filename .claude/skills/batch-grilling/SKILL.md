@@ -1,6 +1,7 @@
 ---
 name: batch-grilling
 description: Grill the user a whole round of questions at a time about a plan, decision, or idea. Use when the user asks to be grilled in batches, in rounds, or several questions at a time.
+argument-hint: "給我一個模糊的計畫或想法，我一次問一輪，幫你釐清。"
 user-invocable: false
 ---
 

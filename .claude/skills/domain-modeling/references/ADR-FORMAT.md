@@ -1,6 +1,6 @@
 # ADR Content Rules
 
-Require the minimum paragraph to state the context, decision, and rationale. Replace generic claims such as `best practice` or `最佳實務` with the concrete driver or tradeoff that justified the decision.
+Require the minimum paragraph to state the context, decision, and rationale. Replace generic claims such as `best practice` or `最佳實踐` with the concrete driver or tradeoff that justified the decision.
 
 Add material only when it preserves useful information that the minimum paragraph cannot carry:
 

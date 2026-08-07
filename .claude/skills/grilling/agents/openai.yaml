@@ -1,4 +1,4 @@
 interface:
-  display_name: "Grilling"
+  display_name: "grilling(NOT INVOCABLE)"
   short_description: "Stress-test thinking one question at a time"
-  default_prompt: "Use $grilling to stress-test my plan before I build it."
+  default_prompt: "用 $grilling 一次問一題，在我動工前狠狠考驗我的計畫。"
