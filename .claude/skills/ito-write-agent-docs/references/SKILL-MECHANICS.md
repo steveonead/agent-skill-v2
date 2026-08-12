@@ -46,7 +46,7 @@ Write `agents/openai.yaml` with quoted string values:
 
 ```yaml
 interface:
-  display_name: "Human Readable Name"
+  display_name: "same-as-the-skill-name"
   short_description: "A brief picker summary"
   default_prompt: "Use $skill-name to perform a representative task."
 ```

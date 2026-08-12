@@ -26,13 +26,13 @@ Classify the question by the smallest tier that covers it:
 
 Announce the chosen tier before exploring. For the complex tier, announce how many explorers will run and the slice each one covers.
 
-Prefer the simple tier while the classification is uncertain, and escalate when direct exploration stalls.
+Prefer the simple tier while the classification is uncertain.
 
 Finish when the tier is announced, and for the complex tier every explorer slice is named.
 
 ## Step 3: Explore
 
-For the simple tier, explore directly with Glob, Grep, and Read.
+For the simple tier, explore directly with Glob, Grep, and Read. Return to Step 2 when this exploration stalls.
 
 For the complex tier, dispatch 2 to 4 read-only exploration sub-agents in a single message. Give each one a distinct slice of the subsystem, such as the data model, the runtime pipeline, or the surrounding infrastructure.
 
@@ -44,7 +44,7 @@ Every exploration follows the same method:
 
 Require each sub-agent to return exactly four items: the components it found, the flow it traced, the absolute paths it read, and anything surprising or counter-intuitive.
 
-Finish when every step of the path from trigger to effect is backed by code that was read.
+Finish when every step of the path from trigger to effect is backed by code that was read or by a named boundary outside this codebase.
 
 ## Step 4: Synthesize and present
 

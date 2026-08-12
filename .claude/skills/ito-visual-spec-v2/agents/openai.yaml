@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-visual-spec-v2"
+  short_description: "Generate a verified visual feature spec through visual-artifact"
+  default_prompt: "用 $ito-visual-spec-v2 幫這個 feature 產一份視覺化 spec。"
+policy:
+  allow_implicit_invocation: false
