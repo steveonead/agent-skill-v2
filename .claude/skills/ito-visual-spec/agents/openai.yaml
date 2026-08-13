@@ -1,6 +1,6 @@
 interface:
   display_name: "ito-visual-spec"
-  short_description: "Generate a visual HTML spec: feature, user stories, API, and interactive wireframe"
-  default_prompt: "用 $ito-visual-spec 幫這個 feature 產一份視覺化 spec。"
+  short_description: "Interview to converge a requirement into a visual HTML spec"
+  default_prompt: "用 $ito-visual-spec 訪談我，把需求收斂成一份視覺化 spec。"
 policy:
   allow_implicit_invocation: false

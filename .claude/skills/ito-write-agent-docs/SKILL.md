@@ -1,8 +1,7 @@
 ---
 name: ito-write-agent-docs
-description: Create or edit a SKILL.md, AGENTS.md, or CLAUDE.md using predictable agent-writing principles.
+description: Create or edit the documents a coding agent consumes: SKILL.md, AGENTS.md, CLAUDE.md, and the reference files they point to. Use when writing a new skill, revising an existing skill's steps, description, or invocation, or when an agent document produces unreliable behavior. For human-facing README or product docs, write them directly instead.
 argument-hint: "想寫或改哪份文件？SKILL.md、AGENTS.md，還是 CLAUDE.md？"
-disable-model-invocation: true
 ---
 
 Write `SKILL.md`, `AGENTS.md`, `CLAUDE.md`, `agents/openai.yaml`, and agent-facing reference files in English, regardless of the conversation language.

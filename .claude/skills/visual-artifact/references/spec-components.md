@@ -1,7 +1,5 @@
 # Specification Component Pack
 
-Core catalog rules still apply.
-
 ## Contents
 
 - [User stories](#user-stories)
@@ -10,7 +8,7 @@ Core catalog rules still apply.
 
 ## User stories
 
-Put one `<article class="story">` per observable behavior inside a `.stories` container. Keep the header, role statement, diagram, and collapsed text criteria in this order.
+Put one `<article class="story">` per observable behavior inside a `.stories` container. Keep the header, lede, picture, and criteria grid in this order.
 
 ```html
 <div class="stories">
@@ -20,39 +18,57 @@ Put one `<article class="story">` per observable behavior inside a `.stories` co
       <h3 class="story-title">登入取得工作區</h3>
       <span class="story-count">2 條驗收條件</span>
     </div>
-    <dl class="story-role">
-      <dt>身為</dt><dd>AOE</dd>
-      <dt>想要</dt><dd>用 email 與密碼登入</dd>
-      <dt>以便</dt><dd>進到工作區操作資料</dd>
-    </dl>
+    <p class="story-lede">
+      登入成功才拿得到 token。<b>帳密錯誤一律回同一則訊息</b>，不透露帳號是否存在。
+    </p>
     <div class="diagram"><pre class="mermaid">flowchart TD
 S1[在登入頁] -->|AC-01| R1[取得 token 進工作區]
 S1 -->|AC-02| R2[顯示一般錯誤]
 linkStyle default stroke:#337ECC,stroke-width:2px
 linkStyle 1 stroke:#9E4A46,stroke-width:2px</pre></div>
     <p class="diagram-cap">藍線是成功登入，紅線是被拒絕的路徑。</p>
-    <details class="ac-text">
-      <summary>文字版驗收條件<span class="chev"></span></summary>
-      <div class="ac-list">
-        <div class="ac">
-          <span class="ac-id">AC-01</span>
-          <div class="beat given">在登入頁，帳號啟用中</div>
-          <div class="beat when">送出正確帳密</div>
-          <div class="beat then">取得 token，進入工作區</div>
-        </div>
-        <div class="ac">
-          <span class="ac-id">AC-02</span>
-          <div class="beat given">在登入頁</div>
-          <div class="beat when">送出錯誤帳密</div>
-          <div class="beat then">顯示一般錯誤，不透露帳號狀態</div>
-        </div>
+    <div class="ac-grid">
+      <div class="ac-head"><span>條件</span><span>前提</span><span>動作</span><span class="then">預期</span></div>
+      <div class="ac" data-ac="AC-01">
+        <span class="ac-id">AC-01</span>
+        <div class="beat given">在登入頁，帳號啟用中</div>
+        <div class="beat when">送出正確帳密</div>
+        <div class="beat then">取得 token，進入工作區</div>
       </div>
-    </details>
+      <div class="ac" data-ac="AC-02">
+        <span class="ac-id">AC-02</span>
+        <div class="beat given">在登入頁</div>
+        <div class="beat when">送出錯誤帳密</div>
+        <div class="beat then">顯示一般錯誤，不透露帳號狀態</div>
+      </div>
+    </div>
   </article>
 </div>
 ```
 
-Every acceptance criterion appears once as a labeled edge whose label is its `AC-NN` ID. A node names a state or outcome; keep the detailed action in the matching `.ac` row. The `.story-count` integer, diagram criterion IDs, and `.ac` rows must match.
+The `.story-lede` states the rule that shapes the criteria, in one or two sentences, with `<b>` on the part a reader must remember. Write what this story constrains. One role sentence repeated across every story that shares an actor carries no information.
+
+Use the `AC-NN` identifier alone on a Mermaid edge, so an edge label stays narrow and each sentence appears in one visual form.
+
+The `.ac-grid` lists every criterion of the story, headed by one `.ac-head` row. Give each `.ac` a `data-ac` attribute matching its `.ac-id`. The `.story-count` integer equals the number of `.ac` rows.
+
+The template lights a criterion and its picture together when the reader clicks either one, keyed on `data-ac`. Reuse one `AC-NN` on several edges or cells when the criterion governs all of them.
+
+### Choosing the story picture
+
+Pick the picture from the shape of the criteria:
+
+| Criteria shape | Picture |
+| --- | --- |
+| Transitions between named states | `stateDiagram-v2` |
+| One input judged against ordered conditions | `flowchart` |
+| Messages exchanged between actors over time | `sequenceDiagram` |
+| An outcome that varies by context, such as state or role | Rule matrix |
+| Independent rules that share no path | Criteria grid alone |
+
+A picture whose nodes restate one criterion each adds reading work without adding a relationship.
+
+Put every criterion that fits the chosen picture on the picture. Name the criteria left out in the `.diagram-cap` so the reader knows the grid is the complete list. Every `AC-NN` on the picture also appears in the `.ac-grid`.
 
 ## API and symbol ledger
 
@@ -88,7 +104,7 @@ Use `verb get` for GET, `verb post` for POST, PUT, PATCH, and DELETE, and `verb 
 
 ## Wireframes
 
-A flow groups screens that the reader can click through. Every `data-goto` stays inside its nearest `data-flow`.
+A flow groups screens that the reader can click through.
 
 ```html
 <div data-flow data-start="list">
@@ -124,7 +140,7 @@ A flow groups screens that the reader can click through. Every `data-goto` stays
 </div>
 ```
 
-Every flow has a valid `data-start`. Every screen has a unique `data-screen` and a nonempty `data-screen-title`. Every `data-goto` names a screen in the same flow. Every screen is reachable from the start screen. Every state panel has a unique `data-state-panel` and nonempty `data-state-label` within its screen.
+Give every screen a unique `data-screen`, a nonempty `data-screen-title`, and a path from `data-start`. Give every state panel a unique `data-state-panel` and a nonempty `data-state-label`.
 
 Use `.pane` for a centered form column, `.pane-title` for its heading, `.field` for an input placeholder, `.topbar` for a page heading and action, and `.msg` with `ok`, `bad`, `warn`, or `info` for messages. Use `.btn solid` for the primary action, `.btn line` for a secondary action, and `.btn quiet` for cancel or back.
 

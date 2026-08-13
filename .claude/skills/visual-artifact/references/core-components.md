@@ -10,6 +10,7 @@ Copy a complete snippet and replace its content. Use template-defined classes. R
 - [Comparison](#comparison)
 - [Timeline](#timeline)
 - [Decision matrix](#decision-matrix)
+- [Rule matrix](#rule-matrix)
 - [Status summary](#status-summary)
 - [Metric summary](#metric-summary)
 - [Diagrams](#diagrams)
@@ -54,7 +55,7 @@ Use one evidence state for claims whose status matters:
 </div>
 ```
 
-Use `verified`, `proposed`, `assumption`, and `unknown` only with their defined meanings. Add `.evidence-meta` only when a real source is available.
+Add `.evidence-meta` only when a real source is available.
 
 ## Goals and out of scope
 
@@ -71,7 +72,7 @@ Use `verified`, `proposed`, `assumption`, and `unknown` only with their defined 
 </div>
 ```
 
-Keep the second panel class and heading as `nongoals` and `Out of Scope`.
+Keep the panel order as goals then out of scope.
 
 ## Tables
 
@@ -84,11 +85,9 @@ Keep the second panel class and heading as `nongoals` and `Out of Scope`.
 </div>
 ```
 
-Use tables for repeated fields and exact mappings. Keep each row comparable to the others.
+Keep each row comparable to the others.
 
 ## Comparison
-
-Use comparison for two alternatives, versions, or before and after states:
 
 ```html
 <div class="comparison">
@@ -109,7 +108,7 @@ Use exactly two items. Put shared criteria in the same order on both sides.
 
 ## Timeline
 
-Use timeline for a linear sequence without branching:
+Number the stages in reading order:
 
 ```html
 <ol class="timeline">
@@ -118,8 +117,6 @@ Use timeline for a linear sequence without branching:
   <li><span class="timeline-step">03</span><div><h3>驗證</h3><p>檢查內容與呈現。</p></div></li>
 </ol>
 ```
-
-Use Mermaid instead when a step branches or loops.
 
 ## Decision matrix
 
@@ -135,7 +132,42 @@ Use Mermaid instead when a step branches or loops.
 </div>
 ```
 
-Use one `recommended` row when the material records a recommendation. Mark a winner only when the material records it.
+Use one `recommended` row when the material records a recommendation.
+
+## Rule matrix
+
+Use a rule matrix when one outcome varies along two axes, such as a field group against a lifecycle state. Put the subject in the row header and the context in the column header:
+
+```html
+<div class="rule-matrix">
+  <table>
+    <thead>
+      <tr><th>欄位群</th><th>draft 草稿</th><th>active 上刊中</th><th>paused 暫停</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>走期、總預算、每日預算</th>
+        <td class="allow">可改</td>
+        <td class="hold" data-ac="AC-02">唯讀，須先暫停<span class="cell-ac">AC-02</span></td>
+        <td data-ac="AC-03">可改，只驗本次變更欄位<span class="cell-ac">AC-03</span></td>
+      </tr>
+      <tr>
+        <th>廣告品類、格式、計價方式</th>
+        <td class="allow">可改</td>
+        <td class="deny" data-ac="AC-04">永久唯讀，須複製新項目<span class="cell-ac">AC-04</span></td>
+        <td class="deny" data-ac="AC-04">永久唯讀，須複製新項目<span class="cell-ac">AC-04</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ul class="matrix-notes">
+  <li class="note-line"><span class="ac-id">AC-05</span><span>draft 按儲存時只驗證名稱。</span></li>
+</ul>
+```
+
+Every cell states its outcome in the reader's words. Use `allow` for an unrestricted cell, `hold` for a restriction the reader can lift, and `deny` for a permanent one. Leave a cell unclassed when it carries a condition rather than a verdict.
+
+Add `.cell-ac` and `data-ac` inside a story to name the acceptance criterion a cell carries. Put a rule that belongs to the same subject but fits no cell in a `.matrix-notes` list after the table.
 
 ## Status summary
 
@@ -158,11 +190,11 @@ Use `ok`, `warn`, `bad`, or `info` on `.status`. Keep every item in the same cat
 </div>
 ```
 
-Use two to four metrics. Every number needs a label and enough context to prevent a misleading interpretation.
+Use two to four metrics. Every number needs a label and enough context to be read correctly.
 
 ## Diagrams
 
-Use Mermaid for flow, state, sequence, class, entity relationship, or quantitative chart relationships. Wrap every source block in `.diagram` and follow it immediately with one `.diagram-cap` paragraph.
+Wrap every Mermaid source block in `.diagram` and follow it immediately with one `.diagram-cap` paragraph.
 
 ```html
 <div class="diagram"><pre class="mermaid">flowchart TD
@@ -207,4 +239,4 @@ Use disclosure for optional supporting detail:
 </details>
 ```
 
-Keep essential conclusions outside a disclosure.
+Keep essential conclusions in the section body.

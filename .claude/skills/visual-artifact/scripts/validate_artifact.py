@@ -162,31 +162,67 @@ def validate_flows(root: Node, errors: list[str]) -> None:
             errors.append(f"line {flow.line}: screens unreachable from data-start: {', '.join(missing)}")
 
 
+AC_ID = re.compile(r"AC-\d{2}")
+
+
 def validate_stories(root: Node, errors: list[str]) -> None:
     stories = [node for node in root.descendants("article") if "story" in node.classes()]
     for story in stories:
         count_node = first(story.descendants(), class_name="story-count")
+        grid = first(story.descendants(), class_name="ac-grid")
         criteria = [node for node in story.descendants() if "ac" in node.classes()]
-        ids = []
+        ids = set()
+        if grid is None:
+            errors.append(f"line {story.line}: story requires an .ac-grid criteria list")
+        elif first(grid.descendants(), class_name="ac-head") is None:
+            errors.append(f"line {grid.line}: .ac-grid requires one .ac-head row")
         for criterion in criteria:
             id_node = first(criterion.descendants(), class_name="ac-id")
-            if id_node is None or not re.fullmatch(r"AC-\d{2}", id_node.text()):
+            if id_node is None or not AC_ID.fullmatch(id_node.text()):
                 errors.append(f"line {criterion.line}: each .ac needs an AC-NN .ac-id")
-            else:
-                ids.append(id_node.text())
+                continue
+            ids.add(id_node.text())
+            if criterion.attrs.get("data-ac") != id_node.text():
+                errors.append(f"line {criterion.line}: .ac data-ac must equal its .ac-id")
         if count_node is None:
             errors.append(f"line {story.line}: story-count is required")
         else:
             match = re.search(r"\d+", count_node.text())
             if match is None or int(match.group()) != len(criteria):
                 errors.append(f"line {count_node.line}: story-count must equal the number of .ac rows")
+        # The picture carries the criteria that share its shape. The grid is the
+        # complete list, so the picture references a subset of it.
         mermaid = first([node for node in story.descendants("pre") if "mermaid" in node.classes()])
-        if mermaid is None:
-            errors.append(f"line {story.line}: story requires a Mermaid acceptance flow")
-        else:
-            for criterion_id in ids:
-                if mermaid.text().count(criterion_id) != 1:
-                    errors.append(f"line {mermaid.line}: {criterion_id} must appear once in the story diagram")
+        if mermaid is not None:
+            for referenced in sorted(set(AC_ID.findall(mermaid.text())) - ids):
+                errors.append(f"line {mermaid.line}: {referenced} has no .ac row in its story")
+        for cell in [node for node in story.descendants() if "data-ac" in node.attrs and "ac" not in node.classes()]:
+            if cell.attrs["data-ac"] not in ids:
+                errors.append(f"line {cell.line}: data-ac {cell.attrs['data-ac']!r} has no .ac row in its story")
+
+
+URL_ATTRS = ("href", "src", "xlink:href")
+FORBIDDEN_ELEMENTS = {"iframe", "object", "embed", "form"}
+
+
+def validate_active_content(root: Node, errors: list[str]) -> None:
+    for node in root.descendants():
+        for name in node.attrs:
+            if name.startswith("on"):
+                errors.append(f"line {node.line}: event-handler attribute {name!r} is not allowed")
+        for attr in URL_ATTRS:
+            value = node.attrs.get(attr)
+            if value is None:
+                continue
+            compact = re.sub(r"\s+", "", value).lower()
+            if compact.startswith("javascript:"):
+                errors.append(f"line {node.line}: javascript: URL in {attr} is not allowed")
+            if compact.startswith("data:text/html"):
+                errors.append(f"line {node.line}: data:text/html URL in {attr} is not allowed")
+        if node.tag in FORBIDDEN_ELEMENTS:
+            errors.append(f"line {node.line}: {node.tag} element is not allowed")
+        if node.tag == "script" and (node.parent is None or node.parent.tag != "body"):
+            errors.append(f"line {node.line}: script is allowed only as a template-shipped direct child of body")
 
 
 def validate_code_renderer(root: Node, source: str, errors: list[str]) -> None:
@@ -266,6 +302,7 @@ def validate(path: Path) -> list[str]:
     validate_mermaid(root, errors)
     validate_flows(root, errors)
     validate_stories(root, errors)
+    validate_active_content(root, errors)
     validate_code_renderer(root, source, errors)
     return errors
 

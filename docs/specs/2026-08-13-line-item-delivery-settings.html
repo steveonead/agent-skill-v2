@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><!-- ARTIFACT:DOCUMENT_TITLE complete browser title --></title>
+    <title>Line Item 與投放設定 · SuperDSP 2.0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -933,7 +933,7 @@
       .diagram-cap {
         font-size: 16px;
         color: var(--ink-3);
-        margin: 10px 0 0;
+        margin: 10px 0 30px 0;
       }
       .story .diagram-cap {
         padding: 0 24px;
@@ -1427,27 +1427,105 @@
     <div class="shell">
       <aside class="rail">
         <div class="rail-mark">
-          <!-- ARTIFACT:PRODUCT optional product or system name, remove comment when empty -->
+          SuperDSP 2.0
         </div>
         <nav id="toc"></nav>
         <div class="rail-foot">
-          <!-- ARTIFACT:RAIL_META optional date and source link, remove comment when empty -->
+          <span>2026-08-13</span><a href="https://github.com/onead/super-dsp-2.0/issues/801">Issue #801</a>
         </div>
       </aside>
 
       <main>
         <header class="masthead">
           <div class="eyebrow">
-            <!-- ARTIFACT:EYEBROW optional artifact type or phase, remove comment when empty -->
+            Visual Spec · Phase 0
           </div>
-          <h1><!-- ARTIFACT:TITLE required literal subject name --></h1>
-          <p class="lede"><!-- ARTIFACT:SUMMARY required one-sentence explanation --></p>
+          <h1>Line Item 與投放設定</h1>
+          <p class="lede">定義 Campaign 下唯一可投放實體 Line Item 的生命週期、預算、定向、媒體名單、上刊與檢視操作。</p>
           <div class="tags">
-            <!-- ARTIFACT:TAGS optional status, date, source, and topic tags, remove comment when empty -->
+            <span class="tag draft">Draft</span><span class="tag">zh-TW</span><a class="tag" href="https://github.com/onead/super-dsp-2.0/issues/801">Seed: #801</a>
           </div>
         </header>
 
-        <!-- ARTIFACT:SECTIONS one or more section[data-title] blocks from references/core-components.md and the conditionally loaded references/spec-components.md -->
+        <section id="overview" data-title="Overview">
+          <div class="sec-head"><h2>Overview</h2><span class="eyebrow">Scope</span></div>
+          <div class="note assumption"><span class="label">需求來源</span><div><p>本 draft 僅根據 Issue #801，未讀取相依 issue 或程式碼；所有跨層、API 與資料結構主張均非 verified。</p><p class="evidence-meta">https://github.com/onead/super-dsp-2.0/issues/801</p></div></div>
+          <div class="split"><div class="panel goals"><div class="panel-head"><span class="sign">✓</span>Goals</div><ul><li>建立、設定與管理單一 Campaign 下的 LI。</li><li>以狀態及欄位規則控制可編輯性與上刊。</li><li>同頁設定預算日曆、定向及媒體名單。</li></ul></div><div class="panel nongoals"><div class="panel-head"><span class="sign">✕</span>Out of Scope</div><ul><li>素材包、追蹤碼與成效計算。</li><li>EXTERNAL/DSP、再行銷、相似與自訂受眾。</li><li>媒體名單自助管理、上刊通報、每日／每週頻次。</li></ul></div></div>
+          <ol class="timeline"><li><span class="timeline-step">01</span><div><h3>建立草稿</h3><p>Campaign 詳情頁以名稱和廣告格式建立 <code>draft</code>。</p></div></li><li><span class="timeline-step">02</span><div><h3>暫存設定</h3><p>獨立詳情頁分區編輯、頁面層儲存或放棄。</p></div></li><li><span class="timeline-step">03</span><div><h3>上刊管理</h3><p>Campaign 內列表執行閘門、上刊、暫停和停刊。</p></div></li></ol>
+        </section>
+        <section id="user-stories" data-title="User Stories">
+          <div class="sec-head"><h2>User Stories</h2><span class="eyebrow">Observable behavior</span></div>
+          <div class="stories">
+            <article class="story"><div class="story-head"><span class="story-id">US-01</span><h3 class="story-title">建立並安全編輯 LI</h3><span class="story-count">3 條驗收條件</span></div><p class="story-lede">建立後導往詳情頁並以頁面層級儲存。<b>未儲存變更不可被離開操作靜默丟失。</b></p><div class="ac-grid"><div class="ac-head"><span>條件</span><span>前提</span><span>動作</span><span class="then">預期</span></div><div class="ac" data-ac="AC-01"><span class="ac-id">AC-01</span><div class="beat given">位於 Campaign 詳情頁</div><div class="beat when">以名稱與廣告格式建立</div><div class="beat then">建立 draft LI 並導向詳情頁</div></div><div class="ac" data-ac="AC-02"><span class="ac-id">AC-02</span><div class="beat given">詳情頁有暫存變更</div><div class="beat when">取消、離開或切換 LI</div><div class="beat then">確認繼續編輯或捨棄，不能自動儲存</div></div><div class="ac" data-ac="AC-03"><span class="ac-id">AC-03</span><div class="beat given">有暫存變更</div><div class="beat when">重整或關閉分頁</div><div class="beat then">使用原生離開確認</div></div></div></article>
+            <article class="story"><div class="story-head"><span class="story-id">US-02</span><h3 class="story-title">設定走期與每日預算</h3><span class="story-count">3 條驗收條件</span></div><p class="story-lede">預算以整數 NT$ 管理，日曆在走期與總預算有效後出現。<b>總預算改動不會自動重分配每日預算。</b></p><div class="ac-grid"><div class="ac-head"><span>條件</span><span>前提</span><span>動作</span><span class="then">預期</span></div><div class="ac" data-ac="AC-04"><span class="ac-id">AC-04</span><div class="beat given">已分配每日預算</div><div class="beat when">調整 LI 總預算</div><div class="beat then">維持日額、更新待分配池；超額不可儲存</div></div><div class="ac" data-ac="AC-05"><span class="ac-id">AC-05</span><div class="beat given">選擇自訂投放時段</div><div class="beat when">輸入重疊或無效區間</div><div class="beat then">標示衝突且不可儲存</div></div><div class="ac" data-ac="AC-06"><span class="ac-id">AC-06</span><div class="beat given">日曆批次選取日期</div><div class="beat when">均分或釋放預算</div><div class="beat then">依今日、過去、未來及實際花費套用規則</div></div></div></article>
+            <article class="story"><div class="story-head"><span class="story-id">US-03</span><h3 class="story-title">定向並通過上刊閘門</h3><span class="story-count">3 條驗收條件</span></div><p class="story-lede">未設定多數定向表示不限制；媒體白黑名單決定候選網站。<b>上刊一次列出全部失敗原因。</b></p><div class="ac-grid"><div class="ac-head"><span>條件</span><span>前提</span><span>動作</span><span class="then">預期</span></div><div class="ac" data-ac="AC-07"><span class="ac-id">AC-07</span><div class="beat given">選定廣告格式</div><div class="beat when">設定年齡性別與裝置</div><div class="beat then">草稿可空，上刊時各至少一值</div></div><div class="ac" data-ac="AC-08"><span class="ac-id">AC-08</span><div class="beat given">編輯媒體名單</div><div class="beat when">同媒體或樣板加入白黑兩邊</div><div class="beat then">另一邊不可選；URL 重疊僅警示</div></div><div class="ac" data-ac="AC-09"><span class="ac-id">AC-09</span><div class="beat given">draft 或 paused 且未封存</div><div class="beat when">上刊</div><div class="beat then">執行 12 道閘門並列所有失敗原因</div></div></div></article>
+          </div>
+        </section>
+        <section id="data-model" data-title="Data Model">
+          <div class="sec-head"><h2>Data Model</h2><span class="eyebrow">Assumption</span></div>
+          <div class="note assumption"><span class="label">關係草案</span><p>Issue 明示 LI 隸屬單一 Campaign；下列資料關係未由程式碼或父票驗證。</p></div>
+          <div class="diagram"><pre class="mermaid">erDiagram
+  CAMPAIGN ||--o{ LINE_ITEM : contains
+  LINE_ITEM ||--o{ DAILY_BUDGET : plans
+  LINE_ITEM ||--o{ TARGETING_SELECTION : configures
+  LINE_ITEM ||--o{ MEDIA_LIST_REFERENCE : stores
+  CAMPAIGN {
+    string id PK
+    integer budget
+  }
+  LINE_ITEM {
+    string id PK
+    string campaign_id FK
+    string status
+    boolean archived
+    integer total_budget
+  }
+  DAILY_BUDGET {
+    string line_item_id FK
+    date date PK
+    integer budget
+  }
+  TARGETING_SELECTION {
+    string line_item_id FK
+    string category
+  }
+  MEDIA_LIST_REFERENCE {
+    string line_item_id FK
+    string role
+  }</pre></div><p class="diagram-cap">需求層的資料關係草案：LI 是 Campaign 下唯一承載投放狀態與設定的實體。</p>
+          <div class="tw"><table><thead><tr><th>概念</th><th>關係／所有權</th><th>狀態</th></tr></thead><tbody><tr><td>Line Item</td><td>隸屬一個 Campaign，承載狀態與投放設定</td><td><span class="status info">assumption</span></td></tr><tr><td>每日預算</td><td>LI 與日期範圍；零預算日期不送出</td><td><span class="status info">proposed</span></td></tr><tr><td>媒體名單引用</td><td>隨 LI 整筆存檔，保留名稱快照與白黑角色</td><td><span class="status info">proposed</span></td></tr></tbody></table></div>
+        </section>
+        <section id="domain-rules" data-title="Domain Rules">
+          <div class="sec-head"><h2>Domain Rules</h2><span class="eyebrow">Lifecycle &amp; validation</span></div>
+          <div class="diagram"><pre class="mermaid">stateDiagram-v2
+  [*] --> draft
+  draft --> active: AC-09 上刊通過
+  active --> paused: 暫停
+  active --> completed: 走期隔日 00:00
+  paused --> active: AC-09 重新上刊
+  paused --> stop: 確認停刊
+  stop --> [*]
+  completed --> [*]</pre></div><p class="diagram-cap">LI 狀態機；<code>archived</code> 是獨立旗標，<code>paused</code> 過期不自動完成。</p>
+          <div class="rule-matrix"><table><thead><tr><th>欄位群</th><th>draft</th><th>active</th><th>paused</th><th>stop / completed</th></tr></thead><tbody><tr><th>名稱</th><td class="allow">可改</td><td class="allow">可改</td><td class="allow">可改</td><td class="deny">唯讀</td></tr><tr><th>總預算、走期、日預算、時段、定向</th><td class="allow">可改</td><td class="hold">唯讀，先暫停</td><td class="allow">可改</td><td class="deny">唯讀</td></tr><tr><th>品類、格式、計價、節奏、媒體名單</th><td class="allow">可改</td><td class="deny">永久凍結</td><td class="deny">永久凍結</td><td class="deny">唯讀</td></tr><tr><th>投放優先層級</th><td>限 AOE</td><td>限 AOE，可直接改</td><td>限 AOE</td><td class="deny">唯讀</td></tr></tbody></table></div>
+          <h3>上刊閘門摘要</h3><div class="tw"><table><thead><tr><th>類別</th><th>必須通過</th></tr></thead><tbody><tr><td>狀態與歸屬</td><td>draft/paused、未封存、Campaign 存在且未刪除</td></tr><tr><td>走期與預算</td><td>必要欄位、有效走期、總預算大於零、Campaign 預算池足夠</td></tr><tr><td>素材與媒體</td><td>至少一個開啟素材包；有白名單時，候選網站數大於零</td></tr><tr><td>定向</td><td>年齡性別及裝置各至少一值</td></tr></tbody></table></div>
+          <div class="note unknown"><span class="label">規則衝突</span><p>「每日預算待分配池為 0」在閘門表中為已廢棄，卻在完成定義仍要求驗證為 0，最終規則待確認。</p></div>
+        </section>
+        <section id="api-interfaces" data-title="API Interfaces">
+          <div class="sec-head"><h2>API Interfaces</h2><span class="eyebrow">Proposed contract</span></div>
+          <div class="note proposed"><span class="label">接口草案</span><p>Issue 未提供現有 route 或型別。下列 REST 契約只為支援這份流程，非已驗證實作。</p></div>
+          <div class="ledger"><details><summary><span class="verb post">POST</span><span class="path">/campaigns/{campaignId}/line-items</span><span class="auth">proposed</span><span class="chev"></span></summary><div class="acc-body"><p>建立 draft LI。</p><h4>Parameters</h4><div class="tw"><table><thead><tr><th>參數</th><th>位置</th><th>型別</th><th>必填</th><th>說明</th></tr></thead><tbody><tr><td><code>campaignId</code></td><td>path</td><td><code>string</code></td><td>是</td><td>所屬 Campaign</td></tr><tr><td><code>name</code></td><td>body</td><td><code>string</code></td><td>是</td><td>LI 名稱</td></tr><tr><td><code>adFormatTypeId</code></td><td>body</td><td><code>string</code></td><td>是</td><td>廣告格式</td></tr></tbody></table></div><h4>Response 201</h4><pre data-lang="json"><code>{ "id": "li_123", "status": "draft" }</code></pre></div></details><details><summary><span class="verb post">PUT</span><span class="path">/line-items/{lineItemId}</span><span class="auth">proposed</span><span class="chev"></span></summary><div class="acc-body"><p>以完整暫存內容儲存 LI；日額為零的日期移除設定。</p><h4>Parameters</h4><div class="tw"><table><thead><tr><th>參數</th><th>位置</th><th>型別</th><th>必填</th><th>說明</th></tr></thead><tbody><tr><td><code>lineItemId</code></td><td>path</td><td><code>string</code></td><td>是</td><td>LI ID</td></tr><tr><td><code>dailyBudgets</code></td><td>body</td><td><code>array</code></td><td>是</td><td>完整正預算日期集合</td></tr></tbody></table></div><h4>Response 200</h4><pre data-lang="json"><code>{ "id": "li_123", "saved": true, "pendingBudget": 24000 }</code></pre></div></details><details><summary><span class="verb post">POST</span><span class="path">/line-items/{lineItemId}/activate</span><span class="auth">proposed</span><span class="chev"></span></summary><div class="acc-body"><p>執行全部上刊閘門，失敗時回傳原因集合。</p><h4>Parameters</h4><div class="tw"><table><thead><tr><th>參數</th><th>位置</th><th>型別</th><th>必填</th><th>說明</th></tr></thead><tbody><tr><td><code>lineItemId</code></td><td>path</td><td><code>string</code></td><td>是</td><td>draft 或 paused LI</td></tr></tbody></table></div><h4>Response 422</h4><pre data-lang="json"><code>{ "code": "ACTIVATION_FAILED", "reasons": ["NO_DEVICE"] }</code></pre></div></details></div>
+        </section>
+        <section id="wireframe" data-title="Wireframe">
+          <div class="sec-head"><h2>Wireframe</h2><span class="eyebrow">Proposed screens</span></div>
+          <div class="note proposed"><span class="label">起始畫面</span><p>Campaign 詳情的 LI 列表是起始畫面；下列互動示意描述導覽與狀態，非既有 UI。</p></div>
+          <div data-flow data-start="list"><article data-screen="list" data-screen-title="Campaign 詳情：LI 列表"><div data-state-panel="default" data-state-label="進行中"><div class="browser"><div class="browser-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">/campaigns/cmp_123</span></div><div class="screen-body"><div class="topbar"><strong>夏季品牌活動 · Line Items</strong><button class="btn solid" data-goto="create">新增 LI</button></div><div class="msg info">影音曝光 A · 上刊中 · NT$120,000</div><button class="btn line" data-goto="detail">查看設定</button></div></div></div><div data-state-panel="batch-result" data-state-label="批次結果"><div class="browser"><div class="screen-body"><div class="msg warn">2 筆上刊成功，1 筆跳過：尚未選擇裝置</div><button class="btn line" data-goto="list">回列表</button></div></div></div></article><article data-screen="create" data-screen-title="新增 LI"><div class="browser"><div class="browser-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">/campaigns/cmp_123</span></div><div class="screen-body"><div class="pane"><p class="pane-title">新增 Line Item</p><div class="field">名稱（必填）</div><div class="field">廣告格式（必填）</div><button class="btn solid" data-goto="detail">建立草稿</button><button class="btn quiet" data-goto="list">取消</button></div></div></div></article><article data-screen="detail" data-screen-title="LI 詳情"><div data-state-panel="editing" data-state-label="編輯中"><div class="browser"><div class="browser-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">/line-items/li_123</span></div><div class="screen-body"><div class="topbar"><strong>影音曝光 A · 草稿</strong><button class="btn line" data-goto="calendar">每日預算</button></div><div class="split"><div class="panel goals"><div class="panel-head">投放設定</div><p>走期、總預算、投放時段</p></div><div class="panel goals"><div class="panel-head">定向與媒體名單</div><p>受眾、環境、內容、白黑名單</p></div></div><button class="btn solid" data-goto="list">儲存變更</button><button class="btn quiet" data-goto="list">放棄變更</button></div></div></div><div data-state-panel="readonly" data-state-label="唯讀"><div class="browser"><div class="screen-body"><div class="msg info">停刊、完成或封存後，投放設定唯讀。</div><button class="btn line" data-goto="list">回列表</button></div></div></div></article><article data-screen="calendar" data-screen-title="每日預算日曆"><div class="browser"><div class="browser-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">/line-items/li_123#budget</span></div><div class="screen-body"><div class="topbar"><strong>每日預算 · 2026 年 8 月</strong><button class="btn line" data-goto="detail">回設定</button></div><div class="metrics"><div class="metric"><strong class="metric-value">120k</strong><span class="metric-label">總預算</span></div><div class="metric"><strong class="metric-value">96k</strong><span class="metric-label">已分配</span></div><div class="metric"><strong class="metric-value">24k</strong><span class="metric-label">待分配池</span></div></div><div class="msg info">編輯模式可選日期後均分或釋放預算。</div></div></div></article></div>
+          <ol class="notes"><li>有未儲存變更時，離開、取消或切換 LI 必須先確認。</li><li>詳情頁不提供狀態切換；上刊與暫停只在 Campaign 內列表。</li><li>日曆檢視模式不開設定窗，編輯模式才可單筆或批次操作。</li></ol>
+        </section>
+        <section id="open-items" data-title="Open Items">
+          <div class="sec-head"><h2>Open Items</h2><span class="eyebrow">Unknowns</span></div>
+          <div class="status-summary"><div class="status-item"><span class="status warn">unknown</span><strong>跨層契約</strong><p>Campaign 預算池、走期邊界與複製連動須以 #533 為準。</p></div><div class="status-item"><span class="status warn">unknown</span><strong>媒體資料來源</strong><p>媒體池 seed、產品線過濾、媒體合約範圍未確認。</p></div><div class="status-item"><span class="status warn">unknown</span><strong>URL 正規化</strong><p>網域、子網域、路徑的同一性會影響集合運算。</p></div><div class="status-item"><span class="status info">assumption</span><strong>產品線開關</strong><p>Advertiser 層級啟用來源與儲存位置尚未確認。</p></div></div>
+          <div class="note unknown"><span class="label">未讀依賴</span><p>#536、#535、#534、#532、#275 與 CONTEXT.md 尚未讀取，相關主張均不可視為已驗證。</p></div>
+        </section>
       </main>
     </div>
 

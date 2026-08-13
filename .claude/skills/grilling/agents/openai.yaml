@@ -1,4 +1,4 @@
 interface:
   display_name: "grilling(NOT INVOCABLE)"
   short_description: "Stress-test thinking one question at a time"
-  default_prompt: "用 $grilling 一次問一題，在我動工前狠狠考驗我的計畫。"
+  default_prompt: "$grilling 只由其他技能在流程中呼叫，不能直接指名使用。被呼叫時會一次問一題，狠狠考驗計畫。"

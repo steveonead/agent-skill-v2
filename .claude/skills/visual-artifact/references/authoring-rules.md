@@ -2,7 +2,7 @@
 
 ## Render brief
 
-Normalize caller context into this internal brief. The caller does not need to provide this shape.
+Normalize caller context into this internal brief, deriving every field from the supplied material.
 
 | Field | Requirement | Rule |
 | --- | --- | --- |
@@ -30,7 +30,7 @@ Use these claim states:
 | `assumption` | The claim is an inference needed to explain the material. |
 | `unknown` | The material leaves the claim unresolved. |
 
-Attach a source line to a claim when the material supplies a useful file path, issue, symbol, commit, or URL.
+Attach a source line to a claim when the material supplies one.
 
 ## Shell contract
 
@@ -46,7 +46,7 @@ Every authored section uses this shape:
 </section>
 ```
 
-Keep section IDs unique and lowercase kebab-case. Omit empty optional metadata elements instead of filling them with invented values.
+Write section IDs in lowercase kebab-case. Include an optional metadata element only when the material supplies its value.
 
 The template contains the only authored `<style>` and executable `<script>` blocks. Compose sections with markup, catalog classes, `data-*` attributes, and Mermaid source. Catalog prose is the authoring contract. The validator enforces its machine-checkable subset.
 
@@ -62,6 +62,7 @@ Choose by information relationship:
 | Two versions or two options | Comparison |
 | Ordered stages without branching | Timeline |
 | Options against shared criteria | Decision matrix |
+| One outcome varying along two axes | Rule matrix |
 | A few categorical states | Status summary |
 | A few important quantities | Metric summary |
 | Repeated fields or exact mappings | Data table |
@@ -71,16 +72,6 @@ Choose by information relationship:
 
 Prefer prose for a single fact or a one-step action. A visual component must expose a relationship that is harder to scan in prose.
 
-## Runtime boundary
+## Diagram readability
 
-Keep authored sections free of custom JavaScript.
-
-Scope the first version to desktop presentation artifacts with the catalog components. Defer accessibility auditing, mobile QA, responsive acceptance, exploration interactions, editing, persisted state, and code-review-specific components to later packs.
-
-## Diagram and acceptance readability
-
-Keep Mermaid diagrams readable at their natural size. Use the template-provided diagram sizing and panning. Author only Mermaid source and catalog markup.
-
-Favor a layout with few branches per rank even though scrolling is available.
-
-When a user story has acceptance criteria, use the `AC-NN` identifier alone on the Mermaid edge. Put the complete precondition, action, and expected outcome in the collapsed acceptance list. This prevents edge labels from widening a diagram or duplicating the same sentence in two visual forms.
+Keep Mermaid diagrams readable at their natural size. Favor a layout with few branches per rank.

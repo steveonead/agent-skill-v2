@@ -1,5 +1,5 @@
 interface:
   display_name: "batch-grilling(NOT INVOCABLE)"
   short_description: "Stress-test thinking a round of questions at a time"
-  default_prompt: "用 $batch-grilling 一次問一輪問題，狠狠考驗我的計畫。"
+  default_prompt: "$batch-grilling 只由其他技能在流程中呼叫，不能直接指名使用。被呼叫時會一次問一輪問題，狠狠考驗計畫。"
   
