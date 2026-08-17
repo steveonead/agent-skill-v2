@@ -1,0 +1,6 @@
+interface:
+  display_name: "codebase-design"
+  short_description: "Vocabulary for deep-module design"
+  default_prompt: "Use $codebase-design to describe this module's interface, depth, and seam."
+policy:
+  allow_implicit_invocation: true
