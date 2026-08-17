@@ -1,0 +1,4 @@
+interface:
+  display_name: "visual-artifact-v2"
+  short_description: "Choose components and build a visual HTML artifact"
+  default_prompt: "Use $visual-artifact-v2 to choose the smallest useful components and turn this agreed material into one visual HTML artifact."
