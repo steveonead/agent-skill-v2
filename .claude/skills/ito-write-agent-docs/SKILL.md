@@ -6,6 +6,8 @@ argument-hint: "想寫或改哪份文件？加 --grill 先釐清設計。"
 
 Write `SKILL.md`, `AGENTS.md`, `CLAUDE.md`, `agents/openai.yaml`, and agent-facing reference files in English, regardless of the conversation language.
 
+Treat harness-agnostic behavior as the default. Unless the user explicitly targets one harness, write shared instructions entirely in terms of required capabilities and outcomes. Reserve product names, proprietary tool names, harness-specific invocation syntax, UI metadata, discovery metadata, and setup for native configuration. Define an outcome-preserving fallback for unavailable capabilities.
+
 ## Establish the intent and target
 
 When the request includes the literal `--grill` flag, immediately invoke `batch-grilling` with the remaining request and current discussion as its subject. Its result must cover the relevant codebase and filesystem facts and every unresolved design decision. Wait for the user to confirm the shared understanding, then resume this workflow and treat the confirmed decisions as requirements.
@@ -18,20 +20,24 @@ Derive decisions from the request and environment before asking questions. Witho
 
 ## Draft the complete result
 
-Produce a complete, coherent version of every affected file. Preserve unrelated behavior and repository conventions. For an edit, limit design changes to the request and its necessary consequences.
+Produce a complete, coherent version of every affected file. Preserve unrelated behavior and repository conventions, limiting edits to the requested changes and their necessary consequences.
 
-For a new skill, choose a lowercase hyphenated name unless the user supplied one. Draft `SKILL.md` and `agents/openai.yaml` according to `SKILL-MECHANICS.md`, and include only the directly required references, scripts, or assets. For an existing skill, keep `agents/openai.yaml` aligned when its name, purpose, or invocation changes.
+For a new skill, choose a lowercase hyphenated name unless the user supplied one. Draft `SKILL.md` and the applicable native companion metadata according to `SKILL-MECHANICS.md`, and include only the directly required references, scripts, or assets. For an existing skill, keep every affected native companion metadata file aligned when its name, purpose, or invocation changes.
 
 ## Review with fresh eyes
 
-When agent delegation is available, assign one holistic review to a fresh agent. Give that reviewer the complete candidate files, the user's intent and settled decisions, and the absolute path to `WRITING-PRINCIPLES.md`. The same reviewer must prune duplication, sediment, stale caches, no-op prose, weak context pointers, and unnecessary procedural detail, then return a coherent candidate that still fulfills the user's intent and contains no contradictory instructions.
+When agent delegation is available, assign one holistic review to a fresh agent. Give that reviewer the complete candidate files, the user's intent and settled decisions, and the absolute path to `WRITING-PRINCIPLES.md`. Require the reviewer to read the principles in full, then:
 
-Adopt only review changes that preserve the intended behavior. When delegation is unavailable, perform the same holistic review directly. After any later content fix, confirm that the final complete files still satisfy these conditions.
+- Run the no-op test on every sentence and return a keep-or-cut disposition for each sentence, with a reason for every cut.
+- Report duplication, sediment, sprawl, stale caches, weak context pointers, unnecessary procedural detail, avoidable negation, intent drift, contradictions, em dashes, and semicolons.
+- Return a coherent pruned candidate that still fulfills the user's intent and resolves every contradiction.
+
+Apply every cut verdict that preserves the intended behavior, and record a reason for each cut verdict not adopted. When delegation is unavailable, perform and record the same sentence-level review directly. After any later content fix, repeat the holistic review on the complete candidate. Finish when every sentence and reported issue has a disposition, every accepted cut is applied, and every rejected cut has a reason.
 
 ## Write and verify
 
 A request to create, implement, edit, modify, or apply changes authorizes writing. A request only to draft, review, or propose changes authorizes presentation until the user explicitly approves writing.
 
-For presentation-only work, present the complete proposal and wait for approval. For an authorized change, write every affected file. Validate a skill with the environment's skill validator when one is available. Confirm that every context pointer resolves, metadata matches the skill's name, purpose, and invocation, and repository instructions apply at the intended scope. Fix every error or mismatch before reporting.
+For presentation-only work, present the complete proposal and wait for approval. For an authorized change, write every affected file. Validate a skill with the environment's skill validator when one is available. Confirm that every context pointer resolves, metadata matches the skill's name, purpose, and invocation, repository instructions apply at the intended scope, and shared instructions remain harness-agnostic unless the user requested a single-harness result. Fix every error or mismatch before reporting.
 
-Report the files written, the important behavior changes, and the verification result. Expand the report only for unresolved or unavailable checks.
+Report the files written, the important behavior changes, the pruning result, and the verification result. Include each rejected cut and its reason. Expand the report only for unresolved or unavailable checks.

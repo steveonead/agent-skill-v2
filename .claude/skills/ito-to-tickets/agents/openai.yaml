@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-to-tickets"
+  short_description: "Publish contract-first ticket graphs in Traditional Chinese"
+  default_prompt: "Use $ito-to-tickets to turn this requirement into an approved contract-first GitHub ticket graph."
+policy:
+  allow_implicit_invocation: false

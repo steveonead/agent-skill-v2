@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-implement"
+  short_description: "Implement a spec test-first, then review it"
+  default_prompt: "Use $ito-implement to build this ticket test-first and review the result."
+policy:
+  allow_implicit_invocation: false

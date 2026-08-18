@@ -4,14 +4,18 @@
 
 Name the skill folder and frontmatter `name` with the same lowercase hyphenated value.
 
-Add `agents/openai.yaml` for Codex UI metadata. Add `scripts/`, `references/`, or `assets/` when the workflow uses them. Keep agent instructions in `SKILL.md`, detailed knowledge in `references/`, deterministic repeated operations in `scripts/`, and output materials in `assets/`.
+Add `scripts/`, `references/`, or `assets/` when the workflow uses them. Keep agent instructions in `SKILL.md`, detailed knowledge in `references/`, deterministic repeated operations in `scripts/`, and output materials in `assets/`.
+
+Treat `SKILL.md`, references, scripts, and assets as shared artifacts governed by the harness-agnostic default in `SKILL.md`. Keep their workflows independent of native metadata and configuration.
 
 ## Invocation
 
 - A **model-invoked** skill is discoverable by the agent and by other skills. Its description is an always-loaded context pointer, so it earns concise trigger coverage for every distinct branch. Omit `disable-model-invocation` and allow implicit invocation in `agents/openai.yaml`.
 - A **user-invoked** skill is reached explicitly by the human. It spends cognitive load instead of permanent context load. Set `disable-model-invocation: true`, keep the description to a human-facing one-line summary, and set `policy.allow_implicit_invocation: false` in `agents/openai.yaml`.
 
-Choose model invocation when the agent or another skill must discover the workflow without a human naming it. A user can still invoke a model-invoked skill explicitly.
+Choose model invocation when the agent or another skill must discover the workflow autonomously. A user can still invoke a model-invoked skill explicitly.
+
+Encode the invocation choice through each target harness's native controls. Use the mappings below where applicable, and derive additional mappings from governing instructions and current documentation.
 
 Split a model-invoked skill when a distinct leading word should trigger the new branch independently or another skill must reach it. Each split adds an always-loaded description, so independent reach must justify that load.
 
@@ -40,7 +44,7 @@ disable-model-invocation: true
 
 Keep discovery triggers in the description. Reserve the body for post-invocation instructions.
 
-## Codex metadata
+## `agents/openai.yaml` metadata
 
 Write `agents/openai.yaml` with quoted string values:
 
