@@ -1,6 +1,0 @@
-interface:
-  display_name: "Visual Artifact"
-  short_description: "Create disposable interactive HTML visualizations"
-  default_prompt: "Use $visual-artifact to turn this information into a disposable interactive HTML reference."
-policy:
-  allow_implicit_invocation: true

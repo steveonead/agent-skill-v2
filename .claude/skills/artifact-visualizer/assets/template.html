@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
     <style type="text/tailwindcss">
       @theme {
-        --font-sans: Inter, "Noto Serif TC", ui-sans-serif, system-ui, sans-serif;
+        --font-sans: "Noto Serif TC", ui-sans-serif, system-ui, sans-serif;
         --font-mono: "Maple Mono", "Noto Serif TC", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
       }
 
@@ -144,7 +144,7 @@
         <a class="text-[var(--artifact-accent)] underline-offset-4 hover:underline" href="#evidence-example">Diff and code</a>
       </nav>
 
-      <section id="flow-example" class="mb-16 grid grid-cols-[280px_1fr] gap-10" data-starter-example>
+      <section id="flow-example" class="mb-16 grid gap-10" data-starter-example>
         <div>
           <p class="text-base font-semibold uppercase text-[var(--artifact-muted)]">Example 1</p>
           <h2 class="mt-2 text-2xl font-semibold">Mermaid for topology</h2>
@@ -163,7 +163,7 @@
             Use the narrowest evidence that makes the explanation verifiable.
           </p>
         </div>
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid gap-6">
           <div id="starter-diff" class="artifact-surface min-h-48 overflow-hidden"></div>
           <div id="starter-code" class="code-host artifact-surface min-h-48 overflow-hidden"></div>
         </div>
@@ -306,7 +306,7 @@
             border: "var(--artifact-border)",
             transparent: true,
             ...options,
-            font: diagramUsesChinese ? "Noto Serif TC" : (options.font ?? "Inter"),
+            font: diagramUsesChinese ? "Noto Serif TC" : (options.font ?? "Maple Mono"),
           });
           host.innerHTML = svg;
           preserveDiagramScale(host);
@@ -337,11 +337,14 @@
         }
       }
 
-      async function renderCode(hostOrId, source, options) {
+      async function renderCode(hostOrId, source, options = {}) {
         const host = getHost(hostOrId);
         try {
           const { codeToHtml } = await loadShiki();
-          host.innerHTML = await codeToHtml(source, options);
+          host.innerHTML = await codeToHtml(source, {
+            ...options,
+            theme: "vitesse-light",
+          });
         } catch (error) {
           showRendererError(host, rendererMessages.code, error);
         }
@@ -365,7 +368,6 @@
         ),
         renderCode("starter-code", 'const artifact = { priority: "visuals" };', {
           lang: "javascript",
-          theme: "github-light",
         }),
       ]);
     </script>

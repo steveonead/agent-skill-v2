@@ -1,5 +1,5 @@
 ---
-name: visual-artifact
+name: artifact-visualizer
 description: Turn supplied information into a disposable single-file interactive HTML visual artifact. Use when a user or another skill asks to visualize, explain, compare, map, recap, or present information as HTML, including code, diffs, flows, architecture, timelines, matrices, or quantitative data.
 ---
 
@@ -61,6 +61,8 @@ When no design tokens exist, create a compact subject-specific system with backg
 Use Tailwind CSS for primary layout and styling. Use CSS custom properties, small renderer overrides, and focused custom CSS for diagrams or geometry that utilities express poorly. Design one theme that fits the content. Add a theme switch only when comparing themes contributes to the explanation.
 
 Use Noto Serif TC for Chinese text, including diagram labels and monospace fallbacks. Keep all rendered text at 16px or larger, use Maple Mono for code, diff, and preformatted content, set diff line height to 26px, and apply `text-wrap: pretty` to prose and labels. Preserve code and diff whitespace. When Mermaid's renderer uses smaller internal label sizes, enlarge the entire SVG proportionally so labels, nodes, and edges stay aligned.
+
+Use Shiki's `vitesse-light` theme for code blocks.
 
 ## Build from the template
 

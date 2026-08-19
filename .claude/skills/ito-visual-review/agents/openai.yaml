@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-visual-review"
+  short_description: "Explain a PR or branch diff as interactive HTML"
+  default_prompt: "Use $ito-visual-review to explain this PR or branch comparison as an interactive visual document."
+policy:
+  allow_implicit_invocation: false
