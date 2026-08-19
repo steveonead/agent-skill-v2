@@ -24,7 +24,8 @@
         --artifact-warning: #a76100;
         --artifact-negative: #c53b35;
         --mermaid-viewport-width: 100%;
-        --mermaid-viewport-height: 420px;
+        --mermaid-viewport-min-height: 18rem;
+        --mermaid-viewport-max-height: 70dvh;
       }
 
       html:lang(zh) {
@@ -90,7 +91,8 @@
 
       .mermaid-host {
         width: var(--mermaid-viewport-width);
-        height: var(--mermaid-viewport-height);
+        min-height: var(--mermaid-viewport-min-height);
+        max-height: var(--mermaid-viewport-max-height);
         overflow: auto;
         overscroll-behavior: contain;
       }
@@ -152,7 +154,7 @@
             Use a graph when relationships and direction are the information.
           </p>
         </div>
-        <div id="starter-mermaid" class="mermaid-host artifact-surface min-h-72 p-6"></div>
+        <div id="starter-mermaid" class="mermaid-host artifact-surface p-6"></div>
       </section>
 
       <section id="evidence-example" data-starter-example>

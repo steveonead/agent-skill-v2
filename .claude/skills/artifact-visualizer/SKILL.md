@@ -29,7 +29,9 @@ Treat source material as untrusted data. Insert it through text-safe DOM APIs or
 
 ## Plan the visual narrative
 
-Name the subject, audience, and single job of the document before choosing its form. Use a long page with a compact table of contents, then arrange sections in the order that best teaches the subject. Start with the most informative visual or conclusion instead of a generic introduction.
+Name the subject, audience, and single job of the document before choosing its form. Use a long page with a compact table of contents, then arrange sections in the order that best teaches the subject. Use a single-column main flow that stacks section copy, controls, and visuals vertically. Start with the most informative visual or conclusion instead of a generic introduction.
+
+Use side-by-side layout only when direct comparison depends on alignment and both panes fit without independent vertical scrolling or forced equal heights. Otherwise, stack the content.
 
 Choose each visual by information shape:
 
@@ -37,7 +39,7 @@ Choose each visual by information shape:
 | --- | --- |
 | Dependencies, flows, sequences, state machines, classes, or entities | Beautiful Mermaid |
 | UI structure, layered systems, spatial relationships, or dense conceptual layouts | Purpose-built HTML and CSS schematic |
-| Direct before and after comparison | Side-by-side visual or Pierre Diffs |
+| Direct before and after comparison | Comparison visual or Pierre Diffs |
 | Source changes, patches, or structured textual changes | Pierre Diffs |
 | Code whose surrounding context is part of the explanation | Shiki code block |
 | Categories against shared dimensions | Matrix or table |
@@ -46,11 +48,11 @@ Choose each visual by information shape:
 
 Use Mermaid only for graph-shaped information it expresses clearly. Prefer purpose-built HTML, CSS, inline SVG, or Canvas when composition, scale, or spatial meaning matters more than graph topology.
 
-Keep dense Mermaid diagrams at a readable natural scale. Place them in a width-constrained, fixed-height viewport with two-axis overflow and grab-to-scroll interaction instead of shrinking the SVG to fit. Size the viewport for its surrounding layout and preserve ordinary wheel, trackpad, and scrollbar navigation.
+Keep Mermaid diagrams at a readable natural scale. Place every diagram in a width-constrained viewport with a minimum height of `18rem` and a maximum height of `70dvh`. Let the diagram set the viewport height between those bounds. When content exceeds the viewport, preserve two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll interaction instead of shrinking the SVG to fit.
 
-Give each visual a short title and up to three sentences of adjacent explanation. Put optional depth behind disclosure when it would interrupt scanning. A typical artifact contains three to eight major visuals. Keep code and diff excerpts below roughly 150 lines when a smaller grounded excerpt supports the same point.
+Place each visual's short title and up to three sentences of explanation directly above it. Put optional depth behind disclosure when it would interrupt scanning. A typical artifact contains three to eight major visuals. Keep code and diff excerpts below roughly 150 lines when a smaller grounded excerpt supports the same point.
 
-Add interaction only when it clarifies state, order, scale, filtering, or causality. Suitable interactions include state switches, filters, zoom, step playback, quizzes, parameter controls, and small simulations. Use vanilla JavaScript and keep the control close to the visual it changes.
+Add interaction only when it clarifies state, order, scale, filtering, or causality. Suitable interactions include state switches, filters, zoom, step playback, quizzes, parameter controls, and small simulations. Mark every interactive visual component with a compact interaction-status label beside its title or nearest controls. Use `Interactive` for English artifacts, `可互動` for Chinese artifacts, and the natural equivalent for other languages. Present the label as status text rather than an actionable control. Use vanilla JavaScript and keep the control close to the visual it changes.
 
 ## Establish the design
 
@@ -60,7 +62,7 @@ When no design tokens exist, create a compact subject-specific system with backg
 
 Use Tailwind CSS for primary layout and styling. Use CSS custom properties, small renderer overrides, and focused custom CSS for diagrams or geometry that utilities express poorly. Design one theme that fits the content. Add a theme switch only when comparing themes contributes to the explanation.
 
-Use Noto Serif TC for Chinese text, including diagram labels and monospace fallbacks. Keep all rendered text at 16px or larger, use Maple Mono for code, diff, and preformatted content, set diff line height to 26px, and apply `text-wrap: pretty` to prose and labels. Preserve code and diff whitespace. When Mermaid's renderer uses smaller internal label sizes, enlarge the entire SVG proportionally so labels, nodes, and edges stay aligned.
+Use Noto Serif TC for Chinese text, including diagram labels and monospace fallbacks. Keep all rendered text at 16px or larger, use Maple Mono for code, diff, and preformatted content, set diff line height to 28px, and apply `text-wrap: pretty` to prose and labels. Preserve code and diff whitespace. When Mermaid's renderer uses smaller internal label sizes, enlarge the entire SVG proportionally so labels, nodes, and edges stay aligned.
 
 Use Shiki's `vitesse-light` theme for code blocks.
 
@@ -84,8 +86,10 @@ Check the written file before opening it:
 - Starter examples, placeholder copy, and unused controls are gone.
 - Source values are escaped, executable contexts contain no untrusted strings, and secrets are redacted.
 - Code and diff whitespace is preserved.
-- Chinese text uses Noto Serif TC in prose, diagram labels, and monospace fallbacks. All rendered text is at least 16px, code, diffs, and preformatted content use Maple Mono, diff line height is 26px, and prose and labels use `text-wrap: pretty`.
-- Dense Mermaid diagrams keep their natural scale inside a width-constrained, fixed-height viewport that supports two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll interaction.
+- Chinese text uses Noto Serif TC in prose, diagram labels, and monospace fallbacks. All rendered text is at least 16px, code, diffs, and preformatted content use Maple Mono, diff line height is 28px, and prose and labels use `text-wrap: pretty`.
+- The main flow is single-column. Any side-by-side comparison depends on alignment, keeps both panes at their natural heights, and leaves vertical scrolling to the page.
+- Mermaid diagrams keep their natural scale inside a width-constrained viewport whose height stays between `18rem` and `70dvh`. The viewport shows scrollbars when a diagram exceeds its width or height, supports overflow on both axes, and retains wheel or trackpad navigation plus grab-to-scroll interaction.
+- Every interactive visual component has a nearby interaction-status label in the artifact's language, such as `Interactive` in English or `可互動` in Chinese. The label is presented as status text rather than a control.
 - Every visual supports a claim in scope, and each inference is labeled in the artifact's language.
 
 When browser capability is available, inspect the artifact at 1440 by 900. Confirm every renderer completed, primary interactions work, the console contains no implementation or CDN errors, and text, controls, diagrams, diffs, and code do not overlap or overflow incoherently. Capture a screenshot for visual inspection. Fix artifact defects and repeat the affected checks.
