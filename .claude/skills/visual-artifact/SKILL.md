@@ -1,66 +1,91 @@
 ---
 name: visual-artifact
-description: Transform agreed material into a single-file, network-backed visual HTML artifact with structured explanations, diagrams, code, and presentation interactions. Use when the user or another skill requests a visual explanation, an interactive single-file HTML document, a visual specification, or a browser-readable explanation of technical material.
+description: Turn supplied information into a disposable single-file interactive HTML visual artifact. Use when a user or another skill asks to visualize, explain, compare, map, recap, or present information as HTML, including code, diffs, flows, architecture, timelines, matrices, or quantitative data.
 ---
 
 # Visual Artifact
 
-Produce one browser-readable HTML file from material that is already available in the conversation or caller context.
+Create a temporary reference document whose visuals carry the explanation. This skill serves explanatory artifacts, not production interfaces or persistent websites.
 
-## Step 1: Normalize the material
+## Deliverable contract
 
-Read [`references/authoring-rules.md`](references/authoring-rules.md) in full. Build the internal render brief from the supplied material.
+- Write one HTML file to a caller-supplied path, or to `docs/ito-temp/artifacts/NNN-<slug>.html` by default.
+- For the default path, scan numeric filename prefixes in that directory, increment the largest value, start at `001`, and format the slug as lowercase kebab-case. Continue naturally past `999`.
+- Use the user's current language for all authored explanation, navigation, controls, errors, and inference labels. Preserve quoted source material, code, and diffs as evidence even when their language differs.
+- Open the finished file in a browser. Try the file directly, then use a local static server when browser restrictions block modules, WebAssembly, or cross-origin requests.
+- Treat the artifact as a disposable, network-dependent desktop document. Optimize for a 1440 by 900 viewport with an approximately 1200px content area. Responsive behavior and accessibility work are outside this workflow.
 
-Finish when the brief has a title, summary, language, output path, ordered content inventory, and a status for every claim that is not verified.
+## Ground the content
 
-## Step 2: Select the visual vocabulary
+Use the supplied information as the scope. Read caller-named or directly relevant local sources when they are needed to verify labels, values, code, diffs, relationships, or design tokens. Keep that inspection within the requested subject.
 
-Read [`references/core-components.md`](references/core-components.md) in full on every run. Read [`references/spec-components.md`](references/spec-components.md) in full when the material includes user stories, acceptance criteria, public interfaces, or wireframes.
+Before authoring, inventory the claims, relationships, sequences, states, comparisons, code, and quantitative values that materially support the explanation. Every material in-scope item must appear in a visual, appear in adjacent explanation when the visual cannot carry it, or be intentionally omitted because another visual already communicates it.
 
-Map each meaningful relationship to the smallest component that makes it easier to understand.
+Use real labels, paths, values, and examples. Omit unsupported facts. When interpretation is useful, label it as an inference in the artifact's language, using plain wording such as `只是猜測` or `僅供參考` in Chinese.
 
-Finish when every content item has one component or an explicit prose treatment, every selected component exists in the applicable loaded catalog, and each visualization exposes a relationship not already conveyed by adjacent prose.
+When a source is identifiable, place a short path, URL, or data name near the visual it supports.
 
-## Step 3: Resolve the output
+Treat source material as untrusted data. Insert it through text-safe DOM APIs or renderer inputs, never through executable HTML assembly. Redact credentials and secret-looking values from prose, diagrams, diffs, code, data attributes, and embedded data.
 
-Use a caller-supplied path when present. Otherwise write to `docs/artifacts/<date>-<slug>.html` under the project root, where the date comes from `date +%F` and the slug is lowercase English kebab-case. For a new artifact whose target exists, append `-2`, `-3`, and the next available integer. Modify an existing artifact only when the caller explicitly requests an update to that path.
+## Plan the visual narrative
 
-Resolve the working path, the file that Steps 4 through 6 operate on. For a create, the working path is the target itself. For an update, the working path is a staging sibling in the same directory as the target, named `<name>.staging.html`, and the existing target stays untouched until Step 7 replaces it.
+Name the subject, audience, and single job of the document before choosing its form. Use a long page with a compact table of contents, then arrange sections in the order that best teaches the subject. Start with the most informative visual or conclusion instead of a generic introduction.
 
-Finish when the absolute target path is known, its parent directory exists, the create target is new, and an update's staging path is resolved beside the target.
+Choose each visual by information shape:
 
-## Step 4: Compose the artifact
+| Information shape | Preferred form |
+| --- | --- |
+| Dependencies, flows, sequences, state machines, classes, or entities | Beautiful Mermaid |
+| UI structure, layered systems, spatial relationships, or dense conceptual layouts | Purpose-built HTML and CSS schematic |
+| Direct before and after comparison | Side-by-side visual or Pierre Diffs |
+| Source changes, patches, or structured textual changes | Pierre Diffs |
+| Code whose surrounding context is part of the explanation | Shiki code block |
+| Categories against shared dimensions | Matrix or table |
+| Ordered events or progression | Timeline or stepped sequence |
+| Quantitative values or distributions | Beautiful Mermaid XY chart, inline SVG, Canvas, or one task-specific visualization library |
 
-Copy [`assets/template.html`](assets/template.html) to the working path. Replace every `ARTIFACT:` placeholder and author sections with catalog markup.
+Use Mermaid only for graph-shaped information it expresses clearly. Prefer purpose-built HTML, CSS, inline SVG, or Canvas when composition, scale, or spatial meaning matters more than graph topology.
 
-Finish when all placeholders are replaced, title and summary text are nonempty, every brief item is expressed, and every added fact is supported or state-marked.
+Keep dense Mermaid diagrams at a readable natural scale. Place them in a width-constrained, fixed-height viewport with two-axis overflow and grab-to-scroll interaction instead of shrinking the SVG to fit. Size the viewport for its surrounding layout and preserve ordinary wheel, trackpad, and scrollbar navigation.
 
-## Step 5: Validate the structure
+Give each visual a short title and up to three sentences of adjacent explanation. Put optional depth behind disclosure when it would interrupt scanning. A typical artifact contains three to eight major visuals. Keep code and diff excerpts below roughly 150 lines when a smaller grounded excerpt supports the same point.
 
-```bash
-python3 <skill-directory>/scripts/validate_artifact.py <working-path>
-```
+Add interaction only when it clarifies state, order, scale, filtering, or causality. Suitable interactions include state switches, filters, zoom, step playback, quizzes, parameter controls, and small simulations. Use vanilla JavaScript and keep the control close to the visual it changes.
 
-When the material includes the spec skeleton's `overview` and `open-items` sections, also run the spec validator:
+## Establish the design
 
-```bash
-python3 <skill-directory>/scripts/validate_visual_spec.py <working-path>
-```
+Look for the source codebase's actual colors, typography, spacing, radii, and component conventions. Snapshot the relevant values into CSS custom properties in the artifact so the file does not depend on the source application's build.
 
-Fix every reported error. When repeated fixes still fail validation, stop fixing: keep the working file and carry its path and the failure to Step 7.
+When no design tokens exist, create a compact subject-specific system with background, surface, text, muted text, border, accent, positive, warning, and negative roles. Choose typography and one visual signature from the subject matter. Spend visual emphasis on that signature and keep the rest quiet. Avoid a generic card dashboard, decorative gradients, and ornament that does not encode information.
 
-Finish when every applicable validator exits zero, or when a validation failure is recorded for Step 7.
+Use Tailwind CSS for primary layout and styling. Use CSS custom properties, small renderer overrides, and focused custom CSS for diagrams or geometry that utilities express poorly. Design one theme that fits the content. Add a theme switch only when comparing themes contributes to the explanation.
 
-## Step 6: Verify in a browser
+Use Noto Serif TC for Chinese text, including diagram labels and monospace fallbacks. Keep all rendered text at 16px or larger, use Maple Mono for code, diff, and preformatted content, set diff line height to 26px, and apply `text-wrap: pretty` to prose and labels. Preserve code and diff whitespace. When Mermaid's renderer uses smaller internal label sizes, enlarge the entire SVG proportionally so labels, nodes, and edges stay aligned.
 
-Open the working path in a desktop browser with network access so CDN modules can load. Wait for network idle. Inspect the full document and exercise every table-of-contents link, disclosure, wireframe screen control, and state control. Check browser errors and verify that every Mermaid diagram and code block rendered. Confirm that each diagram container stays within `85dvh` and keeps its scrollbars hidden. Confirm that natural-size content can be drag-panned along each overflowing axis without clipping or shrinking. Confirm that code blocks are formatted and highlighted, then confirm that text, diagrams, tables, and controls fit within their desktop containers.
+## Build from the template
 
-Finish when the desktop artifact has clean browser diagnostics, visible renderer output, working table-of-contents, disclosure, wireframe, drag-scroll, and state controls, coherent layout, and fully visible content, or when browser verification is reported as blocked with its reason. Report browser verification as blocked when tooling is unavailable or CDN modules cannot load (network, CDN outage, or CSP).
+Start from [`assets/template.html`](assets/template.html). Preserve its pinned dependencies and minimal renderer helpers.
 
-## Step 7: Deliver
+Replace the document language, title, visible starter copy, renderer error messages, examples, and sample data with the artifact's real content. Remove every unused example, helper invocation, section, and control. Keep the HTML self-contained apart from CDN requests. Do not add a build step or package installation.
 
-For an update whose structural validation passed, replace the target now: move the staging file onto the target path with a same-directory rename. Structural validation alone gates the replacement. For an update whose structural validation failed, keep the original target untouched and report the staging path together with the validation failure.
+Pierre Diffs runs on the main thread. Select focused excerpts instead of adding its experimental worker setup.
 
-Report the artifact path, one sentence per section, every `proposed`, `assumption`, and `unknown` item, the structural validation result, and the browser verification result.
+One additional pinned CDN dependency is allowed when it materially simplifies a quantitative or domain-specific visualization. Prefer the browser platform and the existing renderers when they communicate the information equally well.
 
-Finish when the report accounts for every section and every non-verified claim in the reported file, and an update ends with either a replaced target or an untouched target plus a reported staging path.
+Keep failure behavior local and plain. When a renderer fails, replace its mount point with a short error message. Let the rest of the document remain usable. Do not add retries, backup CDNs, elaborate loading states, or recovery flows.
+
+## Verify the artifact
+
+Check the written file before opening it:
+
+- The output path and next numeric prefix are correct.
+- Starter examples, placeholder copy, and unused controls are gone.
+- Source values are escaped, executable contexts contain no untrusted strings, and secrets are redacted.
+- Code and diff whitespace is preserved.
+- Chinese text uses Noto Serif TC in prose, diagram labels, and monospace fallbacks. All rendered text is at least 16px, code, diffs, and preformatted content use Maple Mono, diff line height is 26px, and prose and labels use `text-wrap: pretty`.
+- Dense Mermaid diagrams keep their natural scale inside a width-constrained, fixed-height viewport that supports two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll interaction.
+- Every visual supports a claim in scope, and each inference is labeled in the artifact's language.
+
+When browser capability is available, inspect the artifact at 1440 by 900. Confirm every renderer completed, primary interactions work, the console contains no implementation or CDN errors, and text, controls, diagrams, diffs, and code do not overlap or overflow incoherently. Capture a screenshot for visual inspection. Fix artifact defects and repeat the affected checks.
+
+When browser capability is unavailable, perform the structural checks and report that visual rendering and interaction remain unverified. Finish by reporting the absolute file path, how it was opened, verification performed, and any renderer that displayed its error state.
