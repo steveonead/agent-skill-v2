@@ -341,8 +341,11 @@
         const host = getHost(hostOrId);
         try {
           const { codeToHtml } = await loadShiki();
+          const renderOptions = { ...options };
+          delete renderOptions.theme;
+          delete renderOptions.themes;
           host.innerHTML = await codeToHtml(source, {
-            ...options,
+            ...renderOptions,
             theme: "vitesse-light",
           });
         } catch (error) {
