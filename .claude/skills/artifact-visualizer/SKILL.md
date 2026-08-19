@@ -48,7 +48,7 @@ Choose each visual by information shape:
 
 Use Mermaid only for graph-shaped information it expresses clearly. Prefer purpose-built HTML, CSS, inline SVG, or Canvas when composition, scale, or spatial meaning matters more than graph topology.
 
-Keep Mermaid diagrams at a readable natural scale. Place every diagram in a width-constrained viewport with a minimum height of `18rem` and a maximum height of `70dvh`. Let the diagram set the viewport height between those bounds. When content exceeds the viewport, preserve two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll interaction instead of shrinking the SVG to fit.
+Keep Mermaid diagrams at a readable natural scale. Place every diagram in a width-constrained viewport with a minimum height of `20rem` and a maximum height of `80dvh`. Let the diagram set the viewport height between those bounds. When content exceeds the viewport, preserve two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll interaction instead of shrinking the SVG to fit.
 
 Place each visual's short title and up to three sentences of explanation directly above it. Put optional depth behind disclosure when it would interrupt scanning. A typical artifact contains three to eight major visuals. Keep code and diff excerpts below roughly 150 lines when a smaller grounded excerpt supports the same point.
 
@@ -88,7 +88,7 @@ Check the written file before opening it:
 - Code and diff whitespace is preserved.
 - Chinese text uses Noto Serif TC in prose, diagram labels, and monospace fallbacks. All rendered text is at least 16px, code, diffs, and preformatted content use Maple Mono, diff line height is 28px, and prose and labels use `text-wrap: pretty`.
 - The main flow is single-column. Any side-by-side comparison depends on alignment, keeps both panes at their natural heights, and leaves vertical scrolling to the page.
-- Mermaid diagrams keep their natural scale inside a width-constrained viewport whose height stays between `18rem` and `70dvh`. The viewport shows scrollbars when a diagram exceeds its width or height, supports overflow on both axes, and retains wheel or trackpad navigation plus grab-to-scroll interaction.
+- Mermaid diagrams keep their natural scale inside a width-constrained viewport whose height stays between `20rem` and `80dvh`. The viewport shows scrollbars when a diagram exceeds its width or height, supports overflow on both axes, and retains wheel or trackpad navigation plus grab-to-scroll interaction.
 - Every interactive visual component has a nearby interaction-status label in the artifact's language, such as `Interactive` in English or `可互動` in Chinese. The label is presented as status text rather than a control.
 - Every visual supports a claim in scope, and each inference is labeled in the artifact's language.
 
