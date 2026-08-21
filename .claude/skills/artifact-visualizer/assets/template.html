@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en">
-  <!-- Replace lang, title, visible starter copy, and rendererMessages together. -->
+<html lang="zh-TW">
+  <!-- Replace the visible demo, localized messages, and data blocks. Keep the component system. -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visual artifact starter</title>
+    <title>程式碼審查流程：視覺元件範本</title>
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&amp;display=swap"
     />
     <link
       rel="stylesheet"
@@ -16,28 +16,47 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
     <style type="text/tailwindcss">
       @theme {
-        --font-sans: 'Noto Serif TC', ui-sans-serif, system-ui, sans-serif;
+        --font-sans: 'Noto Serif TC', ui-serif, Georgia, serif;
         --font-mono:
           'Maple Mono', 'Noto Serif TC', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
       }
 
       :root {
-        --artifact-bg: #f7f8fa;
-        --artifact-surface: #ffffff;
-        --artifact-ink: #17181b;
-        --artifact-muted: #60646c;
-        --artifact-border: #d9dce2;
-        --artifact-accent: #2458e6;
-        --artifact-positive: #14825f;
-        --artifact-warning: #a76100;
-        --artifact-negative: #c53b35;
+        --vitesse-white: #ffffff;
+        --vitesse-soft: #f7f7f7;
+        --vitesse-border-soft: #f0f0f0;
+        --vitesse-border: #d1d5da;
+        --vitesse-ink: #393a34;
+        --vitesse-muted: #6a737d;
+        --vitesse-comment: #a0ada0;
+        --vitesse-green: #1e754f;
+        --vitesse-green-strong: #1c6b48;
+        --vitesse-function: #59873a;
+        --vitesse-blue: #296aa3;
+        --vitesse-cyan: #2e808f;
+        --vitesse-orange: #a65e2b;
+        --vitesse-red: #ab5959;
+        --vitesse-pink: #b05a78;
+        --vitesse-string: #b56959;
+        --vitesse-yellow: #998418;
+        --artifact-bg: var(--vitesse-soft);
+        --artifact-surface: var(--vitesse-white);
+        --artifact-ink: var(--vitesse-ink);
+        --artifact-muted: var(--vitesse-muted);
+        --artifact-border: var(--vitesse-border);
+        --artifact-accent: var(--vitesse-green-strong);
+        --artifact-positive: var(--vitesse-green);
+        --artifact-warning: var(--vitesse-orange);
+        --artifact-negative: var(--vitesse-red);
+        --artifact-code: var(--vitesse-white);
+        --artifact-code-raised: var(--vitesse-soft);
+        --artifact-code-border: var(--vitesse-border);
+        --artifact-code-ink: var(--vitesse-ink);
+        --artifact-code-muted: var(--vitesse-muted);
+        --toc-width: 236px;
         --mermaid-viewport-width: 100%;
         --mermaid-viewport-min-height: 20rem;
         --mermaid-viewport-max-height: 80dvh;
-      }
-
-      html:lang(zh) {
-        --font-sans: 'Noto Serif TC', ui-serif, Georgia, serif;
       }
 
       @layer base {
@@ -47,6 +66,8 @@
 
         html {
           background: var(--artifact-bg);
+          color-scheme: light;
+          scroll-behavior: smooth;
         }
 
         body {
@@ -64,43 +85,553 @@
         input,
         select {
           font: inherit;
+          letter-spacing: 0;
         }
 
         code,
         pre {
           font-family: var(--font-mono);
         }
+
+        :focus-visible {
+          outline: 3px solid color-mix(in srgb, var(--artifact-accent) 42%, transparent);
+          outline-offset: 3px;
+        }
       }
 
-      .artifact-shell {
-        max-width: 1200px;
+      .artifact-layout {
+        display: grid;
+        grid-template-columns: var(--toc-width) minmax(0, 1fr);
+        gap: 56px;
+        width: min(1360px, calc(100% - 64px));
         margin-inline: auto;
-        padding: 56px 0 80px;
+        padding: 32px 0 88px;
         text-wrap: pretty;
       }
 
-      .artifact-rule {
-        border-color: var(--artifact-border);
+      .toc-rail {
+        position: sticky;
+        top: 32px;
+        align-self: start;
+        height: calc(100dvh - 64px);
+        padding-right: 24px;
+        overflow: auto;
+        border-right: 1px solid var(--artifact-border);
+      }
+
+      .toc-kicker,
+      .document-kicker,
+      .section-number,
+      .visual-number,
+      .panel-kind {
+        margin: 0;
+        color: var(--artifact-accent);
+        font-family: var(--font-mono);
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+
+      .toc-title {
+        margin: 10px 0 28px;
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .toc-list,
+      .toc-sublist {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .toc-item {
+        position: relative;
+      }
+
+      .toc-link {
+        display: grid;
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 8px;
+        padding: 9px 8px 9px 14px;
+        color: var(--artifact-muted);
+        border-left: 2px solid transparent;
+        font-size: 16px;
+        line-height: 1.45;
+        text-decoration: none;
+      }
+
+      .toc-link:hover,
+      .toc-link.is-active {
+        color: var(--artifact-ink);
+        border-left-color: var(--artifact-accent);
+        background: color-mix(in srgb, var(--artifact-accent) 6%, transparent);
+      }
+
+      .toc-link.is-active {
+        font-weight: 600;
+      }
+
+      .toc-index {
+        color: var(--artifact-accent);
+        font-family: var(--font-mono);
+      }
+
+      .toc-sublist {
+        margin: 2px 0 10px 22px;
+      }
+
+      .toc-sublist .toc-link {
+        grid-template-columns: 45px minmax(0, 1fr);
+        font-size: 16px;
+      }
+
+      .artifact-main {
+        min-width: 0;
+        max-width: 1010px;
+      }
+
+      .document-header {
+        padding: 18px 0 48px;
+        border-bottom: 1px solid var(--artifact-border);
+      }
+
+      .document-title {
+        max-width: 820px;
+        margin: 12px 0 0;
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1.16;
+        letter-spacing: 0;
+      }
+
+      .document-summary {
+        max-width: 760px;
+        margin: 20px 0 0;
+        color: var(--artifact-muted);
+        font-size: 19px;
+        line-height: 1.75;
+      }
+
+      .document-meta {
+        display: flex;
+        gap: 28px;
+        margin: 28px 0 0;
+        padding: 0;
+        color: var(--artifact-muted);
+        font-family: var(--font-mono);
+        list-style: none;
+      }
+
+      .doc-section {
+        padding: 64px 0 20px;
+        scroll-margin-top: 28px;
+      }
+
+      .section-header {
+        display: grid;
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 18px;
+        margin-bottom: 34px;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .section-summary {
+        max-width: 720px;
+        margin: 10px 0 0;
+        color: var(--artifact-muted);
+        font-size: 17px;
+        line-height: 1.75;
+      }
+
+      .visual-block {
+        margin-top: 52px;
+        scroll-margin-top: 28px;
+      }
+
+      .visual-block:first-of-type {
+        margin-top: 0;
+      }
+
+      .visual-header {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: start;
+        margin-bottom: 16px;
+      }
+
+      .visual-title {
+        margin: 0;
+        font-size: 23px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .visual-copy {
+        max-width: 760px;
+        margin: 7px 0 0;
+        color: var(--artifact-muted);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .source-line {
+        margin: 8px 0 0;
+        color: var(--artifact-muted);
+        font-family: var(--font-mono);
+        font-size: 16px;
+      }
+
+      .source-label {
+        margin-right: 0.5em;
+        color: var(--artifact-ink);
+        font-family: var(--font-sans);
+        font-weight: 600;
+      }
+
+      .interaction-status {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 3px 9px;
+        color: var(--artifact-accent);
+        border: 1px solid color-mix(in srgb, var(--artifact-accent) 38%, var(--artifact-border));
+        border-radius: 3px;
+        background: color-mix(in srgb, var(--artifact-accent) 6%, var(--vitesse-white));
+        font-family: var(--font-mono);
+        font-size: 16px;
+        white-space: nowrap;
       }
 
       .artifact-surface {
+        overflow: hidden;
         background: var(--artifact-surface);
         border: 1px solid var(--artifact-border);
         border-radius: 6px;
       }
 
-      .renderer-error {
-        border-left: 3px solid var(--artifact-negative);
-        padding: 12px 14px;
-        color: var(--artifact-negative);
-        background: color-mix(in srgb, var(--artifact-negative) 7%, white);
+      .code-panel {
+        overflow: hidden;
+        color: var(--artifact-code-ink);
+        background: var(--artifact-code);
+        border: 1px solid var(--artifact-code-border);
+        border-radius: 6px;
+        font-family: var(--font-mono);
+      }
+
+      .code-caption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 46px;
+        padding: 9px 16px;
+        color: var(--artifact-code-muted);
+        background: var(--artifact-code-raised);
+        border-bottom: 1px solid var(--artifact-code-border);
         font-size: 16px;
+      }
+
+      .caption-name {
+        color: var(--artifact-code-ink);
+        font-weight: 600;
+      }
+
+      .caption-meta {
+        color: var(--artifact-code-muted);
+      }
+
+      .renderer-error {
+        margin: 0;
+        padding: 15px 18px;
+        color: var(--artifact-negative);
+        background: color-mix(in srgb, var(--artifact-negative) 8%, var(--vitesse-white));
+        border-left: 3px solid var(--artifact-negative);
+        font-size: 16px;
+      }
+
+      .tree-host {
+        padding: 22px 22px 24px;
+        overflow: auto;
+      }
+
+      .tree-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tree-children {
+        position: relative;
+        margin: 4px 0 0 18px;
+        padding: 0 0 0 27px;
+        border-left: 1px solid var(--vitesse-border);
+      }
+
+      .tree-node {
+        position: relative;
+        margin: 0;
+        padding: 4px 0;
+      }
+
+      .tree-children > .tree-node::before {
+        position: absolute;
+        top: 23px;
+        left: -27px;
+        width: 18px;
+        height: 1px;
+        background: var(--vitesse-border);
+        content: '';
+      }
+
+      .tree-row {
+        display: grid;
+        grid-template-columns: 28px auto minmax(0, 1fr);
+        gap: 8px;
+        align-items: start;
+        min-height: 38px;
+        padding: 6px 8px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+      }
+
+      .tree-row.is-active {
+        background: color-mix(in srgb, var(--artifact-accent) 9%, var(--artifact-code));
+        border-color: color-mix(in srgb, var(--artifact-accent) 42%, var(--artifact-code-border));
+      }
+
+      .tree-toggle,
+      .tree-spacer {
+        width: 28px;
+        height: 28px;
+      }
+
+      .tree-toggle {
+        position: relative;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        color: var(--artifact-code-muted);
+        background: transparent;
+        border: 0;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .tree-toggle::before {
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        content: '';
+        transform: rotate(45deg) translate(-1px, -1px);
+        transition: transform 140ms ease;
+      }
+
+      .tree-toggle[aria-expanded='false']::before {
+        transform: rotate(-45deg) translate(-1px, 1px);
+      }
+
+      .tree-toggle:hover {
+        color: var(--artifact-code-ink);
+        background: var(--vitesse-soft);
+      }
+
+      .tree-kind {
+        min-width: 74px;
+        padding-top: 2px;
+        color: var(--vitesse-blue);
+        font-size: 16px;
+      }
+
+      .tree-primary {
+        min-width: 0;
+      }
+
+      .tree-label {
+        color: var(--artifact-code-ink);
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+
+      .tree-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 14px;
+        margin-top: 3px;
+        color: var(--artifact-code-muted);
+        font-size: 16px;
+      }
+
+      .tree-meta strong {
+        color: var(--vitesse-ink);
+        font-weight: 500;
+      }
+
+      .tree-badges {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-left: 10px;
+      }
+
+      .tree-badge {
+        color: var(--vitesse-pink);
+        font-size: 16px;
+      }
+
+      .tree-badge::before {
+        content: '[';
+      }
+
+      .tree-badge::after {
+        content: ']';
+      }
+
+      .pseudocode-host {
+        padding: 14px 0 18px;
+        overflow: auto;
+      }
+
+      .pseudocode-list {
+        margin: 0;
+        padding: 0;
+        counter-reset: pseudo-line;
+        list-style: none;
+      }
+
+      .pseudocode-line {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr) minmax(160px, 30%);
+        min-height: 30px;
+        counter-increment: pseudo-line;
+      }
+
+      .pseudocode-line::before {
+        padding-right: 14px;
+        color: var(--vitesse-comment);
+        text-align: right;
+        content: counter(pseudo-line);
+        user-select: none;
+      }
+
+      .pseudocode-code {
+        padding-left: calc(var(--pseudo-indent, 0) * 24px);
+        white-space: pre;
+      }
+
+      .pseudocode-note {
+        padding: 0 18px;
+        color: var(--artifact-code-muted);
+        border-left: 1px solid var(--artifact-code-border);
+        white-space: normal;
+      }
+
+      .token-keyword {
+        color: var(--vitesse-green);
+        font-weight: 600;
+      }
+
+      .token-function {
+        color: var(--vitesse-function);
+      }
+
+      .token-value {
+        color: var(--vitesse-string);
+      }
+
+      .token-operator {
+        color: var(--vitesse-red);
+      }
+
+      .token-symbol {
+        color: var(--vitesse-pink);
+      }
+
+      .token-comment {
+        color: var(--vitesse-comment);
+      }
+
+      .signature-list {
+        display: grid;
+      }
+
+      .signature-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(250px, 0.65fr);
+        min-height: 116px;
+        border-top: 1px solid var(--artifact-code-border);
+      }
+
+      .signature-item:first-child {
+        border-top: 0;
+      }
+
+      .signature-code {
+        min-width: 0;
+        padding: 16px 18px;
+        overflow: auto;
+      }
+
+      .signature-code .shiki {
+        margin: 0;
+        background: transparent !important;
+        font-size: 16px;
+        line-height: 26px;
+        white-space: pre;
+      }
+
+      .signature-meta {
+        margin: 0;
+        padding: 15px 18px;
+        background: var(--artifact-code-raised);
+        border-left: 1px solid var(--artifact-code-border);
+      }
+
+      .signature-meta div + div {
+        margin-top: 9px;
+      }
+
+      .signature-meta dt {
+        color: var(--artifact-code-muted);
+        font-size: 16px;
+      }
+
+      .signature-meta dd {
+        margin: 1px 0 0;
+        color: var(--artifact-code-ink);
+        font-size: 16px;
+      }
+
+      .code-host .shiki {
+        margin: 0;
+        padding: 20px 22px;
+        overflow: auto;
+        border-radius: 0;
+        font-family: var(--font-mono);
+        font-size: 16px;
+        line-height: 26px;
+        white-space: pre;
+      }
+
+      .diff-host {
+        min-height: 220px;
+        color: var(--artifact-code-ink);
+        background: var(--artifact-code);
       }
 
       .mermaid-host {
         width: var(--mermaid-viewport-width);
         min-height: var(--mermaid-viewport-min-height);
         max-height: var(--mermaid-viewport-max-height);
+        padding: 22px;
         overflow: auto;
         overscroll-behavior: contain;
       }
@@ -115,106 +646,594 @@
       }
 
       .mermaid-host svg {
+        display: block;
         width: auto;
         max-width: none;
         height: auto;
-        display: block;
         margin-inline: auto;
       }
 
-      .code-host .shiki {
-        margin: 0;
-        padding: 18px 20px;
-        overflow: auto;
+      .mockup-frame {
+        display: grid;
+        grid-template-rows: 52px minmax(360px, auto);
+        overflow: hidden;
+        color: var(--vitesse-ink);
+        background: var(--vitesse-soft);
+        border: 1px solid var(--vitesse-border);
         border-radius: 6px;
-        white-space: pre;
+        font-family: var(--font-sans);
+      }
+
+      .mockup-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        background: var(--vitesse-white);
+        border-bottom: 1px solid var(--vitesse-border);
+      }
+
+      .mockup-brand {
+        font-weight: 700;
+      }
+
+      .mockup-state {
+        color: var(--artifact-positive);
         font-family: var(--font-mono);
-        font-size: 16px;
-        line-height: 26px;
+      }
+
+      .mockup-body {
+        display: grid;
+        grid-template-columns: 190px minmax(0, 1fr);
+      }
+
+      .mockup-sidebar {
+        padding: 18px 14px;
+        background: var(--vitesse-soft);
+        border-right: 1px solid var(--vitesse-border);
+      }
+
+      .mockup-nav-item {
+        padding: 8px 10px;
+        color: var(--vitesse-muted);
+        border-left: 3px solid transparent;
+      }
+
+      .mockup-nav-item.is-active {
+        color: var(--vitesse-ink);
+        background: var(--vitesse-white);
+        border-left-color: var(--artifact-accent);
+      }
+
+      .mockup-workspace {
+        padding: 22px;
+      }
+
+      .mockup-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .mockup-heading {
+        margin: 0;
+        font-size: 21px;
+        font-weight: 700;
+      }
+
+      .mockup-button {
+        min-height: 38px;
+        padding: 6px 14px;
+        color: var(--vitesse-white);
+        background: var(--artifact-accent);
+        border: 1px solid var(--artifact-accent);
+        border-radius: 4px;
+      }
+
+      .mockup-panel {
+        padding: 18px;
+        background: var(--vitesse-white);
+        border: 1px solid var(--vitesse-border);
+        border-radius: 5px;
+      }
+
+      .mockup-panel + .mockup-panel {
+        margin-top: 12px;
+      }
+
+      .mockup-panel-title {
+        margin: 0 0 10px;
+        font-weight: 700;
+      }
+
+      .mockup-row {
+        display: grid;
+        grid-template-columns: 96px minmax(0, 1fr);
+        gap: 12px;
+        padding: 8px 0;
+        border-top: 1px solid var(--vitesse-border-soft);
+      }
+
+      .mockup-row:first-of-type {
+        border-top: 0;
+      }
+
+      .mockup-label {
+        color: var(--vitesse-muted);
+      }
+
+      .mockup-annotation {
+        margin-top: 12px;
+        padding: 10px 12px;
+        color: var(--vitesse-orange);
+        background: color-mix(in srgb, var(--vitesse-orange) 8%, var(--vitesse-white));
+        border-left: 3px solid var(--artifact-warning);
+      }
+
+      .mockup-field {
+        display: grid;
+        gap: 6px;
+        margin-top: 12px;
+      }
+
+      .mockup-field-label {
+        color: var(--vitesse-muted);
+        font-weight: 600;
+      }
+
+      .mockup-input {
+        min-height: 42px;
+        padding: 9px 11px;
+        color: var(--vitesse-muted);
+        background: var(--vitesse-white);
+        border: 1px solid var(--vitesse-border);
+        border-radius: 4px;
+      }
+
+      .mockup-list {
+        margin: 4px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .mockup-list-item {
+        display: grid;
+        grid-template-columns: 20px minmax(0, 1fr);
+        gap: 8px;
+        padding: 7px 0;
+        border-top: 1px solid var(--vitesse-border-soft);
+      }
+
+      .mockup-list-item:first-child {
+        border-top: 0;
+      }
+
+      .mockup-list-item::before {
+        color: var(--artifact-positive);
+        font-family: var(--font-mono);
+        content: 'ok';
       }
     </style>
   </head>
   <body>
-    <main class="artifact-shell text-lg prose-2xl">
-      <!-- STARTER EXAMPLES: replace or remove every data-starter-example block. -->
-      <header class="mb-12 border-b artifact-rule pb-8" data-starter-example>
-        <p class="mb-3 text-base font-semibold uppercase text-[var(--artifact-accent)]">
-          Visual artifact starter
-        </p>
-        <h1 class="max-w-4xl text-5xl font-semibold leading-[1.05]">
-          Let the structure carry the explanation.
-        </h1>
-        <p class="mt-5 max-w-2xl text-lg leading-8 text-[var(--artifact-muted)]">
-          Replace this starter material with a subject-specific visual narrative.
-        </p>
-      </header>
+    <div class="artifact-layout">
+      <aside class="toc-rail" aria-label="文件目錄">
+        <p class="toc-kicker">視覺元件範本</p>
+        <p class="toc-title" data-toc-document-title>程式碼審查流程</p>
+        <nav aria-label="章節導覽">
+          <ol id="artifact-toc" class="toc-list"></ol>
+        </nav>
+      </aside>
 
-      <nav class="mb-14 flex gap-6 text-base" aria-label="Starter contents" data-starter-example>
-        <a
-          class="text-[var(--artifact-accent)] underline-offset-4 hover:underline"
-          href="#flow-example"
-          >Flow</a
-        >
-        <a
-          class="text-[var(--artifact-accent)] underline-offset-4 hover:underline"
-          href="#evidence-example"
-          >Diff and code</a
-        >
-      </nav>
-
-      <section id="flow-example" class="mb-16 grid gap-10" data-starter-example>
-        <div>
-          <p class="text-base font-semibold uppercase text-[var(--artifact-muted)]">Example 1</p>
-          <h2 class="mt-2 text-2xl font-semibold">Mermaid for topology</h2>
-          <p class="mt-3 leading-7 text-[var(--artifact-muted)]">
-            Use a graph when relationships and direction are the information.
+      <main class="artifact-main" id="artifact-main">
+        <!-- DEMO CONTENT: replace or remove each data-demo block and its matching JSON data. -->
+        <header class="document-header" data-demo>
+          <p class="document-kicker">程式碼審查流程</p>
+          <h1 class="document-title">同一份系統資訊，使用固定元件說清楚</h1>
+          <p class="document-summary">
+            這份繁中範本展示上游如何先決定章節與元件，再由 artifact-visualizer
+            組裝成一致的單檔 HTML。範例聚焦審查留言從畫面送出、驗證到儲存的流程。
           </p>
-        </div>
-        <div id="starter-mermaid" class="mermaid-host artifact-surface p-6"></div>
-      </section>
+          <ul class="document-meta" aria-label="文件資料">
+            <li>對象：程式碼審查者</li>
+            <li>工作：定位責任與變更證據</li>
+          </ul>
+        </header>
 
-      <section id="evidence-example" data-starter-example>
-        <div class="mb-6 max-w-2xl">
-          <p class="text-base font-semibold uppercase text-[var(--artifact-muted)]">Example 2</p>
-          <h2 class="mt-2 text-2xl font-semibold">Diff for change, code for context</h2>
-          <p class="mt-3 leading-7 text-[var(--artifact-muted)]">
-            Use the narrowest evidence that makes the explanation verifiable.
-          </p>
-        </div>
-        <div class="grid gap-6">
-          <div id="starter-diff" class="artifact-surface min-h-48 overflow-hidden"></div>
-          <div id="starter-code" class="code-host artifact-surface min-h-48 overflow-hidden"></div>
-        </div>
-      </section>
-    </main>
+        <section id="flow" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>先看整體流程</h2>
+              <p class="section-summary">
+                Beautiful Mermaid 負責有明確先後、分支或狀態轉移的 graph topology。Call stack 與
+                UI component tree 交給固定 tree 元件。
+              </p>
+            </div>
+          </header>
+
+          <article id="review-sequence" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>審查留言的往返順序</h3>
+                <p class="visual-copy">先呈現使用者操作到儲存完成的主路徑，後續元件再拆解責任。</p>
+                <p class="source-line">docs/review-flow.md</p>
+              </div>
+              <span class="interaction-status">可互動</span>
+            </header>
+            <div id="demo-sequence" class="mermaid-host artifact-surface"></div>
+          </article>
+
+          <article id="review-flowchart" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>驗證與儲存的決策路徑</h3>
+                <p class="visual-copy">Flowchart 適合呈現分支與匯流，節點文字維持短句。</p>
+                <p class="source-line">src/review/submit-review.ts</p>
+              </div>
+              <span class="interaction-status">可互動</span>
+            </header>
+            <div id="demo-flowchart" class="mermaid-host artifact-surface"></div>
+          </article>
+
+          <article id="review-state" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>審查表單的狀態轉移</h3>
+                <p class="visual-copy">State diagram 聚焦狀態與觸發條件，呼叫順序交給 sequence diagram。</p>
+                <p class="source-line">src/review/use-review-form.ts</p>
+              </div>
+              <span class="interaction-status">可互動</span>
+            </header>
+            <div id="demo-state" class="mermaid-host artifact-surface"></div>
+          </article>
+        </section>
+
+        <section id="structures" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>沿著結構定位責任</h2>
+              <p class="section-summary">
+                三種 tree 共用縮排、connector、節點與 metadata anatomy。各 Variant 透過資料 schema
+                表達自己的語意。
+              </p>
+            </div>
+          </header>
+
+          <article id="call-stack" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>Call stack：錯誤回到哪一層</h3>
+                <p class="visual-copy">Active frame 指出目前處理驗證失敗的位置，節點可收合。</p>
+                <p class="source-line">src/review/submit-review.ts</p>
+              </div>
+              <span class="interaction-status">可互動</span>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">call stack</span> <span class="caption-name">submitReview</span></span>
+                <span class="caption-meta">驗證失敗</span>
+              </div>
+              <div id="demo-call-stack" class="tree-host"></div>
+            </div>
+          </article>
+
+          <article id="component-tree" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>UI component tree：狀態由誰持有</h3>
+                <p class="visual-copy">Props 與 responsibility 固定在節點下方，讓每個節點維持同一套 anatomy。</p>
+                <p class="source-line">src/review/ReviewPage.tsx</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">component tree</span> <span class="caption-name">ReviewPage</span></span>
+                <span class="caption-meta">React</span>
+              </div>
+              <div id="demo-component-tree" class="tree-host"></div>
+            </div>
+          </article>
+
+          <article id="file-tree" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>File tree：變更落在哪裡</h3>
+                <p class="visual-copy">Path 與 note 描述檔案邊界，架構關係交給其他元件。</p>
+                <p class="source-line">repository layout</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">file tree</span> <span class="caption-name">src/review</span></span>
+                <span class="caption-meta">4 個檔案</span>
+              </div>
+              <div id="demo-file-tree" class="tree-host"></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="logic" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>把判斷與實作分開看</h2>
+              <p class="section-summary">
+                Pseudocode 說明決策，code block 保留真實上下文。兩者各自維持可核對的形式。
+              </p>
+            </div>
+          </header>
+
+          <article id="pseudocode" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>送出留言的守門條件</h3>
+                <p class="visual-copy">Typed segments 固定 keyword、function、value 與註解的樣式。</p>
+                <p class="source-line">review submission rules</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">pseudocode</span> <span class="caption-name">submit-review.flow</span></span>
+                <span class="caption-meta">守門順序</span>
+              </div>
+              <div id="demo-pseudocode" class="pseudocode-host"></div>
+            </div>
+          </article>
+
+          <article id="source-code" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>真實實作保留必要上下文</h3>
+                <p class="visual-copy">Standalone code 保留可核對的來源，pseudocode 負責決策摘要。</p>
+                <p class="source-line">src/review/submit-review.ts:12</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">code</span> <span class="caption-name">submit-review.ts</span></span>
+                <span class="caption-meta">TypeScript</span>
+              </div>
+              <div id="demo-code" class="code-host"></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="contracts" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>先談介面與責任</h2>
+              <p class="section-summary">Signature list 將宣告和 owner、responsibility 放在同一列。</p>
+            </div>
+          </header>
+
+          <article id="signatures" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>審查服務的公開契約</h3>
+                <p class="visual-copy">長型別宣告保留自然寬度，說明欄維持固定 anatomy。</p>
+                <p class="source-line">src/review/types.ts</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">signatures</span> <span class="caption-name">review service</span></span>
+                <span class="caption-meta">TypeScript</span>
+              </div>
+              <div id="demo-signatures" class="signature-list"></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="evidence" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>用變更證據收尾</h2>
+              <p class="section-summary">Pierre 以 Vitesse Light 與 28px 行高呈現所有 Diff。</p>
+            </div>
+          </header>
+
+          <article id="source-diff" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>空白留言現在會被拒絕</h3>
+                <p class="visual-copy">聚焦的 patch 已足以支持結論。</p>
+                <p class="source-line">src/review/validate-comment.ts</p>
+              </div>
+            </header>
+            <div id="demo-diff" class="diff-host artifact-surface"></div>
+          </article>
+
+          <article id="renderer-failure" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>Renderer 錯誤維持在個別區塊</h3>
+                <p class="visual-copy">錯誤訊息指出失敗元件，頁面其他部分保持可用。</p>
+                <p class="source-line">template rendererMessages</p>
+              </div>
+            </header>
+            <div class="artifact-surface">
+              <p class="renderer-error">無法顯示差異內容。請檢查輸入資料是否完整。</p>
+            </div>
+          </article>
+        </section>
+
+        <section id="layout" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>用低擬真畫面說明空間關係</h2>
+              <p class="section-summary">Mockup primitives 專注表達 layout 與 ownership。</p>
+            </div>
+          </header>
+
+          <article id="html-mockup" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>審查頁面的責任分區</h3>
+                <p class="visual-copy">Viewport、sidebar、toolbar、panel、list、form field、button 與 annotation 都使用固定 primitives。</p>
+                <p class="source-line">src/review/ReviewPage.tsx</p>
+              </div>
+            </header>
+            <div class="mockup-frame" aria-label="程式碼審查頁面低擬真配置">
+              <div class="mockup-topbar">
+                <span class="mockup-brand">Review Desk</span>
+                <span class="mockup-state">檢查通過</span>
+              </div>
+              <div class="mockup-body">
+                <aside class="mockup-sidebar" aria-label="審查頁導覽">
+                  <div class="mockup-nav-item">摘要</div>
+                  <div class="mockup-nav-item is-active">檔案</div>
+                  <div class="mockup-nav-item">活動</div>
+                </aside>
+                <div class="mockup-workspace">
+                  <div class="mockup-toolbar">
+                    <h4 class="mockup-heading">validate-comment.ts</h4>
+                    <button class="mockup-button" type="button">送出審查</button>
+                  </div>
+                  <section class="mockup-panel">
+                    <p class="mockup-panel-title">變更摘要</p>
+                    <div class="mockup-row"><span class="mockup-label">新增</span><span>拒絕空白留言</span></div>
+                    <div class="mockup-row"><span class="mockup-label">影響</span><span>留言送出流程</span></div>
+                  </section>
+                  <section class="mockup-panel">
+                    <p class="mockup-panel-title">審查留言</p>
+                    <label class="mockup-field">
+                      <span class="mockup-field-label">留言</span>
+                      <span class="mockup-input">請說明這項變更需要調整的原因</span>
+                    </label>
+                    <div class="mockup-annotation">驗證失敗時，錯誤留在輸入區附近。</div>
+                  </section>
+                  <section class="mockup-panel">
+                    <p class="mockup-panel-title">檢查項目</p>
+                    <ul class="mockup-list">
+                      <li class="mockup-list-item">型別檢查通過</li>
+                      <li class="mockup-list-item">空白留言測試通過</li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <!-- Escape script-sensitive characters before embedding generated JSON data. -->
+    <script id="data-sequence" type="application/json" data-demo>
+      {"source":"sequenceDiagram\n  participant Reviewer as 審查者\n  participant Page as ReviewPage\n  participant Service as ReviewService\n  participant Store as ReviewStore\n  Reviewer->>Page: 送出留言\n  Page->>Service: submitReview(input)\n  Service->>Service: validateComment(input)\n  Service->>Store: save(comment)\n  Store-->>Service: 已儲存留言\n  Service-->>Page: 成功"}
+    </script>
+    <script id="data-flowchart" type="application/json" data-demo>
+      {"source":"graph TD\n  A[接收審查留言] --> B[去除前後空白]\n  B --> C{留言是否為空白}\n  C -->|是| D[回傳驗證失敗]\n  C -->|否| E[儲存審查留言]\n  E --> F[回傳成功]"}
+    </script>
+    <script id="data-state" type="application/json" data-demo>
+      {"source":"stateDiagram-v2\n  state \"編輯中\" as Editing\n  state \"驗證中\" as Validating\n  state \"儲存中\" as Saving\n  state \"已完成\" as Complete\n  [*] --> Editing\n  Editing --> Validating: 送出\n  Validating --> Editing: 驗證失敗\n  Validating --> Saving: 驗證通過\n  Saving --> Complete: 儲存成功\n  Complete --> [*]"}
+    </script>
+    <script id="data-call-stack" type="application/json" data-demo>
+      {"roots":[{"frame":"onSubmit","location":"ReviewForm.tsx:42","detail":"接收表單事件","children":[{"frame":"submitReview","location":"submit-review.ts:12","detail":"協調驗證與儲存","children":[{"frame":"validateComment","location":"validate-comment.ts:8","detail":"拒絕空白留言","active":true,"badges":["目前堆疊位置"]},{"frame":"saveReview","location":"review-store.ts:31","detail":"驗證成功後才執行"}]}]}]}
+    </script>
+    <script id="data-component-tree" type="application/json" data-demo>
+      {"roots":[{"component":"ReviewPage","props":"pullRequestId","responsibility":"載入審查內容與共享狀態","children":[{"component":"FileNavigator","props":"files, selectedPath","responsibility":"切換檔案"},{"component":"ReviewWorkspace","props":"selectedFile","responsibility":"組合 diff 與留言區","children":[{"component":"DiffViewer","props":"oldFile, newFile","responsibility":"顯示來源變更"},{"component":"ReviewForm","props":"onSubmit, error","responsibility":"收集並送出留言"}]}]}]}
+    </script>
+    <script id="data-file-tree" type="application/json" data-demo>
+      {"roots":[{"name":"src","kind":"dir","path":"src","note":"應用程式來源","children":[{"name":"review","kind":"dir","path":"src/review","note":"審查 bounded context","children":[{"name":"ReviewPage.tsx","kind":"file","path":"src/review/ReviewPage.tsx","note":"畫面組合"},{"name":"submit-review.ts","kind":"file","path":"src/review/submit-review.ts","note":"use case"},{"name":"validate-comment.ts","kind":"file","path":"src/review/validate-comment.ts","note":"輸入規則"},{"name":"review-store.ts","kind":"file","path":"src/review/review-store.ts","note":"持久化介面"}]}]}]}
+    </script>
+    <script id="data-pseudocode" type="application/json" data-demo>
+      {"lines":[{"indent":0,"segments":[{"type":"keyword","text":"WHEN "},{"type":"function","text":"submitReview"},{"type":"plain","text":" receives input"}],"note":"使用者送出留言"},{"indent":1,"segments":[{"type":"keyword","text":"IF "},{"type":"function","text":"trim"},{"type":"plain","text":"(comment) "},{"type":"operator","text":"== "},{"type":"value","text":"empty"}],"note":"先正規化空白"},{"indent":2,"segments":[{"type":"keyword","text":"RETURN "},{"type":"value","text":"驗證失敗"}],"note":"不呼叫 store"},{"indent":1,"segments":[{"type":"keyword","text":"ELSE"}],"note":""},{"indent":2,"segments":[{"type":"function","text":"saveReview"},{"type":"plain","text":"(comment)"}],"note":"儲存有效留言"},{"indent":2,"segments":[{"type":"keyword","text":"RETURN "},{"type":"value","text":"已儲存留言"}],"note":"更新畫面"}]}
+    </script>
+    <script id="data-code" type="application/json" data-demo>
+      {"source":"export async function submitReview(input: ReviewInput) {\n  const comment = input.comment.trim()\n\n  if (!comment) {\n    return { ok: false, error: 'Comment is required' }\n  }\n\n  return reviewStore.save({ ...input, comment })\n}","lang":"typescript"}
+    </script>
+    <script id="data-signatures" type="application/json" data-demo>
+      {"items":[{"declaration":"submitReview(input: ReviewInput): Promise<ReviewResult>","lang":"typescript","owner":"ReviewService","responsibility":"協調驗證與儲存"},{"declaration":"validateComment(comment: string): ValidationResult","lang":"typescript","owner":"ReviewPolicy","responsibility":"判斷留言是否可送出","note":"不得讀寫外部狀態"},{"declaration":"save(review: PendingReview): Promise<SavedReview>","lang":"typescript","owner":"ReviewStore","responsibility":"持久化已驗證的留言"}]}
+    </script>
+    <script id="data-diff" type="application/json" data-demo>
+      {"oldFile":{"name":"validate-comment.ts","contents":"export function validateComment(comment: string) {\n  return { ok: true }\n}\n"},"newFile":{"name":"validate-comment.ts","contents":"export function validateComment(comment: string) {\n  if (!comment.trim()) {\n    return { ok: false, error: 'Comment is required' }\n  }\n\n  return { ok: true }\n}\n"}}
+    </script>
 
     <script type="module">
       const mountedDiffs = []
       const rendererMessages = {
-        diagram: 'Diagram could not be rendered.',
-        diff: 'Diff could not be rendered.',
-        code: 'Code could not be highlighted.',
+        diagram: '無法顯示流程圖。請檢查圖表資料。',
+        diff: '無法顯示差異內容。請檢查檔案資料。',
+        code: '無法套用程式碼高亮。請檢查語言與來源。',
+        signatures: '無法顯示介面宣告。請檢查 signature 資料。',
       }
-      const diffTypographyCSS = `
-        :host {
-          --diffs-font-family: "Maple Mono", "Noto Serif TC", monospace;
-          --diffs-header-font-family: "Maple Mono", "Noto Serif TC", monospace;
-          --diffs-font-size: 16px;
-          --diffs-line-height: 28px;
-        }
-
-        [data-merge-conflict='marker-start']::after,
-        [data-merge-conflict='marker-end']::after,
-        [data-merge-conflict-actions-content] {
-          font-size: 16px;
-        }
-      `
+      const uiMessages = {
+        collapse: '收合節點',
+        expand: '展開節點',
+        source: '來源',
+        location: '位置',
+        detail: '說明',
+        props: 'props',
+        path: 'path',
+        owner: '負責',
+        responsibility: '責任',
+        note: '備註',
+      }
+      const diffThemeCSS = [
+        ':host {',
+        '  --diffs-font-family: "Maple Mono", "Noto Serif TC", monospace;',
+        '  --diffs-header-font-family: "Maple Mono", "Noto Serif TC", monospace;',
+        '  --diffs-font-size: 16px;',
+        '  --diffs-line-height: 28px;',
+        '  color-scheme: light;',
+        '}',
+        '[data-merge-conflict="marker-start"]::after,',
+        '[data-merge-conflict="marker-end"]::after,',
+        '[data-merge-conflict-actions-content] { font-size: 16px; }',
+      ].join('\n')
 
       let mermaidModule
       let diffsModule
       let shikiModule
       const dragScrollHosts = new WeakSet()
       const minimumDiagramLabelSize = 16
+      /**
+       * Public data contracts:
+       * readData(id): parses one safely serialized application/json block.
+       * createTree(host, { roots }, { variant, collapsible }): renders nested nodes.
+       * call-stack nodes use { frame, location?, detail?, children?, active?, badges? }.
+       * component-tree nodes use { component, props?, responsibility?, children?, active?, badges? }.
+       * file-tree nodes use { name, kind, path?, note?, children?, active?, badges? }.
+       * createPseudocode(host, { lines }): each line uses { indent, segments, note? }.
+       * Pseudocode segments use { type, text }. The type is a tokenTypes value.
+       * createSignatureList(host, { items }): each item uses
+       * { declaration, lang?, owner?, responsibility?, note? }.
+       * renderDiagram and renderCode accept renderer source. renderDiff accepts only file data.
+       * Put untrusted source in safely serialized JSON. Builders insert source text with textContent.
+       */
+      const treePresets = {
+        'call-stack': { primary: 'frame', kind: 'fn' },
+        'component-tree': { primary: 'component', kind: 'component' },
+        'file-tree': { primary: 'name', kind: 'file' },
+      }
+      const tokenTypes = new Set([
+        'plain',
+        'keyword',
+        'function',
+        'value',
+        'operator',
+        'symbol',
+        'comment',
+      ])
 
       function loadMermaid() {
         mermaidModule ??= import('https://esm.sh/beautiful-mermaid@1.1.3')
@@ -234,26 +1253,183 @@
       function getHost(hostOrId) {
         const host = typeof hostOrId === 'string' ? document.getElementById(hostOrId) : hostOrId
         if (!(host instanceof HTMLElement)) {
-          throw new Error(`Missing renderer host: ${String(hostOrId)}`)
+          throw new Error('Missing component host: ' + String(hostOrId))
         }
         return host
+      }
+
+      function readData(id) {
+        const node = document.getElementById(id)
+        if (!(node instanceof HTMLScriptElement) || node.type !== 'application/json') {
+          throw new Error('Missing JSON data block: ' + id)
+        }
+        return JSON.parse(node.textContent || '')
+      }
+
+      function element(tag, className, text) {
+        const node = document.createElement(tag)
+        if (className) node.className = className
+        if (text !== undefined) node.textContent = String(text)
+        return node
       }
 
       function showRendererError(hostOrId, displayMessage, error) {
         const host = getHost(hostOrId)
         host.classList.remove('is-scrollable', 'is-grabbing')
         host.replaceChildren()
-        const message = document.createElement('p')
-        message.className = 'renderer-error'
-        message.textContent = displayMessage
-        host.append(message)
+        host.append(element('p', 'renderer-error', displayMessage))
         console.error(displayMessage, error)
+      }
+
+      function metadataForNode(node, variant) {
+        if (variant === 'call-stack') {
+          return [
+            node.location && [uiMessages.location, node.location],
+            node.detail && [uiMessages.detail, node.detail],
+          ].filter(Boolean)
+        }
+        if (variant === 'component-tree') {
+          return [
+            node.props && [uiMessages.props, node.props],
+            node.responsibility && [uiMessages.responsibility, node.responsibility],
+          ].filter(Boolean)
+        }
+        return [
+          node.path && [uiMessages.path, node.path],
+          node.note && [uiMessages.note, node.note],
+        ].filter(Boolean)
+      }
+
+      function localizeSourceLines() {
+        for (const line of document.querySelectorAll('.source-line')) {
+          if (line.querySelector('.source-label')) continue
+          line.prepend(element('span', 'source-label', uiMessages.source))
+        }
+      }
+
+      function createTree(hostOrId, data, options = {}) {
+        const host = getHost(hostOrId)
+        const variant = Object.hasOwn(treePresets, options.variant) ? options.variant : 'file-tree'
+        const preset = treePresets[variant]
+        const roots = Array.isArray(data) ? data : data.roots
+        const collapsible = options.collapsible === true
+        host.replaceChildren()
+
+        function buildList(nodes, nested) {
+          const list = element('ol', nested ? 'tree-list tree-children' : 'tree-list')
+          for (const node of nodes || []) {
+            const item = element('li', 'tree-node')
+            const row = element('div', 'tree-row' + (node.active ? ' is-active' : ''))
+            const children = Array.isArray(node.children) ? node.children : []
+            let childList
+
+            if (collapsible && children.length) {
+              const toggle = element('button', 'tree-toggle')
+              toggle.type = 'button'
+              toggle.setAttribute('aria-expanded', 'true')
+              toggle.setAttribute('aria-label', uiMessages.collapse)
+              toggle.title = uiMessages.collapse
+              row.append(toggle)
+              childList = buildList(children, true)
+              toggle.addEventListener('click', () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'true'
+                toggle.setAttribute('aria-expanded', String(!expanded))
+                toggle.setAttribute('aria-label', expanded ? uiMessages.expand : uiMessages.collapse)
+                toggle.title = expanded ? uiMessages.expand : uiMessages.collapse
+                childList.hidden = expanded
+              })
+            } else {
+              row.append(element('span', 'tree-spacer'))
+            }
+
+            row.append(element('span', 'tree-kind', node.kind || preset.kind))
+            const primary = element('div', 'tree-primary')
+            const label = element('span', 'tree-label', node[preset.primary])
+            primary.append(label)
+
+            if (Array.isArray(node.badges) && node.badges.length) {
+              const badges = element('span', 'tree-badges')
+              for (const badge of node.badges) badges.append(element('span', 'tree-badge', badge))
+              primary.append(badges)
+            }
+
+            const metadata = metadataForNode(node, variant)
+            if (metadata.length) {
+              const meta = element('div', 'tree-meta')
+              for (const pair of metadata) {
+                const value = element('span')
+                value.append(element('strong', '', pair[0] + '  '), document.createTextNode(pair[1]))
+                meta.append(value)
+              }
+              primary.append(meta)
+            }
+
+            row.append(primary)
+            item.append(row)
+            if (children.length) item.append(childList || buildList(children, true))
+            list.append(item)
+          }
+          return list
+        }
+
+        host.append(buildList(roots, false))
+      }
+
+      function createPseudocode(hostOrId, data) {
+        const host = getHost(hostOrId)
+        const list = element('ol', 'pseudocode-list')
+        for (const line of data.lines || []) {
+          const item = element('li', 'pseudocode-line')
+          const code = element('code', 'pseudocode-code')
+          const indent = Math.max(0, Number.parseInt(line.indent, 10) || 0)
+          code.style.setProperty('--pseudo-indent', String(indent))
+          for (const segment of line.segments || []) {
+            const type = tokenTypes.has(segment.type) ? segment.type : 'plain'
+            code.append(element('span', 'token-' + type, segment.text))
+          }
+          item.append(code, element('span', 'pseudocode-note', line.note || ''))
+          list.append(item)
+        }
+        host.replaceChildren(list)
+      }
+
+      async function createSignatureList(hostOrId, data) {
+        const host = getHost(hostOrId)
+        try {
+          const { codeToHtml } = await loadShiki()
+          const items = await Promise.all(
+            (data.items || []).map(async (signature) => {
+              const item = element('article', 'signature-item')
+              const code = element('div', 'signature-code')
+              code.innerHTML = await codeToHtml(signature.declaration, {
+                lang: signature.lang || 'typescript',
+                theme: 'vitesse-light',
+              })
+              const meta = element('dl', 'signature-meta')
+              const fields = [
+                [uiMessages.owner, signature.owner],
+                [uiMessages.responsibility, signature.responsibility],
+                [uiMessages.note, signature.note],
+              ]
+              for (const field of fields) {
+                if (!field[1]) continue
+                const group = element('div')
+                group.append(element('dt', '', field[0]), element('dd', '', field[1]))
+                meta.append(group)
+              }
+              item.append(code, meta)
+              return item
+            }),
+          )
+          host.replaceChildren(...items)
+        } catch (error) {
+          showRendererError(host, rendererMessages.signatures, error)
+        }
       }
 
       function enableGrabScroll(host) {
         if (dragScrollHosts.has(host)) return
         dragScrollHosts.add(host)
-
         let pointerId = null
         let startX = 0
         let startY = 0
@@ -264,7 +1440,6 @@
           const canScroll =
             host.scrollWidth > host.clientWidth || host.scrollHeight > host.clientHeight
           if (pointerId !== null || event.button !== 0 || !canScroll) return
-
           pointerId = event.pointerId
           startX = event.clientX
           startY = event.clientY
@@ -285,7 +1460,6 @@
           pointerId = null
           host.classList.remove('is-grabbing')
         }
-
         host.addEventListener('pointerup', stopDragging)
         host.addEventListener('pointercancel', stopDragging)
         host.addEventListener('lostpointercapture', stopDragging)
@@ -294,41 +1468,56 @@
       function preserveDiagramScale(host) {
         const svg = host.querySelector('svg')
         if (!(svg instanceof SVGSVGElement)) return
-
         const viewBox = svg.viewBox.baseVal
         if (viewBox.width > 0) {
-          const labelSizes = [...svg.querySelectorAll('text')]
+          const sizes = [...svg.querySelectorAll('text')]
             .map((label) => Number.parseFloat(getComputedStyle(label).fontSize))
             .filter((size) => Number.isFinite(size) && size > 0)
-          const smallestLabel = labelSizes.length
-            ? Math.min(...labelSizes)
-            : minimumDiagramLabelSize
-          const readableScale = Math.max(1, minimumDiagramLabelSize / smallestLabel)
-          svg.style.width = `${Math.ceil(viewBox.width * readableScale)}px`
+          const smallest = sizes.length ? Math.min(...sizes) : minimumDiagramLabelSize
+          const scale = Math.max(1, minimumDiagramLabelSize / smallest)
+          svg.style.width = String(Math.ceil(viewBox.width * scale)) + 'px'
         }
-
         host.classList.toggle(
           'is-scrollable',
           host.scrollWidth > host.clientWidth || host.scrollHeight > host.clientHeight,
         )
       }
 
+      function colorToken(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+      }
+
       async function renderDiagram(hostOrId, source, options = {}) {
         const host = getHost(hostOrId)
         try {
           const { renderMermaidSVG } = await loadMermaid()
-          const diagramUsesChinese =
-            document.documentElement.matches(':lang(zh)') ||
+          const {
+            bg,
+            fg,
+            line,
+            accent,
+            muted,
+            surface,
+            border,
+            transparent,
+            font,
+            ...renderOptions
+          } = options
+          void [bg, fg, line, accent, muted, surface, border, transparent, font]
+          const usesChinese =
+            document.documentElement.matches(':lang(zh-TW), :lang(zh)') ||
             /[\p{Script=Han}\p{Script=Bopomofo}]/u.test(source)
           const svg = renderMermaidSVG(source, {
-            bg: 'var(--artifact-surface)',
-            fg: 'var(--artifact-ink)',
-            accent: 'var(--artifact-accent)',
-            muted: 'var(--artifact-muted)',
-            border: 'var(--artifact-border)',
+            ...renderOptions,
+            bg: colorToken('--artifact-surface'),
+            fg: colorToken('--artifact-ink'),
+            line: colorToken('--artifact-border'),
+            accent: colorToken('--artifact-accent'),
+            muted: colorToken('--artifact-muted'),
+            surface: colorToken('--vitesse-soft'),
+            border: colorToken('--artifact-border'),
             transparent: true,
-            ...options,
-            font: diagramUsesChinese ? 'Noto Serif TC' : (options.font ?? 'Maple Mono'),
+            font: usesChinese ? 'Noto Serif TC' : 'Maple Mono',
           })
           host.innerHTML = svg
           preserveDiagramScale(host)
@@ -338,17 +1527,16 @@
         }
       }
 
-      async function renderDiff(hostOrId, oldFile, newFile, options = {}) {
+      async function renderDiff(hostOrId, oldFile, newFile) {
         const host = getHost(hostOrId)
         try {
           const { FileDiff } = await loadDiffs()
           const view = new FileDiff({
-            theme: 'vitesse-light',
-            themeType: 'light',
             diffStyle: 'unified',
             overflow: 'wrap',
-            ...options,
-            unsafeCSS: `${options.unsafeCSS ?? ''}\n${diffTypographyCSS}`,
+            theme: 'vitesse-light',
+            themeType: 'light',
+            unsafeCSS: diffThemeCSS,
           })
           view.render({ oldFile, newFile, containerWrapper: host })
           mountedDiffs.push(view)
@@ -363,9 +1551,9 @@
         const host = getHost(hostOrId)
         try {
           const { codeToHtml } = await loadShiki()
-          const renderOptions = { ...options }
-          delete renderOptions.theme
-          delete renderOptions.themes
+          const { theme: ignoredTheme, themes: ignoredThemes, ...renderOptions } = options
+          void ignoredTheme
+          void ignoredThemes
           host.innerHTML = await codeToHtml(source, {
             ...renderOptions,
             theme: 'vitesse-light',
@@ -375,25 +1563,135 @@
         }
       }
 
-      window.visualArtifact = { renderDiagram, renderDiff, renderCode, showRendererError }
+      function buildToc() {
+        const toc = document.getElementById('artifact-toc')
+        if (!toc) return
+        const targets = []
+        const links = new Map()
+        const sections = [...document.querySelectorAll('[data-toc-section]')]
+        toc.replaceChildren()
 
+        sections.forEach((section, sectionIndex) => {
+          const sectionNumber = String(sectionIndex + 1).padStart(2, '0')
+          const title = section.querySelector('[data-section-title]')
+          const numberHost = section.querySelector('[data-section-number]')
+          const visuals = [...section.querySelectorAll(':scope > [data-toc-visual]')]
+          if (!title || !section.id) return
+          if (numberHost) numberHost.textContent = sectionNumber
+
+          const item = element('li', 'toc-item')
+          const link = element('a', 'toc-link')
+          link.href = '#' + section.id
+          link.append(element('span', 'toc-index', sectionNumber), element('span', '', title.textContent))
+          item.append(link)
+          links.set(section, link)
+          targets.push(section)
+
+          visuals.forEach((visual, visualIndex) => {
+            const visualNumber = sectionNumber + '.' + String(visualIndex + 1)
+            const visualNumberHost = visual.querySelector('[data-visual-number]')
+            if (visualNumberHost) visualNumberHost.textContent = visualNumber
+          })
+
+          if (visuals.length > 1) {
+            const sublist = element('ol', 'toc-sublist')
+            visuals.forEach((visual, visualIndex) => {
+              const visualTitle = visual.querySelector('[data-visual-title]')
+              if (!visualTitle || !visual.id) return
+              const visualNumber = sectionNumber + '.' + String(visualIndex + 1)
+              const subitem = element('li', 'toc-item')
+              const sublink = element('a', 'toc-link')
+              sublink.href = '#' + visual.id
+              sublink.append(
+                element('span', 'toc-index', visualNumber),
+                element('span', '', visualTitle.textContent),
+              )
+              subitem.append(sublink)
+              sublist.append(subitem)
+              links.set(visual, sublink)
+              targets.push(visual)
+            })
+            item.append(sublist)
+          }
+          toc.append(item)
+        })
+
+        for (const link of links.values()) {
+          link.addEventListener('click', (event) => {
+            const id = link.getAttribute('href').slice(1)
+            const target = document.getElementById(id)
+            if (!target) return
+            event.preventDefault()
+            target.scrollIntoView({
+              behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+              block: 'start',
+            })
+            history.replaceState(null, '', '#' + id)
+          })
+        }
+
+        let activeLink
+        function setActive(target) {
+          const link = links.get(target)
+          if (!link || link === activeLink) return
+          if (activeLink) {
+            activeLink.classList.remove('is-active')
+            activeLink.removeAttribute('aria-current')
+          }
+          link.classList.add('is-active')
+          link.setAttribute('aria-current', 'location')
+          activeLink = link
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top))
+            if (visible[0]) setActive(visible[0].target)
+          },
+          { rootMargin: '-12% 0px -72% 0px', threshold: 0 },
+        )
+        targets.forEach((target) => observer.observe(target))
+        if (targets[0]) setActive(targets[0])
+      }
+
+      const ArtifactUI = {
+        readData,
+        createTree,
+        createPseudocode,
+        createSignatureList,
+        renderDiagram,
+        renderDiff,
+        renderCode,
+        showRendererError,
+        buildToc,
+      }
+      window.ArtifactUI = ArtifactUI
+
+      localizeSourceLines()
+      buildToc()
+      const sequence = readData('data-sequence')
+      const flowchart = readData('data-flowchart')
+      const state = readData('data-state')
+      const code = readData('data-code')
+      const diff = readData('data-diff')
+      createTree('demo-call-stack', readData('data-call-stack'), {
+        variant: 'call-stack',
+        collapsible: true,
+      })
+      createTree('demo-component-tree', readData('data-component-tree'), {
+        variant: 'component-tree',
+      })
+      createTree('demo-file-tree', readData('data-file-tree'), { variant: 'file-tree' })
+      createPseudocode('demo-pseudocode', readData('data-pseudocode'))
       await Promise.all([
-        renderDiagram(
-          'starter-mermaid',
-          `graph LR
-            Input[Received information] --> Shape{Information shape}
-            Shape -->|relationships| Graph[Diagram]
-            Shape -->|change| Diff[Diff]
-            Shape -->|context| Code[Code]`,
-        ),
-        renderDiff(
-          'starter-diff',
-          { name: 'summary.ts', contents: 'const format = "prose";\n' },
-          { name: 'summary.ts', contents: 'const format = "visual";\n' },
-        ),
-        renderCode('starter-code', 'const artifact = { priority: "visuals" };', {
-          lang: 'javascript',
-        }),
+        renderDiagram('demo-sequence', sequence.source),
+        renderDiagram('demo-flowchart', flowchart.source),
+        renderDiagram('demo-state', state.source),
+        renderCode('demo-code', code.source, { lang: code.lang }),
+        createSignatureList('demo-signatures', readData('data-signatures')),
+        renderDiff('demo-diff', diff.oldFile, diff.newFile),
       ])
     </script>
   </body>

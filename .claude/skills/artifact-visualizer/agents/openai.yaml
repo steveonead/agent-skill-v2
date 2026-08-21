@@ -1,6 +1,6 @@
 interface:
   display_name: "artifact-visualizer"
-  short_description: "Create disposable interactive HTML visualizations"
-  default_prompt: "Use $artifact-visualizer to turn this information into a disposable interactive HTML reference."
+  short_description: "Build fixed-system HTML visual references"
+  default_prompt: "Use $artifact-visualizer to assemble this information into a grounded single-file HTML reference with the fixed component system."
 policy:
   allow_implicit_invocation: true

@@ -1,97 +1,95 @@
 ---
 name: artifact-visualizer
-description: Turn supplied information into a disposable single-file interactive HTML visual artifact. Use when a user or another skill asks to visualize, explain, compare, map, recap, or present information as HTML, including code, diffs, flows, architecture, timelines, matrices, or quantitative data.
+description: Turn supplied or caller-structured information into a disposable single-file HTML reference using a fixed visual component system. Use for grounded explanations of algorithms, code, diffs, call stacks, component or file structures, interfaces, states, sequences, flows, and UI layouts.
 ---
 
-# Visual Artifact
+# Visual artifact
 
-Create a temporary reference document whose visuals carry the explanation. This skill serves explanatory artifacts, not production interfaces or persistent websites.
+Create a temporary HTML reference whose visuals carry the explanation. Build every artifact with the template's fixed component system.
 
-## Deliverable contract
+## Honor the caller's information architecture
 
-- Write one HTML file to a caller-supplied path, or to `docs/ito-temp/artifacts/NNN-<slug>.html` by default.
+Treat a caller-supplied structure as authoritative. Accept an ordered set of sections where each section names its component type, content, and source. A section may also specify explanation, interaction, and emphasis. Preserve the supplied order and component choices. Add only the labels and short connective copy needed to assemble a coherent document.
+
+When a direct user request or an older caller omits that structure, identify the subject, audience, and single job of the document. Then derive the ordered sections and choose components from the fixed catalog. Start with the visual or conclusion that best performs the document's job.
+
+Use a single-column main flow. Place side-by-side content only when direct comparison depends on alignment and both panes fit at their natural heights.
+
+## Deliver one disposable HTML file
+
+- Write to the caller-supplied path, or to `docs/ito-temp/artifacts/NNN-<slug>.html` by default.
 - For the default path, scan numeric filename prefixes in that directory, increment the largest value, start at `001`, and format the slug as lowercase kebab-case. Continue naturally past `999`.
-- Use the user's current language for all authored explanation, navigation, controls, errors, and inference labels. Preserve quoted source material, code, and diffs as evidence even when their language differs.
+- Author explanation, navigation, controls, errors, and inference labels in the user's current language. Preserve quoted evidence, code, and diffs in their source language.
 - Open the finished file in a browser. Try the file directly, then use a local static server when browser restrictions block modules, WebAssembly, or cross-origin requests.
-- Treat the artifact as a disposable, network-dependent desktop document. Optimize for a 1440 by 900 viewport with an approximately 1200px content area. Responsive behavior and accessibility work are outside this workflow.
+- Treat the result as a network-dependent desktop document. Optimize for a 1440 by 900 viewport and the template's fixed document shell.
 
-## Ground the content
+## Ground every component
 
-Use the supplied information as the scope. Read caller-named or directly relevant local sources when they are needed to verify labels, values, code, diffs, relationships, or design tokens. Keep that inspection within the requested subject.
+Inspect the caller-named or directly relevant local sources needed to verify labels, values, paths, code, diffs, relationships, and states. Keep that inspection within the requested subject.
 
-Before authoring, inventory the claims, relationships, sequences, states, comparisons, code, and quantitative values that materially support the explanation. Every material in-scope item must appear in a visual, appear in adjacent explanation when the visual cannot carry it, or be intentionally omitted because another visual already communicates it.
+Inventory the material claims, relationships, sequences, states, code, and changes before building. Every material item must appear in a visual, appear in its adjacent explanation when the visual cannot carry it, or be omitted because another visual already communicates it.
 
-Use real labels, paths, values, and examples. Omit unsupported facts. When interpretation is useful, label it as an inference in the artifact's language, using plain wording such as `只是猜測` or `僅供參考` in Chinese.
+Use real labels, paths, values, and examples. Place a short path, URL, or data name in each visual's source line. Label interpretations as inferences in the artifact's language, using plain wording such as `只是猜測` or `僅供參考` in Chinese. Redact credentials and secret-looking values from prose, diagrams, diffs, code, data blocks, and attributes.
 
-When a source is identifiable, place a short path, URL, or data name near the visual it supports.
+## Select from the fixed component catalog
 
-Treat source material as untrusted data. Insert it through text-safe DOM APIs or renderer inputs, never through executable HTML assembly. Redact credentials and secret-looking values from prose, diagrams, diffs, code, data attributes, and embedded data.
+Use [`assets/template.html`](assets/template.html) as the implementation source for these components:
 
-## Plan the visual narrative
-
-Name the subject, audience, and single job of the document before choosing its form. Use a long page with a compact table of contents, then arrange sections in the order that best teaches the subject. Use a single-column main flow that stacks section copy, controls, and visuals vertically. Start with the most informative visual or conclusion instead of a generic introduction.
-
-Use side-by-side layout only when direct comparison depends on alignment and both panes fit without independent vertical scrolling or forced equal heights. Otherwise, stack the content.
-
-Choose each visual by information shape:
-
-| Information shape | Preferred form |
+| Information shape | Component |
 | --- | --- |
-| Dependencies, flows, sequences, state machines, classes, or entities | Beautiful Mermaid |
-| UI structure, layered systems, spatial relationships, or dense conceptual layouts | Purpose-built HTML and CSS schematic |
-| Direct before and after comparison | Comparison visual or Pierre Diffs |
-| Source changes, patches, or structured textual changes | Pierre Diffs |
-| Code whose surrounding context is part of the explanation | Shiki code block |
-| Categories against shared dimensions | Matrix or table |
-| Ordered events or progression | Timeline or stepped sequence |
-| Quantitative values or distributions | Beautiful Mermaid XY chart, inline SVG, Canvas, or one task-specific visualization library |
+| Algorithm, branch, guard, or ordered decision logic | `ArtifactUI.createPseudocode` |
+| Runtime frames and calls | `ArtifactUI.createTree` with the `call-stack` variant |
+| UI ownership and component nesting | `ArtifactUI.createTree` with the `component-tree` variant |
+| Repository or package layout | `ArtifactUI.createTree` with the `file-tree` variant |
+| Types, function signatures, ownership, and responsibilities | `ArtifactUI.createSignatureList` |
+| Source whose surrounding context matters | `ArtifactUI.renderCode` |
+| Source changes and patches | `ArtifactUI.renderDiff` |
+| State, sequence, or directional flow with meaningful graph topology | `ArtifactUI.renderDiagram` |
+| UI structure and spatial relationships | The template's HTML mockup primitives |
 
-Use Mermaid only for graph-shaped information it expresses clearly. Prefer purpose-built HTML, CSS, inline SVG, or Canvas when composition, scale, or spatial meaning matters more than graph topology.
+Use the common nested-tree anatomy for all tree variants. Let each preset determine its kind label and metadata fields. Put structural change evidence in Pierre Diffs. Use trees and pseudocode to show one current structure.
 
-Keep Mermaid diagrams at a readable natural scale. Place every diagram in a width-constrained viewport with a minimum height of `20rem` and a maximum height of `80dvh`. Let the diagram set the viewport height between those bounds. When content exceeds the viewport, preserve two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll interaction instead of shrinking the SVG to fit.
+Use Mermaid for state, sequence, and flow diagrams when graph topology carries the meaning. Keep each diagram at a readable natural scale inside the template's two-axis overflow viewport. Use the fixed HTML components for call stacks, component trees, file trees, pseudocode, signatures, source code, and UI layouts.
 
-Place each visual's short title and up to three sentences of explanation directly above it. Put optional depth behind disclosure when it would interrupt scanning. A typical artifact contains three to eight major visuals. Keep code and diff excerpts below roughly 150 lines when a smaller grounded excerpt supports the same point.
+Each visual consists of a hierarchical number, short title, up to three explanatory sentences, source line, optional interaction-status label, and its component. Code-like components also use the template's caption bar for kind, name, language, path, or status metadata.
 
-Add interaction only when it clarifies state, order, scale, filtering, or causality. Suitable interactions include state switches, filters, zoom, step playback, quizzes, parameter controls, and small simulations. Mark every interactive visual component with a compact interaction-status label beside its title or nearest controls. Use `Interactive` for English artifacts, `可互動` for Chinese artifacts, and the natural equivalent for other languages. Present the label as status text rather than an actionable control. Use vanilla JavaScript and keep the control close to the visual it changes.
+Default to static components. Enable tree collapse only when the caller asks for it or the hierarchy needs disclosure. Mermaid retains pan and overflow navigation. Add another vanilla JavaScript interaction only when the caller specifies a state, order, filter, or causal relationship that requires it. Mark every interactive visual with localized status text such as `Interactive` or `可互動`.
 
-## Establish the design
+## Preserve the fixed design system
 
-Look for the source codebase's actual colors, typography, spacing, radii, and component conventions. Snapshot the relevant values into CSS custom properties in the artifact so the file does not depend on the source application's build.
+Start from the template and retain its document shell, hierarchical table of contents, component markup, CSS, `ArtifactUI` namespace, pinned dependencies, renderer helpers, typography, and Vitesse Light theme across the document, code, diffs, diagrams, and custom components.
 
-When no design tokens exist, create a compact subject-specific system with background, surface, text, muted text, border, accent, positive, warning, and negative roles. Choose typography and one visual signature from the subject matter. Spend visual emphasis on that signature and keep the rest quiet. Avoid a generic card dashboard, decorative gradients, and ornament that does not encode information.
+The caller may explicitly remap only `--artifact-accent`, `--artifact-positive`, `--artifact-warning`, and `--artifact-negative` to the template's named Vitesse Light palette tokens. Keep the background, surfaces, text, borders, code panels, type, spacing, radii, and component anatomy fixed.
 
-Use Tailwind CSS for primary layout and styling. Use CSS custom properties, small renderer overrides, and focused custom CSS for diagrams or geometry that utilities express poorly. Design one theme that fits the content. Add a theme switch only when comparing themes contributes to the explanation.
+Use Noto Serif TC for Chinese prose and diagram labels. Use Maple Mono with a Noto Serif TC fallback for code, diffs, pseudocode, trees, signatures, and preformatted content. Keep rendered text at 16px or larger, diff line height at 28px, and prose and labels at `text-wrap: pretty`. Preserve code and diff whitespace. Use Shiki's `vitesse-light` theme and the template-owned light Pierre theme.
 
-Use Noto Serif TC for Chinese text, including diagram labels and monospace fallbacks. Keep all rendered text at 16px or larger, use Maple Mono for code, diff, and preformatted content, set diff line height to 28px, and apply `text-wrap: pretty` to prose and labels. Preserve code and diff whitespace. When Mermaid's renderer uses smaller internal label sizes, enlarge the entire SVG proportionally so labels, nodes, and edges stay aligned.
+## Build safely from the template
 
-Use Shiki's `vitesse-light` theme for code blocks.
+Replace the template's document language, title, visible demo content, localized labels and messages, navigation and ARIA labels, and sample data with the artifact's real content. Remove unused `data-demo` sections, component instances, data blocks, and demo invocations. Retain the shared CSS, page shell, table-of-contents builder, `ArtifactUI` methods, and renderer infrastructure.
 
-## Build from the template
+Embed dynamic component data in `script[type="application/json"]` blocks. Serialize JSON with `<`, `>`, `&`, U+2028, and U+2029 escaped for an HTML script context, then read it with `ArtifactUI.readData`. Insert source material through text-safe DOM APIs or renderer inputs. Treat renderer-produced markup as trusted only at the renderer boundary.
 
-Start from [`assets/template.html`](assets/template.html). Preserve its pinned dependencies and minimal renderer helpers.
+Keep the HTML self-contained apart from the pinned CDN requests. Run the file directly in the browser without a build or installation step.
 
-Replace the document language, title, visible starter copy, renderer error messages, examples, and sample data with the artifact's real content. Remove every unused example, helper invocation, section, and control. Keep the HTML self-contained apart from CDN requests. Do not add a build step or package installation.
+Run Pierre Diffs on the main thread with focused excerpts. Keep code and diff excerpts below roughly 150 lines when a smaller grounded excerpt supports the same claim.
 
-Pierre Diffs runs on the main thread. Select focused excerpts instead of adding its experimental worker setup.
-
-One additional pinned CDN dependency is allowed when it materially simplifies a quantitative or domain-specific visualization. Prefer the browser platform and the existing renderers when they communicate the information equally well.
-
-Keep failure behavior local and plain. When a renderer fails, replace its mount point with a short error message. Let the rest of the document remain usable. Do not add retries, backup CDNs, elaborate loading states, or recovery flows.
+Keep renderer failures local. Replace only the failed mount point with the localized error component and leave the rest of the document usable.
 
 ## Verify the artifact
 
 Check the written file before opening it:
 
 - The output path and next numeric prefix are correct.
-- Starter examples, placeholder copy, and unused controls are gone.
-- Source values are escaped, executable contexts contain no untrusted strings, and secrets are redacted.
-- Code and diff whitespace is preserved.
-- Chinese text uses Noto Serif TC in prose, diagram labels, and monospace fallbacks. All rendered text is at least 16px, code, diffs, and preformatted content use Maple Mono, diff line height is 28px, and prose and labels use `text-wrap: pretty`.
-- The main flow is single-column. Any side-by-side comparison depends on alignment, keeps both panes at their natural heights, and leaves vertical scrolling to the page.
-- Mermaid diagrams keep their natural scale inside a width-constrained viewport whose height stays between `20rem` and `80dvh`. The viewport shows scrollbars when a diagram exceeds its width or height, supports overflow on both axes, and retains wheel or trackpad navigation plus grab-to-scroll interaction.
-- Every interactive visual component has a nearby interaction-status label in the artifact's language, such as `Interactive` in English or `可互動` in Chinese. The label is presented as status text rather than a control.
-- Every visual supports a claim in scope, and each inference is labeled in the artifact's language.
+- Unused demo sections, sample data, demo invocations, controls, and placeholders are gone.
+- Every component follows the template anatomy and supports a claim in scope.
+- Every source line is present, every inference is labeled, and secrets are redacted.
+- JSON data is safe for its script context, DOM insertion is text-safe, and executable contexts contain no untrusted strings.
+- The sticky table of contents reflects the final section and visual hierarchy, numbering matches the headings, and every anchor resolves.
+- Chinese text, monospace content, minimum sizes, diff line height, wrapping, and whitespace match the fixed typography.
+- The main flow is single-column, and aligned comparisons leave vertical scrolling to the page.
+- Mermaid diagrams retain natural scale, two-axis overflow, scrollbars, wheel or trackpad navigation, and grab-to-scroll behavior inside the fixed viewport bounds.
+- Every interactive visual has nearby localized interaction-status text.
 
-When browser capability is available, inspect the artifact at 1440 by 900. Confirm every renderer completed, primary interactions work, the console contains no implementation or CDN errors, and text, controls, diagrams, diffs, and code do not overlap or overflow incoherently. Capture a screenshot for visual inspection. Fix artifact defects and repeat the affected checks.
+When browser capability is available, inspect the artifact at 1440 by 900. Confirm that the table of contents tracks the current section, anchors and tree disclosure work, every renderer completes or displays its local error state, the console contains no implementation errors, and no text, control, visual, diff, or code block overlaps or overflows incoherently. Capture a screenshot, inspect it, fix defects, and repeat the affected checks.
 
 When browser capability is unavailable, perform the structural checks and report that visual rendering and interaction remain unverified. Finish by reporting the absolute file path, how it was opened, verification performed, and any renderer that displayed its error state.
