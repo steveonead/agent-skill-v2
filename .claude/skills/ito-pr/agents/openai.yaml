@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-pr"
+  short_description: "Write or refresh a PR from the full branch diff"
+  default_prompt: "Use $ito-pr to write and publish the current branch pull request."
+policy:
+  allow_implicit_invocation: false

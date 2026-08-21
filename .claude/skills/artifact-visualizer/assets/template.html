@@ -1,16 +1,24 @@
 <!doctype html>
-<html lang="en"><!-- Replace lang, title, visible starter copy, and rendererMessages together. -->
+<html lang="en">
+  <!-- Replace lang, title, visible starter copy, and rendererMessages together. -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Visual artifact starter</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&display=swap" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/maple-mono@5.3.0/index.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/fontsource/css/maple-mono@5.3.0/index.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
     <style type="text/tailwindcss">
       @theme {
-        --font-sans: "Noto Serif TC", ui-sans-serif, system-ui, sans-serif;
-        --font-mono: "Maple Mono", "Noto Serif TC", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        --font-sans: 'Noto Serif TC', ui-sans-serif, system-ui, sans-serif;
+        --font-mono:
+          'Maple Mono', 'Noto Serif TC', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
       }
 
       :root {
@@ -29,7 +37,7 @@
       }
 
       html:lang(zh) {
-        --font-sans: "Noto Serif TC", ui-serif, Georgia, serif;
+        --font-sans: 'Noto Serif TC', ui-serif, Georgia, serif;
       }
 
       @layer base {
@@ -127,7 +135,7 @@
     </style>
   </head>
   <body>
-    <main class="artifact-shell text-lg">
+    <main class="artifact-shell text-lg prose-2xl">
       <!-- STARTER EXAMPLES: replace or remove every data-starter-example block. -->
       <header class="mb-12 border-b artifact-rule pb-8" data-starter-example>
         <p class="mb-3 text-base font-semibold uppercase text-[var(--artifact-accent)]">
@@ -142,8 +150,16 @@
       </header>
 
       <nav class="mb-14 flex gap-6 text-base" aria-label="Starter contents" data-starter-example>
-        <a class="text-[var(--artifact-accent)] underline-offset-4 hover:underline" href="#flow-example">Flow</a>
-        <a class="text-[var(--artifact-accent)] underline-offset-4 hover:underline" href="#evidence-example">Diff and code</a>
+        <a
+          class="text-[var(--artifact-accent)] underline-offset-4 hover:underline"
+          href="#flow-example"
+          >Flow</a
+        >
+        <a
+          class="text-[var(--artifact-accent)] underline-offset-4 hover:underline"
+          href="#evidence-example"
+          >Diff and code</a
+        >
       </nav>
 
       <section id="flow-example" class="mb-16 grid gap-10" data-starter-example>
@@ -173,12 +189,12 @@
     </main>
 
     <script type="module">
-      const mountedDiffs = [];
+      const mountedDiffs = []
       const rendererMessages = {
-        diagram: "Diagram could not be rendered.",
-        diff: "Diff could not be rendered.",
-        code: "Code could not be highlighted.",
-      };
+        diagram: 'Diagram could not be rendered.',
+        diff: 'Diff could not be rendered.',
+        code: 'Code could not be highlighted.',
+      }
       const diffTypographyCSS = `
         :host {
           --diffs-font-family: "Maple Mono", "Noto Serif TC", monospace;
@@ -192,174 +208,178 @@
         [data-merge-conflict-actions-content] {
           font-size: 16px;
         }
-      `;
+      `
 
-      let mermaidModule;
-      let diffsModule;
-      let shikiModule;
-      const dragScrollHosts = new WeakSet();
-      const minimumDiagramLabelSize = 16;
+      let mermaidModule
+      let diffsModule
+      let shikiModule
+      const dragScrollHosts = new WeakSet()
+      const minimumDiagramLabelSize = 16
 
       function loadMermaid() {
-        mermaidModule ??= import("https://esm.sh/beautiful-mermaid@1.1.3");
-        return mermaidModule;
+        mermaidModule ??= import('https://esm.sh/beautiful-mermaid@1.1.3')
+        return mermaidModule
       }
 
       function loadDiffs() {
-        diffsModule ??= import("https://esm.sh/@pierre/diffs@1.3.5");
-        return diffsModule;
+        diffsModule ??= import('https://esm.sh/@pierre/diffs@1.3.5')
+        return diffsModule
       }
 
       function loadShiki() {
-        shikiModule ??= import("https://esm.sh/shiki@4.4.3");
-        return shikiModule;
+        shikiModule ??= import('https://esm.sh/shiki@4.4.3')
+        return shikiModule
       }
 
       function getHost(hostOrId) {
-        const host = typeof hostOrId === "string" ? document.getElementById(hostOrId) : hostOrId;
+        const host = typeof hostOrId === 'string' ? document.getElementById(hostOrId) : hostOrId
         if (!(host instanceof HTMLElement)) {
-          throw new Error(`Missing renderer host: ${String(hostOrId)}`);
+          throw new Error(`Missing renderer host: ${String(hostOrId)}`)
         }
-        return host;
+        return host
       }
 
       function showRendererError(hostOrId, displayMessage, error) {
-        const host = getHost(hostOrId);
-        host.classList.remove("is-scrollable", "is-grabbing");
-        host.replaceChildren();
-        const message = document.createElement("p");
-        message.className = "renderer-error";
-        message.textContent = displayMessage;
-        host.append(message);
-        console.error(displayMessage, error);
+        const host = getHost(hostOrId)
+        host.classList.remove('is-scrollable', 'is-grabbing')
+        host.replaceChildren()
+        const message = document.createElement('p')
+        message.className = 'renderer-error'
+        message.textContent = displayMessage
+        host.append(message)
+        console.error(displayMessage, error)
       }
 
       function enableGrabScroll(host) {
-        if (dragScrollHosts.has(host)) return;
-        dragScrollHosts.add(host);
+        if (dragScrollHosts.has(host)) return
+        dragScrollHosts.add(host)
 
-        let pointerId = null;
-        let startX = 0;
-        let startY = 0;
-        let startScrollLeft = 0;
-        let startScrollTop = 0;
+        let pointerId = null
+        let startX = 0
+        let startY = 0
+        let startScrollLeft = 0
+        let startScrollTop = 0
 
-        host.addEventListener("pointerdown", (event) => {
-          const canScroll = host.scrollWidth > host.clientWidth || host.scrollHeight > host.clientHeight;
-          if (pointerId !== null || event.button !== 0 || !canScroll) return;
+        host.addEventListener('pointerdown', (event) => {
+          const canScroll =
+            host.scrollWidth > host.clientWidth || host.scrollHeight > host.clientHeight
+          if (pointerId !== null || event.button !== 0 || !canScroll) return
 
-          pointerId = event.pointerId;
-          startX = event.clientX;
-          startY = event.clientY;
-          startScrollLeft = host.scrollLeft;
-          startScrollTop = host.scrollTop;
-          host.setPointerCapture(pointerId);
-          host.classList.add("is-grabbing");
-        });
+          pointerId = event.pointerId
+          startX = event.clientX
+          startY = event.clientY
+          startScrollLeft = host.scrollLeft
+          startScrollTop = host.scrollTop
+          host.setPointerCapture(pointerId)
+          host.classList.add('is-grabbing')
+        })
 
-        host.addEventListener("pointermove", (event) => {
-          if (event.pointerId !== pointerId) return;
-          host.scrollLeft = startScrollLeft - (event.clientX - startX);
-          host.scrollTop = startScrollTop - (event.clientY - startY);
-        });
+        host.addEventListener('pointermove', (event) => {
+          if (event.pointerId !== pointerId) return
+          host.scrollLeft = startScrollLeft - (event.clientX - startX)
+          host.scrollTop = startScrollTop - (event.clientY - startY)
+        })
 
         const stopDragging = (event) => {
-          if (event.pointerId !== pointerId) return;
-          pointerId = null;
-          host.classList.remove("is-grabbing");
-        };
+          if (event.pointerId !== pointerId) return
+          pointerId = null
+          host.classList.remove('is-grabbing')
+        }
 
-        host.addEventListener("pointerup", stopDragging);
-        host.addEventListener("pointercancel", stopDragging);
-        host.addEventListener("lostpointercapture", stopDragging);
+        host.addEventListener('pointerup', stopDragging)
+        host.addEventListener('pointercancel', stopDragging)
+        host.addEventListener('lostpointercapture', stopDragging)
       }
 
       function preserveDiagramScale(host) {
-        const svg = host.querySelector("svg");
-        if (!(svg instanceof SVGSVGElement)) return;
+        const svg = host.querySelector('svg')
+        if (!(svg instanceof SVGSVGElement)) return
 
-        const viewBox = svg.viewBox.baseVal;
+        const viewBox = svg.viewBox.baseVal
         if (viewBox.width > 0) {
-          const labelSizes = [...svg.querySelectorAll("text")]
+          const labelSizes = [...svg.querySelectorAll('text')]
             .map((label) => Number.parseFloat(getComputedStyle(label).fontSize))
-            .filter((size) => Number.isFinite(size) && size > 0);
-          const smallestLabel = labelSizes.length ? Math.min(...labelSizes) : minimumDiagramLabelSize;
-          const readableScale = Math.max(1, minimumDiagramLabelSize / smallestLabel);
-          svg.style.width = `${Math.ceil(viewBox.width * readableScale)}px`;
+            .filter((size) => Number.isFinite(size) && size > 0)
+          const smallestLabel = labelSizes.length
+            ? Math.min(...labelSizes)
+            : minimumDiagramLabelSize
+          const readableScale = Math.max(1, minimumDiagramLabelSize / smallestLabel)
+          svg.style.width = `${Math.ceil(viewBox.width * readableScale)}px`
         }
 
         host.classList.toggle(
-          "is-scrollable",
+          'is-scrollable',
           host.scrollWidth > host.clientWidth || host.scrollHeight > host.clientHeight,
-        );
+        )
       }
 
       async function renderDiagram(hostOrId, source, options = {}) {
-        const host = getHost(hostOrId);
+        const host = getHost(hostOrId)
         try {
-          const { renderMermaidSVG } = await loadMermaid();
-          const diagramUsesChinese = document.documentElement.matches(":lang(zh)")
-            || /[\p{Script=Han}\p{Script=Bopomofo}]/u.test(source);
+          const { renderMermaidSVG } = await loadMermaid()
+          const diagramUsesChinese =
+            document.documentElement.matches(':lang(zh)') ||
+            /[\p{Script=Han}\p{Script=Bopomofo}]/u.test(source)
           const svg = renderMermaidSVG(source, {
-            bg: "var(--artifact-surface)",
-            fg: "var(--artifact-ink)",
-            accent: "var(--artifact-accent)",
-            muted: "var(--artifact-muted)",
-            border: "var(--artifact-border)",
+            bg: 'var(--artifact-surface)',
+            fg: 'var(--artifact-ink)',
+            accent: 'var(--artifact-accent)',
+            muted: 'var(--artifact-muted)',
+            border: 'var(--artifact-border)',
             transparent: true,
             ...options,
-            font: diagramUsesChinese ? "Noto Serif TC" : (options.font ?? "Maple Mono"),
-          });
-          host.innerHTML = svg;
-          preserveDiagramScale(host);
-          enableGrabScroll(host);
+            font: diagramUsesChinese ? 'Noto Serif TC' : (options.font ?? 'Maple Mono'),
+          })
+          host.innerHTML = svg
+          preserveDiagramScale(host)
+          enableGrabScroll(host)
         } catch (error) {
-          showRendererError(host, rendererMessages.diagram, error);
+          showRendererError(host, rendererMessages.diagram, error)
         }
       }
 
       async function renderDiff(hostOrId, oldFile, newFile, options = {}) {
-        const host = getHost(hostOrId);
+        const host = getHost(hostOrId)
         try {
-          const { FileDiff } = await loadDiffs();
+          const { FileDiff } = await loadDiffs()
           const view = new FileDiff({
-            theme: "github-light",
-            themeType: "light",
-            diffStyle: "unified",
-            overflow: "wrap",
+            theme: 'vitesse-light',
+            themeType: 'light',
+            diffStyle: 'unified',
+            overflow: 'wrap',
             ...options,
-            unsafeCSS: `${options.unsafeCSS ?? ""}\n${diffTypographyCSS}`,
-          });
-          view.render({ oldFile, newFile, containerWrapper: host });
-          mountedDiffs.push(view);
-          return view;
+            unsafeCSS: `${options.unsafeCSS ?? ''}\n${diffTypographyCSS}`,
+          })
+          view.render({ oldFile, newFile, containerWrapper: host })
+          mountedDiffs.push(view)
+          return view
         } catch (error) {
-          showRendererError(host, rendererMessages.diff, error);
-          return null;
+          showRendererError(host, rendererMessages.diff, error)
+          return null
         }
       }
 
       async function renderCode(hostOrId, source, options = {}) {
-        const host = getHost(hostOrId);
+        const host = getHost(hostOrId)
         try {
-          const { codeToHtml } = await loadShiki();
-          const renderOptions = { ...options };
-          delete renderOptions.theme;
-          delete renderOptions.themes;
+          const { codeToHtml } = await loadShiki()
+          const renderOptions = { ...options }
+          delete renderOptions.theme
+          delete renderOptions.themes
           host.innerHTML = await codeToHtml(source, {
             ...renderOptions,
-            theme: "vitesse-light",
-          });
+            theme: 'vitesse-light',
+          })
         } catch (error) {
-          showRendererError(host, rendererMessages.code, error);
+          showRendererError(host, rendererMessages.code, error)
         }
       }
 
-      window.visualArtifact = { renderDiagram, renderDiff, renderCode, showRendererError };
+      window.visualArtifact = { renderDiagram, renderDiff, renderCode, showRendererError }
 
       await Promise.all([
         renderDiagram(
-          "starter-mermaid",
+          'starter-mermaid',
           `graph LR
             Input[Received information] --> Shape{Information shape}
             Shape -->|relationships| Graph[Diagram]
@@ -367,14 +387,14 @@
             Shape -->|context| Code[Code]`,
         ),
         renderDiff(
-          "starter-diff",
-          { name: "summary.ts", contents: 'const format = "prose";\n' },
-          { name: "summary.ts", contents: 'const format = "visual";\n' },
+          'starter-diff',
+          { name: 'summary.ts', contents: 'const format = "prose";\n' },
+          { name: 'summary.ts', contents: 'const format = "visual";\n' },
         ),
-        renderCode("starter-code", 'const artifact = { priority: "visuals" };', {
-          lang: "javascript",
+        renderCode('starter-code', 'const artifact = { priority: "visuals" };', {
+          lang: 'javascript',
         }),
-      ]);
+      ])
     </script>
   </body>
 </html>
