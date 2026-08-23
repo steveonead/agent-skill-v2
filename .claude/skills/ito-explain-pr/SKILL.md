@@ -35,10 +35,13 @@ Finish when every changed file belongs to a cluster whose behavior change or mec
 Build the artifact from this skeleton, dropping a section only when the change gives it nothing to say:
 
 1. **TL;DR**: one paragraph of intent and net effect, leading with the conclusion. Stat cards (files, additions, deletions, touched areas) are context, never the lead. Put the highest-impact risk in a callout.
-2. **System orientation**: a 30-second introduction to the touched subsystem for a newcomer, then a diagram or file tree that marks where the change lands.
-3. **Behavior changes**: at most 5 groups organized by intent, never a per-file walk. Give every logic change in the core groups a before and after contrast whose delta is visually loud, and keep unchanged context muted. A change that threads several files gets one overview contrast instead of per-file drawings. A new file gets an after view plus one line on its role. A deleted file gets a before view plus what takes over. Collect mechanical changes and overflow beyond the 5 groups into a single list of one-line before and after rows.
-4. **Impact and risks**: who is affected, compatibility, migration notes, all grounded in code that was read. When the code contradicts the PR description, add a callout stating what the description claims and what the code does.
-5. **Details exit**: a closing pointer to the PR Files changed tab for line-level review.
+2. **Mental model**: the domain entities the change reasons about and the states it branches on, as a matrix crossing those states against what the new code does with each. A newcomer who reads this section should be able to predict the outcomes Behavior changes explains.
+3. **System orientation**: a 30-second introduction to the touched subsystem for a newcomer, then a diagram or file tree that marks where the change lands.
+4. **Behavior changes**: at most 5 groups organized by intent, never a per-file walk. Give every logic change in the core groups a before and after contrast whose delta is visually loud, and keep unchanged context muted. A change that threads several files gets one overview contrast instead of per-file drawings. A new file gets an after view plus one line on its role. A deleted file gets a before view plus what takes over. Collect mechanical changes and overflow beyond the 5 groups into a single list of one-line before and after rows.
+5. **Impact and risks**: a matrix crossing each affected caller against the change that reaches it and the action it must take, then compatibility and migration notes, all grounded in code that was read. When the code contradicts the PR description, add a callout stating what the description claims and what the code does. Close with a verification snippet the reader can run: a request and its expected response for a new endpoint, otherwise the command or test path that exercises the change.
+6. **Details exit**: a closing pointer to the PR Files changed tab for line-level review.
+
+Draw each mechanism once: a given function or use case gets one visual for how it works, and a before and after contrast is allowed on top of it because it proves a different claim. A second drawing of the same mechanism from another angle is a cut.
 
 Prose describes the change, not the investigation that found it. Code snippets appear only when a snippet is the clearest proof of a claim, and never open a section. Link behavior evidence to the blob URL at the head SHA with a line anchor. Without a PR, keep evidence as plain `path:line` text.
 

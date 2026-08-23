@@ -20,7 +20,7 @@ A caller may hand over ordered sections, each carrying content, a source, and an
 
 ## Route information to components
 
-Start from `assets/template.html` and its `ArtifactUI` catalog. This table is guidance, not law: pick whatever explains the shape best.
+Start from `assets/template.html` and its `ArtifactUI` catalog.
 
 | Information shape | Component |
 | --- | --- |
@@ -34,18 +34,17 @@ Start from `assets/template.html` and its `ArtifactUI` catalog. This table is gu
 | Per-file change overview | `createFileChangeList` |
 | Change, run, or review metrics | `createStatCards` |
 | Tasks, acceptance criteria, or findings with status | `createChecklist` |
+| Two axes crossed, where the answer lives in the cell | `createMatrix` |
 | Risk, decision, or caveat that needs attention | `createCallout` |
 | State, sequence, or flow with graph topology | `renderDiagram` |
 | UI structure and spatial relationships | Mockup primitives |
 
-For a shape with no good fit, such as a timeline or a comparison matrix, design your own component from the tokens and anatomy in [`references/DESIGN-SYSTEM.md`](references/DESIGN-SYSTEM.md).
+For a shape with no good fit, such as a timeline, design your own component from the tokens and anatomy in [`references/DESIGN-SYSTEM.md`](references/DESIGN-SYSTEM.md).
 
 Before building, read [`references/GALLERY.md`](references/GALLERY.md) in full: component APIs and examples, document design rules, construction safety, and the detailed verification checklist.
 
 ## Verify
 
-- Confirm every renderer completes or shows its localized error state.
-- With browser capability, inspect at 1440 by 900, capture a screenshot, and fix overlaps, overflow, and console errors. Without it, report that visual rendering is unverified.
-- Confirm source lines, inference labels, and secret redaction survived into the final file.
+Work through the verification checklist in [`references/GALLERY.md`](references/GALLERY.md). Without browser capability, state in the report that visual rendering is unverified.
 
 Finish by reporting the absolute file path, how it was opened, and the verification performed.

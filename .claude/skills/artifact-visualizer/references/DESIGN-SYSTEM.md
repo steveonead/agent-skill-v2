@@ -27,9 +27,9 @@ Reach for a raw `--vitesse-*` token when a semantic token carries the wrong mean
 
 ## Typography
 
-All text is Maple Mono, with Maple Mono CN carrying CJK glyphs and browser-synthesized CJK bold. `--font-sans` and `--font-mono` both resolve to that stack. Keep using `--font-sans` for prose and `--font-mono` for declarations, paths, trees, and anything whose alignment carries meaning, so the roles stay legible and a future face change stays a token edit.
+`--font-sans` and `--font-mono` both resolve to the same Maple Mono CN stack. Keep using `--font-sans` for prose and `--font-mono` for declarations, paths, trees, and anything whose alignment carries meaning, so the roles stay legible and a future face change stays a token edit.
 
-Body text is 16px at line height 1.625, and monospace content in a panel is 16px at 26px line height. A component title inside a panel may reach 17px to 18px, and heading weight tops out at 700. Give any element holding `white-space: pre` content its own `overflow-x: auto` so a long line scrolls inside the component instead of widening the page.
+Body text is 16px at line height 1.625, and monospace content in a panel is 16px at 26px line height. A prose block inside a component takes `--prose-measure` and `--prose-line-height`, because a monospace face turns a long line into slow reading. A component title inside a panel may reach 17px to 18px, and heading weight tops out at 700. Give any element holding `white-space: pre` content its own `overflow-x: auto` so a long line scrolls inside the component instead of widening the page.
 
 ## Panel anatomy
 
@@ -38,6 +38,8 @@ A component that shows evidence lives in a `.code-panel`: a 6px radius, a one pi
 When the component carries metadata about the whole panel, open it with a `.code-caption` bar: 46px minimum height, `--artifact-code-raised` ground, a bottom border, `.panel-kind` in accent for the kind, `.caption-name` in ink for the name, and `.caption-meta` in muted at the right edge for language, path, or status.
 
 Inside the panel, build depth with ground and spacing before reaching for another border. One nested outline inside an outlined panel reads as a doubled frame. Use `--artifact-code-raised` for a band or a rail that groups rows, `--artifact-code-border` for a divider that separates peers of the panel's own weight, and `--vitesse-border-soft` for a divider between rows within a group.
+
+A component that crosses two axes uses a table inside the panel: the header row on `--artifact-code-raised` closed by an `--artifact-code-border` rule, row labels in ink at weight 600, and a one pixel `--vitesse-border-soft` divider between rows. Carry a cell's tone in both its text color and a 7 percent wash of the same token, so the reading survives without color perception.
 
 ## Grouping and labels
 

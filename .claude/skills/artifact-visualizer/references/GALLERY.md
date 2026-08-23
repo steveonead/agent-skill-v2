@@ -7,7 +7,9 @@
 Fixed across every artifact:
 
 - The template's document shell: sticky table of contents, single-column main flow, and the visual anatomy of hierarchical number, short title, up to three explanatory sentences, source line, and optional interaction-status label. A panel that carries kind, name, or metadata about its whole content opens with the caption bar.
-- Typography: Maple Mono for all text, with Maple Mono CN carrying CJK glyphs. Rendered text stays at 16px or larger, diff line height at 30px, prose and labels at `text-wrap: pretty`, and code and diff whitespace preserved.
+- The table of contents behaves as an accordion so the whole list fits one viewport without a scrollbar of its own: sections always show, and only the section being read expands its visuals. It builds itself from `data-toc-section`, `data-toc-visual`, `[data-section-title]`, and `[data-visual-title]`, assigns every number, and marks a visual whose callout carries a warning or negative tone. Call `buildToc()` once after every component has rendered, so the risk markers see the finished callouts.
+- Typography: Maple Mono CN for all text, carrying both Latin and CJK glyphs. Rendered text stays at 16px or larger, diff line height at 30px, prose runs at `--prose-measure` width and `--prose-line-height`, prose and labels at `text-wrap: pretty`, and code and diff whitespace preserved.
+- Links in the reading column are underlined and accent-colored, so a reader tells one from body text before clicking.
 - The Vitesse Light palette through the `--artifact-*` tokens, Shiki's `vitesse-light` theme, and the template-owned light Pierre theme. A caller may remap only `--artifact-accent`, `--artifact-positive`, `--artifact-warning`, and `--artifact-negative` to named Vitesse tokens.
 
 Yours to decide:
@@ -15,7 +17,7 @@ Yours to decide:
 - Which components to use, how many, and in what order. Start with the visual or conclusion that best performs the document's job.
 - Section grouping, emphasis, and the short connective copy between visuals.
 - Side-by-side placement, the one exception to the single-column flow, when direct comparison depends on alignment and both panes fit at their natural heights.
-- Interactivity. Default to static. Enable tree collapse when a hierarchy needs disclosure, keep Mermaid's pan and overflow navigation, and add another vanilla JavaScript interaction only when a state, order, filter, or causal relationship requires it. Mark every interactive visual with nearby localized status text such as `Interactive` or `可互動`.
+- Interactivity. Default to static. Enable tree collapse when a hierarchy needs disclosure, and add another vanilla JavaScript interaction only when a state, order, filter, or causal relationship requires it. Mark every interactive visual with nearby localized status text such as `Interactive` or `可互動`.
 
 ## Component catalog
 
@@ -49,11 +51,17 @@ Changes and patches through Pierre. Each file is `{ name, contents }`. Pierre ru
 
 ### renderDiagram(host, source)
 
-States, sequences, and flows with meaningful graph topology, through Beautiful Mermaid. Keep each diagram at a readable natural scale inside the two-axis overflow viewport. Example: `demo-sequence`, `demo-flowchart`, and `demo-state` with `data-sequence`, `data-flowchart`, and `data-state`.
+States, sequences, and flows with meaningful graph topology, through Beautiful Mermaid. The template fits each diagram to its panel width, holding labels between a 16px floor and a 20px ceiling, so the whole shape is visible without panning and a small diagram is not blown up into a poster. Height is uncapped: the page scroll carries a tall diagram. A diagram whose labels reach the floor before it fits overflows horizontally and becomes grab-scrollable, the one diagram case that carries an interaction-status label. Example: `demo-sequence`, `demo-flowchart`, and `demo-state` with `data-sequence`, `data-flowchart`, and `data-state`.
+
+Prefer `LR` over `TD` for a chain with little branching: the fit is width-bound, so a horizontal chain reads larger.
 
 ### createChecklist(host, { items })
 
 Tasks, acceptance criteria, and findings with per-item status. Items are `{ state, stateLabel, label, note? }`. `state` in `pass | pending | fail` picks the color, `stateLabel` is the displayed localized text. Host is a `.checklist-host` inside a code panel. Example: `demo-checklist` with `data-checklist`.
+
+### createMatrix(host, { columns, rows, corner? })
+
+Two axes crossed, where the answer lives in the cell: state combinations against their consequences, or affected callers against what each must do. Rows are `{ label, cells }` and cells `{ value, tone?, note? }` with tone in `positive | warning | negative`. `corner` labels the header cell above the row labels. Host is a `.matrix-host` inside a code panel. Example: `demo-matrix` with `data-matrix`.
 
 ### createStatCards(host, { items })
 
@@ -90,7 +98,8 @@ When no catalog component fits, read `DESIGN-SYSTEM.md` in full and build from i
 - Every source line is present, every inference is labeled, and secrets are redacted.
 - JSON data is safe for its script context, DOM insertion is text-safe, and executable contexts contain no untrusted strings.
 - The sticky table of contents lists the final sections, numbering matches the headings, and every anchor resolves.
-- Typography holds: Maple Mono throughout, minimum sizes, diff line height, wrapping, and preserved whitespace.
-- Mermaid diagrams retain natural scale and two-axis overflow navigation inside the viewport bounds.
+- Typography holds: Maple Mono CN throughout, minimum sizes, diff line height, wrapping, and preserved whitespace.
+- Every diagram either fits its panel width or grab-scrolls inside its own panel, and the page itself never scrolls horizontally.
+- The table of contents fits one viewport at 1440 by 900 without a scrollbar of its own.
 - Every interactive visual has nearby localized interaction-status text.
 - With browser capability, at 1440 by 900: the table of contents tracks the current section, anchors and disclosure work, every renderer completes or shows its local error state, the console is clean, and nothing overlaps or overflows incoherently. Capture a screenshot, inspect it, fix defects, and repeat the affected checks.

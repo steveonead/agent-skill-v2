@@ -7,20 +7,15 @@
     <title>程式碼審查流程：視覺元件範本</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/fontsource/css/maple-mono@5.3.0/index.min.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@mogeko/maple-mono-cn@7.9.0/dist/font/result.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
     <style type="text/tailwindcss">
       @theme {
-        /* Maple Mono everywhere. Maple Mono CN carries CJK glyphs; bold CJK is browser-synthesized. */
-        --font-sans:
-          'Maple Mono', 'Maple Mono CN', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-        --font-mono:
-          'Maple Mono', 'Maple Mono CN', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+        /* Maple Mono CN carries both Latin and CJK glyphs, so one family serves the whole document.
+           CJK bold is browser-synthesized. */
+        --font-sans: 'Maple Mono CN', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+        --font-mono: 'Maple Mono CN', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
       }
 
       :root {
@@ -57,8 +52,9 @@
         --artifact-code-muted: var(--vitesse-muted);
         --toc-width: 236px;
         --mermaid-viewport-width: 100%;
-        --mermaid-viewport-min-height: 20rem;
-        --mermaid-viewport-max-height: 80dvh;
+        --mermaid-viewport-min-height: 12rem;
+        --prose-measure: 640px;
+        --prose-line-height: 1.9;
       }
 
       @layer base {
@@ -101,6 +97,28 @@
         }
       }
 
+      /* Links inside the reading column must be distinguishable from the prose around them,
+         so a reader never clicks one by accident. The table of contents opts out below. */
+      .artifact-main a:not(.toc-link) {
+        color: var(--artifact-accent);
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+        border-radius: 2px;
+      }
+
+      .artifact-main a:not(.toc-link)::after {
+        content: '\2197';
+        margin-left: 0.15em;
+        font-size: 0.85em;
+        text-decoration: none;
+      }
+
+      .artifact-main a:not(.toc-link):hover {
+        background: color-mix(in srgb, var(--artifact-accent) 10%, transparent);
+        text-decoration-thickness: 2px;
+      }
+
       .artifact-layout {
         display: grid;
         grid-template-columns: var(--toc-width) minmax(0, 1fr);
@@ -141,9 +159,12 @@
       }
 
       .toc-list,
-
       .toc-item {
         position: relative;
+      }
+
+      .toc-rail nav {
+        overflow: hidden;
       }
 
       .toc-link {
@@ -165,13 +186,68 @@
         background: color-mix(in srgb, var(--artifact-accent) 6%, transparent);
       }
 
-      .toc-link.is-active {
+      .toc-link.is-active,
+      .toc-link.is-open {
         font-weight: 600;
+      }
+
+      .toc-link.is-open {
+        color: var(--artifact-ink);
+        border-left-color: var(--artifact-accent);
       }
 
       .toc-index {
         color: var(--artifact-accent);
         font-family: var(--font-mono);
+      }
+
+      /* Only the current section expands its visuals, so the rail never needs its own
+         scrollbar however long the document runs. */
+      .toc-sublist {
+        margin: 0 0 6px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .toc-sublist[hidden] {
+        display: none;
+      }
+
+      .toc-sublink {
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr) auto;
+        gap: 6px;
+        padding: 6px 8px 6px 22px;
+        color: var(--artifact-muted);
+        border-left: 2px solid var(--vitesse-border-soft);
+        font-size: 15px;
+        line-height: 1.4;
+        text-decoration: none;
+      }
+
+      .toc-sublink:hover,
+      .toc-sublink.is-active {
+        color: var(--artifact-ink);
+        border-left-color: var(--artifact-accent);
+      }
+
+      .toc-sublink .toc-index {
+        font-size: 14px;
+      }
+
+      .toc-risk {
+        align-self: center;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+
+      .toc-risk[data-tone='warning'] {
+        background: var(--artifact-warning);
+      }
+
+      .toc-risk[data-tone='negative'] {
+        background: var(--artifact-negative);
       }
 
       .artifact-main {
@@ -194,11 +270,11 @@
       }
 
       .document-summary {
-        max-width: 760px;
+        max-width: var(--prose-measure);
         margin: 20px 0 0;
         color: var(--artifact-muted);
         font-size: 19px;
-        line-height: 1.75;
+        line-height: var(--prose-line-height);
       }
 
       .document-meta {
@@ -231,11 +307,11 @@
       }
 
       .section-summary {
-        max-width: 720px;
+        max-width: var(--prose-measure);
         margin: 10px 0 0;
         color: var(--artifact-muted);
         font-size: 17px;
-        line-height: 1.75;
+        line-height: var(--prose-line-height);
       }
 
       .visual-block {
@@ -263,11 +339,11 @@
       }
 
       .visual-copy {
-        max-width: 760px;
+        max-width: var(--prose-measure);
         margin: 7px 0 0;
         color: var(--artifact-muted);
         font-size: 16px;
-        line-height: 1.7;
+        line-height: var(--prose-line-height);
       }
 
       .source-line {
@@ -580,7 +656,8 @@
 
       .signature-items {
         margin: 8px 0 0;
-        padding: 0;
+        padding: 0 0 0 14px;
+        border-left: 1px solid var(--vitesse-border-soft);
         list-style: none;
       }
 
@@ -615,6 +692,7 @@
 
       .signature-fields {
         margin: 2px 0 0;
+        padding-left: 16px;
         color: var(--artifact-code-muted);
         font-family: var(--font-sans);
         font-size: 16px;
@@ -655,10 +733,10 @@
       .mermaid-host {
         width: var(--mermaid-viewport-width);
         min-height: var(--mermaid-viewport-min-height);
-        max-height: var(--mermaid-viewport-max-height);
         padding: 22px;
-        overflow: auto;
-        overscroll-behavior: contain;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
       }
 
       .mermaid-host.is-scrollable {
@@ -892,6 +970,71 @@
         font-size: 16px;
       }
 
+      .matrix-host {
+        padding: 0;
+        overflow-x: auto;
+      }
+
+      .matrix-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+      }
+
+      .matrix-table th,
+      .matrix-table td {
+        padding: 11px 16px;
+        border-top: 1px solid var(--vitesse-border-soft);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .matrix-table thead th {
+        border-top: 0;
+        border-bottom: 1px solid var(--artifact-code-border);
+        background: var(--artifact-code-raised);
+        color: var(--artifact-code-muted);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .matrix-row-label {
+        color: var(--artifact-code-ink);
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+
+      .matrix-cell {
+        --matrix-tone: var(--artifact-code-ink);
+      }
+
+      .matrix-value {
+        color: var(--matrix-tone);
+      }
+
+      .matrix-cell.is-positive {
+        --matrix-tone: var(--artifact-positive);
+      }
+
+      .matrix-cell.is-warning {
+        --matrix-tone: var(--artifact-warning);
+      }
+
+      .matrix-cell.is-negative {
+        --matrix-tone: var(--artifact-negative);
+      }
+
+      .matrix-cell.is-positive,
+      .matrix-cell.is-warning,
+      .matrix-cell.is-negative {
+        background: color-mix(in srgb, var(--matrix-tone) 7%, transparent);
+      }
+
+      .matrix-note {
+        margin-top: 3px;
+        color: var(--artifact-code-muted);
+      }
+
       .callout-block {
         --callout-tone: var(--artifact-accent);
         padding: 18px 22px;
@@ -1079,7 +1222,6 @@
                 <p class="visual-copy">先呈現使用者操作到儲存完成的主路徑，後續元件再拆解責任。</p>
                 <p class="source-line">docs/review-flow.md</p>
               </div>
-              <span class="interaction-status">可互動</span>
             </header>
             <div id="demo-sequence" class="mermaid-host artifact-surface"></div>
           </article>
@@ -1092,7 +1234,6 @@
                 <p class="visual-copy">Flowchart 適合呈現分支與匯流，節點文字維持短句。</p>
                 <p class="source-line">src/review/submit-review.ts</p>
               </div>
-              <span class="interaction-status">可互動</span>
             </header>
             <div id="demo-flowchart" class="mermaid-host artifact-surface"></div>
           </article>
@@ -1105,7 +1246,6 @@
                 <p class="visual-copy">State diagram 聚焦狀態與觸發條件，呼叫順序交給 sequence diagram。</p>
                 <p class="source-line">src/review/use-review-form.ts</p>
               </div>
-              <span class="interaction-status">可互動</span>
             </header>
             <div id="demo-state" class="mermaid-host artifact-surface"></div>
           </article>
@@ -1351,6 +1491,24 @@
             </div>
           </article>
 
+          <article id="matrix" class="visual-block" data-toc-visual data-demo>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>兩個軸交叉之後的結果</h3>
+                <p class="visual-copy">每一格的 tone 決定顏色，note 補一句依據。</p>
+                <p class="source-line">src/review/submit-review.ts</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">matrix</span> <span class="caption-name">審稿狀態的處理方式</span></span>
+                <span class="caption-meta">3 × 2</span>
+              </div>
+              <div id="demo-matrix" class="matrix-host"></div>
+            </div>
+          </article>
+
           <article id="callout" class="visual-block" data-toc-visual>
             <header class="visual-header">
               <p class="visual-number" data-visual-number></p>
@@ -1463,6 +1621,9 @@
     <script id="data-checklist" type="application/json" data-demo>
       {"items":[{"state":"pass","stateLabel":"通過","label":"空白留言被拒絕","note":"validate-comment.test.ts"},{"state":"pending","stateLabel":"待處理","label":"儲存失敗時回報使用者","note":"submit-review.ts:31"},{"state":"fail","stateLabel":"未通過","label":"重複送出防護","note":"ReviewForm.tsx:42"}]}
     </script>
+    <script id="data-matrix" type="application/json" data-demo>
+      {"corner": "審稿狀態", "columns": ["可以送出", "會通知作者"], "rows": [{"label": "draft", "cells": [{"value": "可以", "tone": "positive"}, {"value": "不會", "note": "草稿只存在提交者自己的視野"}]}, {"label": "submitted", "cells": [{"value": "不可以", "tone": "warning", "note": "重複送出會覆蓋既有審稿"}, {"value": "會", "tone": "positive"}]}, {"label": "withdrawn", "cells": [{"value": "不可以", "tone": "negative", "note": "撤回後沒有復原路徑"}, {"value": "不會"}]}]}
+    </script>
     <script id="data-callout" type="application/json" data-demo>
       {"tone":"warning","title":"風險","body":"儲存失敗時目前只寫入 console，使用者不會看到錯誤。上線前需補上失敗提示。"}
     </script>
@@ -1488,11 +1649,13 @@
         responsibility: '責任',
         path: 'path',
         note: '備註',
+        riskWarning: '此處有需要注意的事項',
+        riskNegative: '此處有風險',
       }
       const diffThemeCSS = [
         ':host {',
-        '  --diffs-font-family: "Maple Mono", "Maple Mono CN", monospace;',
-        '  --diffs-header-font-family: "Maple Mono", "Maple Mono CN", monospace;',
+        '  --diffs-font-family: "Maple Mono CN", monospace;',
+        '  --diffs-header-font-family: "Maple Mono CN", monospace;',
         '  --diffs-font-size: 16px;',
         '  --diffs-line-height: 30px;',
         '  color-scheme: light;',
@@ -1507,6 +1670,7 @@
       let shikiModule
       const dragScrollHosts = new WeakSet()
       const minimumDiagramLabelSize = 16
+      const maximumDiagramLabelSize = 20
       /**
        * Public data contracts:
        * readData(id): parses one safely serialized application/json block.
@@ -1518,6 +1682,8 @@
        * Pseudocode segments use { type, text }. The type is a tokenTypes value.
        * createSignatureList(host, { lang?, groups }): each group uses
        * { owner, summary?, items: [{ declaration, lang?, fields?: [{ label, value }] }] }.
+       * createMatrix(host, { columns, rows, corner? }): rows use { label, cells }.
+       * Cells use { value, tone?, note? }. tone is positive | warning | negative.
        * createChecklist(host, { items }): items use { state, stateLabel, label, note? }.
        * state is pass | pending | fail and picks the color. stateLabel is the displayed text.
        * createStatCards(host, { items }): items use { label, value, tone?, note? }.
@@ -1775,6 +1941,35 @@
         host.replaceChildren(list)
       }
 
+      function createMatrix(hostOrId, data) {
+        const host = getHost(hostOrId)
+        const table = element('table', 'matrix-table')
+        const headRow = element('tr')
+        headRow.append(element('th', '', data.corner || ''))
+        for (const column of data.columns || []) headRow.append(element('th', '', column))
+        const head = element('thead')
+        head.append(headRow)
+
+        const body = element('tbody')
+        for (const row of data.rows || []) {
+          const line = element('tr')
+          const label = element('th', 'matrix-row-label', row.label)
+          label.scope = 'row'
+          line.append(label)
+          for (const cell of row.cells || []) {
+            const tone = calloutTones.has(cell.tone) && cell.tone !== 'note' ? ' is-' + cell.tone : ''
+            const box = element('td', 'matrix-cell' + tone)
+            box.append(element('div', 'matrix-value', cell.value))
+            if (cell.note) box.append(element('div', 'matrix-note', cell.note))
+            line.append(box)
+          }
+          body.append(line)
+        }
+
+        table.append(head, body)
+        host.replaceChildren(table)
+      }
+
       function createCallout(hostOrId, data) {
         const host = getHost(hostOrId)
         const tone = calloutTones.has(data.tone) ? data.tone : 'note'
@@ -1859,22 +2054,46 @@
         host.addEventListener('lostpointercapture', stopDragging)
       }
 
-      function preserveDiagramScale(host) {
+      /**
+       * Fit the diagram to the host width so its whole shape is visible without panning.
+       * Two label bounds constrain that fit. The floor wins over everything, so a diagram
+       * too wide to shrink further overflows horizontally and becomes grab-scrollable
+       * instead of unreadable. The ceiling stops a small diagram from being blown up into
+       * a full-width poster. Height is never capped: the page scroll carries a tall diagram.
+       */
+      function fitDiagramToHost(host) {
         const svg = host.querySelector('svg')
         if (!(svg instanceof SVGSVGElement)) return
         const viewBox = svg.viewBox.baseVal
         if (viewBox.width > 0) {
+          const style = getComputedStyle(host)
+          const available =
+            host.clientWidth -
+            Number.parseFloat(style.paddingLeft) -
+            Number.parseFloat(style.paddingRight)
           const sizes = [...svg.querySelectorAll('text')]
             .map((label) => Number.parseFloat(getComputedStyle(label).fontSize))
             .filter((size) => Number.isFinite(size) && size > 0)
           const smallest = sizes.length ? Math.min(...sizes) : minimumDiagramLabelSize
-          const scale = Math.max(1, minimumDiagramLabelSize / smallest)
+          const floor = minimumDiagramLabelSize / smallest
+          const ceiling = Math.max(maximumDiagramLabelSize / smallest, floor)
+          const fit = available > 0 ? available / viewBox.width : 1
+          const scale = Math.min(Math.max(fit, floor), ceiling)
           svg.style.width = String(Math.ceil(viewBox.width * scale)) + 'px'
         }
-        host.classList.toggle(
-          'is-scrollable',
-          host.scrollWidth > host.clientWidth || host.scrollHeight > host.clientHeight,
-        )
+        host.classList.toggle('is-scrollable', host.scrollWidth > host.clientWidth)
+      }
+
+      const fittedDiagramHosts = new Set()
+      let diagramResizeObserver
+
+      function trackDiagramFit(host) {
+        fittedDiagramHosts.add(host)
+        if (diagramResizeObserver) return
+        diagramResizeObserver = new ResizeObserver(() => {
+          for (const fitted of fittedDiagramHosts) fitDiagramToHost(fitted)
+        })
+        diagramResizeObserver.observe(document.documentElement)
       }
 
       function colorToken(name) {
@@ -1898,21 +2117,48 @@
             ...renderOptions
           } = options
           void [bg, fg, line, accent, muted, surface, border, transparent, font]
-          const usesChinese =
-            document.documentElement.matches(':lang(zh-TW), :lang(zh)') ||
-            /[\p{Script=Han}\p{Script=Bopomofo}]/u.test(source)
           const svg = renderMermaidSVG(source, {
             ...THEMES['github-light'],
             ...renderOptions,
             transparent: true,
-            font: "'Maple Mono', 'Maple Mono CN'"
+            font: "'Maple Mono CN'",
           })
           host.innerHTML = svg
-          preserveDiagramScale(host)
+          fitDiagramToHost(host)
+          trackDiagramFit(host)
           enableGrabScroll(host)
         } catch (error) {
           showRendererError(host, rendererMessages.diagram, error)
         }
+      }
+
+      // Pierre 的逐詞高亮會把純空白片段一併標成變更，整段重新縮排的 diff 因此整片染色，
+      // 真正改動的 token 反而被淹沒。只保留含非空白內容的高亮。
+      // 需要 important：shadow stylesheet 的規則會蓋過一般 inline style。
+      function muteWhitespaceDiffSpans(root) {
+        for (const span of root.querySelectorAll('span[data-diff-span]')) {
+          if (!(span.textContent || '').trim()) {
+            span.style.setProperty('background-color', 'transparent', 'important')
+          }
+        }
+      }
+
+      // Pierre 在 render 回傳後才把 span 填進 shadow root，所以要等到節點出現才能處理。
+      function watchWhitespaceDiffSpans(host) {
+        let frames = 0
+        const attach = () => {
+          const root = host.querySelector('diffs-container')?.shadowRoot ?? host.firstElementChild?.shadowRoot
+          if (root) {
+            muteWhitespaceDiffSpans(root)
+            new MutationObserver(() => muteWhitespaceDiffSpans(root)).observe(root, {
+              childList: true,
+              subtree: true,
+            })
+            return
+          }
+          if (frames++ < 120) requestAnimationFrame(attach)
+        }
+        attach()
       }
 
       async function renderDiff(hostOrId, oldFile, newFile) {
@@ -1928,6 +2174,7 @@
           })
           view.render({ oldFile, newFile, containerWrapper: host })
           mountedDiffs.push(view)
+          watchWhitespaceDiffSpans(host)
           return view
         } catch (error) {
           showRendererError(host, rendererMessages.diff, error)
@@ -1951,11 +2198,38 @@
         }
       }
 
+      /** The loudest callout tone inside a visual, or an empty string when it carries none. */
+      function riskToneOf(visual) {
+        if (visual.querySelector('.callout-block.is-negative')) return 'negative'
+        if (visual.querySelector('.callout-block.is-warning')) return 'warning'
+        return ''
+      }
+
+      function tocScrollHandler(link) {
+        return (event) => {
+          const target = document.getElementById(link.getAttribute('href').slice(1))
+          if (!target) return
+          event.preventDefault()
+          target.scrollIntoView({
+            behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start',
+          })
+          history.replaceState(null, '', '#' + target.id)
+        }
+      }
+
+      /**
+       * Build the rail after every component has rendered: the risk markers read the
+       * callout tones the builders produce. Only the current section shows its visuals,
+       * which keeps the rail inside one viewport however long the document runs.
+       */
       function buildToc() {
         const toc = document.getElementById('artifact-toc')
         if (!toc) return
         const targets = []
         const links = new Map()
+        const sublists = new Map()
+        const owners = new Map()
         const sections = [...document.querySelectorAll('[data-toc-section]')]
         toc.replaceChildren()
 
@@ -1971,44 +2245,76 @@
           const link = element('a', 'toc-link')
           link.href = '#' + section.id
           link.append(element('span', 'toc-index', sectionNumber), element('span', '', title.textContent))
+          link.addEventListener('click', tocScrollHandler(link))
           item.append(link)
           links.set(section, link)
           targets.push(section)
+
+          const sublist = element('ol', 'toc-sublist')
+          sublist.hidden = true
 
           visuals.forEach((visual, visualIndex) => {
             const visualNumber = sectionNumber + '.' + String(visualIndex + 1)
             const visualNumberHost = visual.querySelector('[data-visual-number]')
             if (visualNumberHost) visualNumberHost.textContent = visualNumber
+            const visualTitle = visual.querySelector('[data-visual-title]')
+            if (!visualTitle || !visual.id) return
+
+            const subitem = element('li')
+            const sublink = element('a', 'toc-sublink')
+            sublink.href = '#' + visual.id
+            sublink.append(
+              element('span', 'toc-index', visualNumber),
+              element('span', '', visualTitle.textContent),
+            )
+            const tone = riskToneOf(visual)
+            if (tone) {
+              const marker = element('span', 'toc-risk')
+              marker.dataset.tone = tone
+              marker.title = uiMessages[tone === 'negative' ? 'riskNegative' : 'riskWarning']
+              marker.setAttribute('role', 'img')
+              marker.setAttribute('aria-label', marker.title)
+              sublink.append(marker)
+            }
+            sublink.addEventListener('click', tocScrollHandler(sublink))
+            subitem.append(sublink)
+            sublist.append(subitem)
+            links.set(visual, sublink)
+            targets.push(visual)
+            owners.set(visual, section)
           })
 
+          if (sublist.children.length) {
+            item.append(sublist)
+            sublists.set(section, sublist)
+          }
           toc.append(item)
         })
 
-        for (const link of links.values()) {
-          link.addEventListener('click', (event) => {
-            const id = link.getAttribute('href').slice(1)
-            const target = document.getElementById(id)
-            if (!target) return
-            event.preventDefault()
-            target.scrollIntoView({
-              behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-              block: 'start',
-            })
-            history.replaceState(null, '', '#' + id)
-          })
-        }
-
         let activeLink
+        let openSection
         function setActive(target) {
           const link = links.get(target)
-          if (!link || link === activeLink) return
-          if (activeLink) {
-            activeLink.classList.remove('is-active')
-            activeLink.removeAttribute('aria-current')
+          if (!link) return
+          if (link !== activeLink) {
+            activeLink?.classList.remove('is-active')
+            activeLink?.removeAttribute('aria-current')
+            link.classList.add('is-active')
+            link.setAttribute('aria-current', 'location')
+            activeLink = link
           }
-          link.classList.add('is-active')
-          link.setAttribute('aria-current', 'location')
-          activeLink = link
+
+          const section = owners.get(target) || target
+          if (section === openSection) return
+          if (openSection) {
+            const closing = sublists.get(openSection)
+            if (closing) closing.hidden = true
+            links.get(openSection)?.classList.remove('is-open')
+          }
+          const opening = sublists.get(section)
+          if (opening) opening.hidden = false
+          links.get(section)?.classList.add('is-open')
+          openSection = section
         }
 
         const observer = new IntersectionObserver(
@@ -2030,6 +2336,7 @@
         createPseudocode,
         createSignatureList,
         createChecklist,
+        createMatrix,
         createCallout,
         createStatCards,
         createFileChangeList,
@@ -2042,7 +2349,6 @@
       window.ArtifactUI = ArtifactUI
 
       localizeSourceLines()
-      buildToc()
       const sequence = readData('data-sequence')
       const flowchart = readData('data-flowchart')
       const state = readData('data-state')
@@ -2060,6 +2366,7 @@
       createStatCards('demo-stat-cards', readData('data-stat-cards'))
       createFileChangeList('demo-file-changes', readData('data-file-changes'))
       createChecklist('demo-checklist', readData('data-checklist'))
+      createMatrix('demo-matrix', readData('data-matrix'))
       createCallout('demo-callout', readData('data-callout'))
       await Promise.all([
         renderDiagram('demo-sequence', sequence.source),
@@ -2069,6 +2376,7 @@
         createSignatureList('demo-signatures', readData('data-signatures')),
         renderDiff('demo-diff', diff.oldFile, diff.newFile),
       ])
+      buildToc()
     </script>
   </body>
 </html>
