@@ -585,9 +585,14 @@
         user-select: none;
       }
 
+      /* The grid caps this column, so a long line needs its own scroll track.
+         Without it the line spills across the note column and the two overlap. */
       .pseudocode-code {
         padding-left: calc(var(--pseudo-indent, 0) * 24px);
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
         white-space: pre;
+        scrollbar-width: thin;
       }
 
       .pseudocode-note {
@@ -2143,14 +2148,39 @@
         }
       }
 
-      // Pierre 在 render 回傳後才把 span 填進 shadow root，所以要等到節點出現才能處理。
-      function watchWhitespaceDiffSpans(host) {
+      // Pierre 用 git 的 quote_c_style 引住非 ASCII 檔名，中文路徑因此顯示成 "\346\252\224"。
+      // 逆轉那層引號：拆回位元組再以 UTF-8 解碼，還原標題列的原始檔名。
+      const gitQuotedName = /^"(.*)"$/
+      function unquoteDiffFileNames(root) {
+        for (const name of root.querySelectorAll('[data-title] bdi')) {
+          const quoted = gitQuotedName.exec(name.textContent || '')
+          if (!quoted) continue
+          const bytes = []
+          for (let index = 0; index < quoted[1].length; index += 1) {
+            const octal = /^\\([0-7]{3})/.exec(quoted[1].slice(index))
+            if (octal) {
+              bytes.push(Number.parseInt(octal[1], 8))
+              index += 3
+              continue
+            }
+            for (const byte of new TextEncoder().encode(quoted[1][index])) bytes.push(byte)
+          }
+          name.textContent = new TextDecoder().decode(new Uint8Array(bytes))
+        }
+      }
+
+      // Pierre 在 render 回傳後才把節點填進 shadow root，所以要等到節點出現才能處理。
+      function watchDiffShadowRoot(host) {
         let frames = 0
+        const process = (root) => {
+          muteWhitespaceDiffSpans(root)
+          unquoteDiffFileNames(root)
+        }
         const attach = () => {
           const root = host.querySelector('diffs-container')?.shadowRoot ?? host.firstElementChild?.shadowRoot
           if (root) {
-            muteWhitespaceDiffSpans(root)
-            new MutationObserver(() => muteWhitespaceDiffSpans(root)).observe(root, {
+            process(root)
+            new MutationObserver(() => process(root)).observe(root, {
               childList: true,
               subtree: true,
             })
@@ -2174,7 +2204,7 @@
           })
           view.render({ oldFile, newFile, containerWrapper: host })
           mountedDiffs.push(view)
-          watchWhitespaceDiffSpans(host)
+          watchDiffShadowRoot(host)
           return view
         } catch (error) {
           showRendererError(host, rendererMessages.diff, error)
