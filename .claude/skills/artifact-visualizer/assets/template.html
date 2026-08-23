@@ -7,18 +7,20 @@
     <title>程式碼審查流程：視覺元件範本</title>
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&amp;display=swap"
+      href="https://cdn.jsdelivr.net/fontsource/css/maple-mono@5.3.0/index.min.css"
     />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/fontsource/css/maple-mono@5.3.0/index.min.css"
+      href="https://cdn.jsdelivr.net/npm/@mogeko/maple-mono-cn@7.9.0/dist/font/result.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
     <style type="text/tailwindcss">
       @theme {
-        --font-sans: 'Noto Serif TC', ui-serif, Georgia, serif;
+        /* Maple Mono everywhere. Maple Mono CN carries CJK glyphs; bold CJK is browser-synthesized. */
+        --font-sans:
+          'Maple Mono', 'Maple Mono CN', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
         --font-mono:
-          'Maple Mono', 'Noto Serif TC', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+          'Maple Mono', 'Maple Mono CN', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
       }
 
       :root {
@@ -113,9 +115,8 @@
         position: sticky;
         top: 32px;
         align-self: start;
-        height: calc(100dvh - 64px);
+        min-height: calc(100dvh - 64px);
         padding-right: 24px;
-        overflow: auto;
         border-right: 1px solid var(--artifact-border);
       }
 
@@ -140,11 +141,6 @@
       }
 
       .toc-list,
-      .toc-sublist {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
 
       .toc-item {
         position: relative;
@@ -178,15 +174,6 @@
         font-family: var(--font-mono);
       }
 
-      .toc-sublist {
-        margin: 2px 0 10px 22px;
-      }
-
-      .toc-sublist .toc-link {
-        grid-template-columns: 45px minmax(0, 1fr);
-        font-size: 16px;
-      }
-
       .artifact-main {
         min-width: 0;
         max-width: 1010px;
@@ -200,7 +187,7 @@
       .document-title {
         max-width: 820px;
         margin: 12px 0 0;
-        font-size: 48px;
+        font-size: 40px;
         font-weight: 700;
         line-height: 1.16;
         letter-spacing: 0;
@@ -233,7 +220,7 @@
         display: grid;
         grid-template-columns: 72px minmax(0, 1fr);
         gap: 18px;
-        margin-bottom: 34px;
+        margin-bottom: 52px;
       }
 
       .section-title {
@@ -265,7 +252,7 @@
         grid-template-columns: 64px minmax(0, 1fr) auto;
         gap: 18px;
         align-items: start;
-        margin-bottom: 16px;
+        margin-bottom: 28px;
       }
 
       .visual-title {
@@ -370,8 +357,8 @@
 
       .tree-children {
         position: relative;
-        margin: 4px 0 0 18px;
-        padding: 0 0 0 27px;
+        margin: 4px 0 0 14px;
+        padding: 0 0 0 20px;
         border-left: 1px solid var(--vitesse-border);
       }
 
@@ -384,8 +371,8 @@
       .tree-children > .tree-node::before {
         position: absolute;
         top: 23px;
-        left: -27px;
-        width: 18px;
+        left: -20px;
+        width: 13px;
         height: 1px;
         background: var(--vitesse-border);
         content: '';
@@ -445,7 +432,7 @@
       }
 
       .tree-kind {
-        min-width: 74px;
+        min-width: 68px;
         padding-top: 2px;
         color: var(--vitesse-blue);
         font-size: 16px;
@@ -466,12 +453,12 @@
         flex-wrap: wrap;
         gap: 4px 14px;
         margin-top: 3px;
-        color: var(--artifact-code-muted);
+        color: var(--artifact-code-ink);
         font-size: 16px;
       }
 
       .tree-meta strong {
-        color: var(--vitesse-ink);
+        color: var(--vitesse-orange);
         font-weight: 500;
       }
 
@@ -560,24 +547,62 @@
       }
 
       .signature-list {
-        display: grid;
+        padding: 6px 22px 20px;
+      }
+
+      .signature-group {
+        padding-top: 18px;
+      }
+
+      .signature-group + .signature-group {
+        margin-top: 4px;
+        border-top: 1px solid var(--vitesse-border-soft);
+      }
+
+      .signature-owner-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 2px 12px;
+      }
+
+      .signature-owner {
+        color: var(--artifact-code-ink);
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .signature-summary {
+        color: var(--artifact-code-muted);
+        font-family: var(--font-sans);
+        font-size: 16px;
+      }
+
+      .signature-items {
+        margin: 8px 0 0;
+        padding: 0;
+        list-style: none;
       }
 
       .signature-item {
         display: grid;
-        grid-template-columns: minmax(0, 1.35fr) minmax(250px, 0.65fr);
-        min-height: 116px;
-        border-top: 1px solid var(--artifact-code-border);
+        grid-template-columns: 14px minmax(0, 1fr);
+        gap: 10px;
+        padding: 5px 0;
       }
 
-      .signature-item:first-child {
-        border-top: 0;
+      .signature-bullet {
+        color: var(--artifact-code-muted);
+        line-height: 26px;
+      }
+
+      .signature-body {
+        min-width: 0;
       }
 
       .signature-code {
         min-width: 0;
-        padding: 16px 18px;
-        overflow: auto;
+        overflow-x: auto;
       }
 
       .signature-code .shiki {
@@ -588,26 +613,26 @@
         white-space: pre;
       }
 
-      .signature-meta {
-        margin: 0;
-        padding: 15px 18px;
-        background: var(--artifact-code-raised);
-        border-left: 1px solid var(--artifact-code-border);
-      }
-
-      .signature-meta div + div {
-        margin-top: 9px;
-      }
-
-      .signature-meta dt {
+      .signature-fields {
+        margin: 2px 0 0;
         color: var(--artifact-code-muted);
+        font-family: var(--font-sans);
         font-size: 16px;
       }
 
-      .signature-meta dd {
-        margin: 1px 0 0;
-        color: var(--artifact-code-ink);
-        font-size: 16px;
+      .signature-fields div + div {
+        margin-top: 2px;
+      }
+
+      .signature-fields dt {
+        display: inline;
+        margin-right: 7px;
+        color: var(--vitesse-orange);
+      }
+
+      .signature-fields dd {
+        display: inline;
+        margin: 0;
       }
 
       .code-host .shiki {
@@ -815,6 +840,198 @@
         font-family: var(--font-mono);
         content: 'ok';
       }
+
+      .checklist-host {
+        padding: 8px 22px 14px;
+      }
+
+      .checklist-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .checklist-item {
+        display: grid;
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 14px;
+        padding: 10px 0;
+        border-top: 1px solid var(--vitesse-border-soft);
+      }
+
+      .checklist-item:first-child {
+        border-top: 0;
+      }
+
+      .checklist-state {
+        color: var(--artifact-code-muted);
+        font-weight: 600;
+      }
+
+      .checklist-state.is-pass {
+        color: var(--artifact-positive);
+      }
+
+      .checklist-state.is-pending {
+        color: var(--artifact-warning);
+      }
+
+      .checklist-state.is-fail {
+        color: var(--artifact-negative);
+      }
+
+      .checklist-label {
+        color: var(--artifact-code-ink);
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+
+      .checklist-note {
+        margin-top: 3px;
+        color: var(--artifact-code-muted);
+        font-size: 16px;
+      }
+
+      .callout-block {
+        --callout-tone: var(--artifact-accent);
+        padding: 18px 22px;
+        background: color-mix(in srgb, var(--callout-tone) 7%, var(--vitesse-white));
+        border-left: 3px solid var(--callout-tone);
+      }
+
+      .callout-block.is-positive {
+        --callout-tone: var(--artifact-positive);
+      }
+
+      .callout-block.is-warning {
+        --callout-tone: var(--artifact-warning);
+      }
+
+      .callout-block.is-negative {
+        --callout-tone: var(--artifact-negative);
+      }
+
+      .callout-title {
+        margin: 0 0 6px;
+        color: var(--callout-tone);
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .callout-body {
+        margin: 0;
+        color: var(--artifact-ink);
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .stat-card {
+        padding: 16px 18px 14px;
+        background: var(--artifact-surface);
+        border: 1px solid var(--artifact-border);
+        border-radius: 6px;
+      }
+
+      .stat-label {
+        margin: 0;
+        color: var(--artifact-muted);
+        font-size: 16px;
+      }
+
+      .stat-value {
+        margin: 6px 0 0;
+        color: var(--artifact-ink);
+        font-family: var(--font-mono);
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .stat-value.is-positive {
+        color: var(--artifact-positive);
+      }
+
+      .stat-value.is-warning {
+        color: var(--artifact-warning);
+      }
+
+      .stat-value.is-negative {
+        color: var(--artifact-negative);
+      }
+
+      .stat-note {
+        margin: 4px 0 0;
+        color: var(--artifact-muted);
+        font-size: 16px;
+      }
+
+      .filechange-list {
+        margin: 0;
+        padding: 6px 0;
+        list-style: none;
+      }
+
+      .filechange-item {
+        display: grid;
+        grid-template-columns: 88px minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: start;
+        padding: 9px 22px;
+        border-top: 1px solid var(--vitesse-border-soft);
+      }
+
+      .filechange-item:first-child {
+        border-top: 0;
+      }
+
+      .filechange-change {
+        color: var(--artifact-code-muted);
+        font-weight: 600;
+      }
+
+      .filechange-change.is-added {
+        color: var(--artifact-positive);
+      }
+
+      .filechange-change.is-modified {
+        color: var(--artifact-warning);
+      }
+
+      .filechange-change.is-removed {
+        color: var(--artifact-negative);
+      }
+
+      .filechange-change.is-renamed {
+        color: var(--vitesse-blue);
+      }
+
+      .filechange-path {
+        color: var(--artifact-code-ink);
+        overflow-wrap: anywhere;
+      }
+
+      .filechange-note {
+        margin-top: 3px;
+        color: var(--artifact-code-muted);
+        font-size: 16px;
+      }
+
+      .filechange-counts {
+        color: var(--artifact-code-muted);
+        white-space: nowrap;
+      }
+
+      .filechange-add {
+        color: var(--artifact-positive);
+      }
+
+      .filechange-del {
+        color: var(--artifact-negative);
+      }
     </style>
   </head>
   <body>
@@ -1015,7 +1232,7 @@
             <p class="section-number" data-section-number></p>
             <div>
               <h2 class="section-title" data-section-title>先談介面與責任</h2>
-              <p class="section-summary">Signature list 將宣告和 owner、responsibility 放在同一列。</p>
+              <p class="section-summary">Signature list 依 owner 分組，補充欄位由呼叫端自訂。</p>
             </div>
           </header>
 
@@ -1024,7 +1241,7 @@
               <p class="visual-number" data-visual-number></p>
               <div>
                 <h3 class="visual-title" data-visual-title>審查服務的公開契約</h3>
-                <p class="visual-copy">長型別宣告保留自然寬度，說明欄維持固定 anatomy。</p>
+                <p class="visual-copy">宣告依歸屬分組，owner 只出現一次，補充欄位掛在宣告下方。</p>
                 <p class="source-line">src/review/types.ts</p>
               </div>
             </header>
@@ -1043,7 +1260,7 @@
             <p class="section-number" data-section-number></p>
             <div>
               <h2 class="section-title" data-section-title>用變更證據收尾</h2>
-              <p class="section-summary">Pierre 以 Vitesse Light 與 28px 行高呈現所有 Diff。</p>
+              <p class="section-summary">Pierre 以 Vitesse Light 與 30px 行高呈現所有 Diff。</p>
             </div>
           </header>
 
@@ -1071,6 +1288,79 @@
             <div class="artifact-surface">
               <p class="renderer-error">無法顯示差異內容。請檢查輸入資料是否完整。</p>
             </div>
+          </article>
+        </section>
+
+        <section id="status" class="doc-section" data-toc-section data-demo>
+          <header class="section-header">
+            <p class="section-number" data-section-number></p>
+            <div>
+              <h2 class="section-title" data-section-title>狀態與變更摘要</h2>
+              <p class="section-summary">
+                Stat cards、file change list、checklist 與 callout 服務 PR、plan 與 spec
+                視覺化：整體數字、逐檔變更、逐項狀態與需要注意的訊息。
+              </p>
+            </div>
+          </header>
+
+          <article id="stat-cards" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>這次變更的整體數字</h3>
+                <p class="visual-copy">每張卡片一個數字，tone 只在數字本身該帶語氣時使用。</p>
+                <p class="source-line">git diff --stat</p>
+              </div>
+            </header>
+            <div id="demo-stat-cards" class="stat-grid"></div>
+          </article>
+
+          <article id="file-changes" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>逐檔變更概觀</h3>
+                <p class="visual-copy">變更類型的顯示文字由資料提供，change key 只決定顏色。</p>
+                <p class="source-line">git diff --stat</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">files</span> <span class="caption-name">src/review</span></span>
+                <span class="caption-meta">4 個檔案</span>
+              </div>
+              <ol id="demo-file-changes" class="filechange-list"></ol>
+            </div>
+          </article>
+
+          <article id="checklist" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>驗收條件的目前狀態</h3>
+                <p class="visual-copy">狀態文字由資料提供，state key 決定顏色。</p>
+                <p class="source-line">docs/review-plan.md</p>
+              </div>
+            </header>
+            <div class="code-panel">
+              <div class="code-caption">
+                <span><span class="panel-kind">checklist</span> <span class="caption-name">驗收條件</span></span>
+                <span class="caption-meta">3 項</span>
+              </div>
+              <div id="demo-checklist" class="checklist-host"></div>
+            </div>
+          </article>
+
+          <article id="callout" class="visual-block" data-toc-visual>
+            <header class="visual-header">
+              <p class="visual-number" data-visual-number></p>
+              <div>
+                <h3 class="visual-title" data-visual-title>上線前需要注意的風險</h3>
+                <p class="visual-copy">Callout 承載風險、決策與注意事項，一次一件事。</p>
+                <p class="source-line">src/review/submit-review.ts:31</p>
+              </div>
+            </header>
+            <div id="demo-callout" class="artifact-surface"></div>
           </article>
         </section>
 
@@ -1162,7 +1452,19 @@
       {"source":"export async function submitReview(input: ReviewInput) {\n  const comment = input.comment.trim()\n\n  if (!comment) {\n    return { ok: false, error: 'Comment is required' }\n  }\n\n  return reviewStore.save({ ...input, comment })\n}","lang":"typescript"}
     </script>
     <script id="data-signatures" type="application/json" data-demo>
-      {"items":[{"declaration":"submitReview(input: ReviewInput): Promise<ReviewResult>","lang":"typescript","owner":"ReviewService","responsibility":"協調驗證與儲存"},{"declaration":"validateComment(comment: string): ValidationResult","lang":"typescript","owner":"ReviewPolicy","responsibility":"判斷留言是否可送出","note":"不得讀寫外部狀態"},{"declaration":"save(review: PendingReview): Promise<SavedReview>","lang":"typescript","owner":"ReviewStore","responsibility":"持久化已驗證的留言"}]}
+      {"lang":"typescript","groups":[{"owner":"ReviewService","summary":"協調驗證與儲存","items":[{"declaration":"submitReview(input: ReviewInput): Promise\u003cReviewResult\u003e","fields":[{"label":"備註","value":"失敗時不寫入"}]},{"declaration":"listReviews(query: ReviewQuery): Promise\u003cReview[]\u003e"}]},{"owner":"ReviewPolicy","summary":"判斷留言是否可送出","items":[{"declaration":"validateComment(comment: string): ValidationResult","fields":[{"label":"限制","value":"不得讀寫外部狀態"}]}]},{"owner":"ReviewStore","summary":"持久化已驗證的留言","items":[{"declaration":"save(review: PendingReview): Promise\u003cSavedReview\u003e"}]}]}
+    </script>
+    <script id="data-stat-cards" type="application/json" data-demo>
+      {"items":[{"label":"變更檔案","value":"4"},{"label":"新增行數","value":"+96","tone":"positive"},{"label":"刪除行數","value":"−12","tone":"negative"},{"label":"測試","value":"18 通過","tone":"positive","note":"vitest run"}]}
+    </script>
+    <script id="data-file-changes" type="application/json" data-demo>
+      {"files":[{"path":"src/review/validate-comment.ts","change":"modified","changeLabel":"修改","additions":5,"deletions":1,"note":"拒絕空白留言"},{"path":"src/review/submit-review.ts","change":"modified","changeLabel":"修改","additions":3},{"path":"src/review/validate-comment.test.ts","change":"added","changeLabel":"新增","additions":88},{"path":"src/review/legacy-notes.ts","change":"removed","changeLabel":"刪除","deletions":11}]}
+    </script>
+    <script id="data-checklist" type="application/json" data-demo>
+      {"items":[{"state":"pass","stateLabel":"通過","label":"空白留言被拒絕","note":"validate-comment.test.ts"},{"state":"pending","stateLabel":"待處理","label":"儲存失敗時回報使用者","note":"submit-review.ts:31"},{"state":"fail","stateLabel":"未通過","label":"重複送出防護","note":"ReviewForm.tsx:42"}]}
+    </script>
+    <script id="data-callout" type="application/json" data-demo>
+      {"tone":"warning","title":"風險","body":"儲存失敗時目前只寫入 console，使用者不會看到錯誤。上線前需補上失敗提示。"}
     </script>
     <script id="data-diff" type="application/json" data-demo>
       {"oldFile":{"name":"validate-comment.ts","contents":"export function validateComment(comment: string) {\n  return { ok: true }\n}\n"},"newFile":{"name":"validate-comment.ts","contents":"export function validateComment(comment: string) {\n  if (!comment.trim()) {\n    return { ok: false, error: 'Comment is required' }\n  }\n\n  return { ok: true }\n}\n"}}
@@ -1183,15 +1485,14 @@
         location: '位置',
         detail: '說明',
         props: 'props',
-        path: 'path',
-        owner: '負責',
         responsibility: '責任',
+        path: 'path',
         note: '備註',
       }
       const diffThemeCSS = [
         ':host {',
-        '  --diffs-font-family: "Maple Mono", "Noto Serif TC", monospace;',
-        '  --diffs-header-font-family: "Maple Mono", "Noto Serif TC", monospace;',
+        '  --diffs-font-family: "Maple Mono", "Maple Mono CN", monospace;',
+        '  --diffs-header-font-family: "Maple Mono", "Maple Mono CN", monospace;',
         '  --diffs-font-size: 16px;',
         '  --diffs-line-height: 30px;',
         '  color-scheme: light;',
@@ -1215,8 +1516,16 @@
        * file-tree nodes use { name, kind, path?, note?, children?, active?, badges? }.
        * createPseudocode(host, { lines }): each line uses { indent, segments, note? }.
        * Pseudocode segments use { type, text }. The type is a tokenTypes value.
-       * createSignatureList(host, { items }): each item uses
-       * { declaration, lang?, owner?, responsibility?, note? }.
+       * createSignatureList(host, { lang?, groups }): each group uses
+       * { owner, summary?, items: [{ declaration, lang?, fields?: [{ label, value }] }] }.
+       * createChecklist(host, { items }): items use { state, stateLabel, label, note? }.
+       * state is pass | pending | fail and picks the color. stateLabel is the displayed text.
+       * createStatCards(host, { items }): items use { label, value, tone?, note? }.
+       * tone is positive | warning | negative. The host is a plain .stat-grid element.
+       * createCallout(host, { tone, title?, body }): tone is note | positive | warning | negative.
+       * createFileChangeList(host, { files }): files use
+       * { path, change, changeLabel, additions?, deletions?, note? }.
+       * change is added | modified | removed | renamed and picks the color.
        * renderDiagram and renderCode accept renderer source. renderDiff accepts only file data.
        * Put untrusted source in safely serialized JSON. Builders insert source text with textContent.
        */
@@ -1397,33 +1706,118 @@
         const host = getHost(hostOrId)
         try {
           const { codeToHtml } = await loadShiki()
-          const items = await Promise.all(
-            (data.items || []).map(async (signature) => {
-              const item = element('article', 'signature-item')
-              const code = element('div', 'signature-code')
-              code.innerHTML = await codeToHtml(signature.declaration, {
-                lang: signature.lang || 'typescript',
-                theme: 'vitesse-light',
-              })
-              const meta = element('dl', 'signature-meta')
-              const fields = [
-                [uiMessages.owner, signature.owner],
-                [uiMessages.responsibility, signature.responsibility],
-                [uiMessages.note, signature.note],
-              ]
-              for (const field of fields) {
-                if (!field[1]) continue
-                const group = element('div')
-                group.append(element('dt', '', field[0]), element('dd', '', field[1]))
-                meta.append(group)
+          const defaultLang = data.lang || 'typescript'
+          const groups = await Promise.all(
+            (data.groups || []).map(async (group) => {
+              const section = element('section', 'signature-group')
+              if (group.owner) {
+                const ownerLine = element('div', 'signature-owner-line')
+                ownerLine.append(element('span', 'signature-owner', group.owner))
+                if (group.summary) {
+                  ownerLine.append(element('span', 'signature-summary', group.summary))
+                }
+                section.append(ownerLine)
               }
-              item.append(code, meta)
-              return item
+              const items = await Promise.all(
+                (group.items || []).map(async (signature) => {
+                  const item = element('li', 'signature-item')
+                  const body = element('div', 'signature-body')
+                  const code = element('div', 'signature-code')
+                  code.innerHTML = await codeToHtml(signature.declaration, {
+                    lang: signature.lang || defaultLang,
+                    theme: 'vitesse-light',
+                  })
+                  body.append(code)
+                  const fields = (signature.fields || []).filter((field) => field && field.value)
+                  if (fields.length) {
+                    const list = element('dl', 'signature-fields')
+                    for (const field of fields) {
+                      const pair = element('div')
+                      pair.append(element('dt', '', field.label || ''), element('dd', '', field.value))
+                      list.append(pair)
+                    }
+                    body.append(list)
+                  }
+                  item.append(element('span', 'signature-bullet', '·'), body)
+                  return item
+                }),
+              )
+              const list = element('ul', 'signature-items')
+              list.append(...items)
+              section.append(list)
+              return section
             }),
           )
-          host.replaceChildren(...items)
+          host.replaceChildren(...groups)
         } catch (error) {
           showRendererError(host, rendererMessages.signatures, error)
+        }
+      }
+
+      const checklistStates = new Set(['pass', 'pending', 'fail'])
+      const calloutTones = new Set(['note', 'positive', 'warning', 'negative'])
+      const statTones = new Set(['positive', 'warning', 'negative'])
+      const fileChangeKinds = new Set(['added', 'modified', 'removed', 'renamed'])
+
+      function createChecklist(hostOrId, data) {
+        const host = getHost(hostOrId)
+        const list = element('ol', 'checklist-list')
+        for (const item of data.items || []) {
+          const row = element('li', 'checklist-item')
+          const state = checklistStates.has(item.state) ? ' is-' + item.state : ''
+          row.append(element('span', 'checklist-state' + state, item.stateLabel || item.state || ''))
+          const body = element('div')
+          body.append(element('div', 'checklist-label', item.label))
+          if (item.note) body.append(element('div', 'checklist-note', item.note))
+          row.append(body)
+          list.append(row)
+        }
+        host.replaceChildren(list)
+      }
+
+      function createCallout(hostOrId, data) {
+        const host = getHost(hostOrId)
+        const tone = calloutTones.has(data.tone) ? data.tone : 'note'
+        const block = element('div', 'callout-block is-' + tone)
+        if (data.title) block.append(element('p', 'callout-title', data.title))
+        block.append(element('p', 'callout-body', data.body))
+        host.replaceChildren(block)
+      }
+
+      function createStatCards(hostOrId, data) {
+        const host = getHost(hostOrId)
+        host.replaceChildren()
+        for (const item of data.items || []) {
+          const card = element('div', 'stat-card')
+          card.append(element('p', 'stat-label', item.label))
+          const tone = statTones.has(item.tone) ? ' is-' + item.tone : ''
+          card.append(element('p', 'stat-value' + tone, item.value))
+          if (item.note) card.append(element('p', 'stat-note', item.note))
+          host.append(card)
+        }
+      }
+
+      function createFileChangeList(hostOrId, data) {
+        const host = getHost(hostOrId)
+        host.replaceChildren()
+        for (const file of data.files || []) {
+          const row = element('li', 'filechange-item')
+          const change = fileChangeKinds.has(file.change) ? ' is-' + file.change : ''
+          row.append(element('span', 'filechange-change' + change, file.changeLabel || file.change || ''))
+          const body = element('div')
+          body.append(element('div', 'filechange-path', file.path))
+          if (file.note) body.append(element('div', 'filechange-note', file.note))
+          row.append(body)
+          const counts = element('span', 'filechange-counts')
+          if (Number.isFinite(file.additions)) {
+            counts.append(element('span', 'filechange-add', '+' + file.additions))
+          }
+          if (Number.isFinite(file.deletions)) {
+            if (counts.childNodes.length) counts.append(document.createTextNode(' '))
+            counts.append(element('span', 'filechange-del', '−' + file.deletions))
+          }
+          row.append(counts)
+          host.append(row)
         }
       }
 
@@ -1490,7 +1884,7 @@
       async function renderDiagram(hostOrId, source, options = {}) {
         const host = getHost(hostOrId)
         try {
-          const { renderMermaidSVG } = await loadMermaid()
+          const { renderMermaidSVG, THEMES } = await loadMermaid()
           const {
             bg,
             fg,
@@ -1508,16 +1902,10 @@
             document.documentElement.matches(':lang(zh-TW), :lang(zh)') ||
             /[\p{Script=Han}\p{Script=Bopomofo}]/u.test(source)
           const svg = renderMermaidSVG(source, {
+            ...THEMES['github-light'],
             ...renderOptions,
-            bg: colorToken('--artifact-surface'),
-            fg: colorToken('--artifact-ink'),
-            line: colorToken('--artifact-border'),
-            accent: colorToken('--artifact-accent'),
-            muted: colorToken('--artifact-muted'),
-            surface: colorToken('--vitesse-soft'),
-            border: colorToken('--artifact-border'),
             transparent: true,
-            font: usesChinese ? 'Noto Serif TC' : 'Maple Mono',
+            font: "'Maple Mono', 'Maple Mono CN'"
           })
           host.innerHTML = svg
           preserveDiagramScale(host)
@@ -1593,26 +1981,6 @@
             if (visualNumberHost) visualNumberHost.textContent = visualNumber
           })
 
-          if (visuals.length > 1) {
-            const sublist = element('ol', 'toc-sublist')
-            visuals.forEach((visual, visualIndex) => {
-              const visualTitle = visual.querySelector('[data-visual-title]')
-              if (!visualTitle || !visual.id) return
-              const visualNumber = sectionNumber + '.' + String(visualIndex + 1)
-              const subitem = element('li', 'toc-item')
-              const sublink = element('a', 'toc-link')
-              sublink.href = '#' + visual.id
-              sublink.append(
-                element('span', 'toc-index', visualNumber),
-                element('span', '', visualTitle.textContent),
-              )
-              subitem.append(sublink)
-              sublist.append(subitem)
-              links.set(visual, sublink)
-              targets.push(visual)
-            })
-            item.append(sublist)
-          }
           toc.append(item)
         })
 
@@ -1661,6 +2029,10 @@
         createTree,
         createPseudocode,
         createSignatureList,
+        createChecklist,
+        createCallout,
+        createStatCards,
+        createFileChangeList,
         renderDiagram,
         renderDiff,
         renderCode,
@@ -1685,6 +2057,10 @@
       })
       createTree('demo-file-tree', readData('data-file-tree'), { variant: 'file-tree' })
       createPseudocode('demo-pseudocode', readData('data-pseudocode'))
+      createStatCards('demo-stat-cards', readData('data-stat-cards'))
+      createFileChangeList('demo-file-changes', readData('data-file-changes'))
+      createChecklist('demo-checklist', readData('data-checklist'))
+      createCallout('demo-callout', readData('data-callout'))
       await Promise.all([
         renderDiagram('demo-sequence', sequence.source),
         renderDiagram('demo-flowchart', flowchart.source),

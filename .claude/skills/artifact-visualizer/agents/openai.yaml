@@ -1,6 +1,6 @@
 interface:
   display_name: "artifact-visualizer"
-  short_description: "Build fixed-system HTML visual references"
-  default_prompt: "Use $artifact-visualizer to assemble this information into a grounded single-file HTML reference with the fixed component system."
+  short_description: "Render information as a single-file HTML visual reference"
+  default_prompt: "Use $artifact-visualizer to render this information as a grounded single-file HTML visual reference."
 policy:
   allow_implicit_invocation: true
