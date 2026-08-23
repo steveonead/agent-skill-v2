@@ -46,8 +46,7 @@ Finish when every skeleton section is composed or explicitly dropped, and every 
 
 ## Step 4: Render and deliver
 
-Invoke the artifact-visualizer skill with the composed sections in order, each carrying content, source, and a component hint. Author prose in Traditional Chinese and keep identifiers, code, and established technical terms in English. When skill invocation is unavailable, read the sibling `.claude/skills/artifact-visualizer/SKILL.md` and follow it directly.
-
+Invoke the artifact-visualizer skill with the composed sections in order, each carrying content, source, and a component hint. Pass `docs/ito-temp/diff/NNN-<slug>.html` as the output path, following the caller-path numbering and slug convention in its output contract. Author prose in Traditional Chinese and keep identifiers, code, and established technical terms in English.
 Deliver the local HTML file, and publish a shareable claude.ai Artifact only when the user asks.
 
 Finish when the artifact path is reported along with any behavior the exploration could not verify.
