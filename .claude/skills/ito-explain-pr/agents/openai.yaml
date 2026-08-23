@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-explain-pr"
+  short_description: "Explain a PR or diff visually for a codebase newcomer"
+  default_prompt: "Use $ito-explain-pr to explain this pull request visually."
+policy:
+  allow_implicit_invocation: false
