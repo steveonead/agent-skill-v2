@@ -61,7 +61,7 @@ Start from the template and retain its document shell, hierarchical table of con
 
 The caller may explicitly remap only `--artifact-accent`, `--artifact-positive`, `--artifact-warning`, and `--artifact-negative` to the template's named Vitesse Light palette tokens. Keep the background, surfaces, text, borders, code panels, type, spacing, radii, and component anatomy fixed.
 
-Use Noto Serif TC for Chinese prose and diagram labels. Use Maple Mono with a Noto Serif TC fallback for code, diffs, pseudocode, trees, signatures, and preformatted content. Keep rendered text at 16px or larger, diff line height at 28px, and prose and labels at `text-wrap: pretty`. Preserve code and diff whitespace. Use Shiki's `vitesse-light` theme and the template-owned light Pierre theme.
+Use Noto Serif TC for Chinese prose and diagram labels. Use Maple Mono with a Noto Serif TC fallback for code, diffs, pseudocode, trees, signatures, and preformatted content. Keep rendered text at 16px or larger, diff line height at 30px, and prose and labels at `text-wrap: pretty`. Preserve code and diff whitespace. Use Shiki's `vitesse-light` theme and the template-owned light Pierre theme.
 
 ## Build safely from the template
 
