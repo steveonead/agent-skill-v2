@@ -1,64 +1,70 @@
 ---
 name: ito-explain-pr
-description: Explain a pull request or diff as a visual HTML artifact for an engineer new to the codebase.
-argument-hint: "PR 編號或 URL、branch、commit range，留空自動抓目前 branch 的 PR 或本地 diff。"
+description: Explain a pull request or diff as a visual brief that gets an impatient reviewer into context before they read code.
+argument-hint: "PR number or URL, branch, or commit range. Leave empty to detect the current branch's PR or local diff."
 disable-model-invocation: true
 ---
 
 # Explain a change visually
 
-Explain a code change to an engineer who knows nothing about this codebase. Visuals carry the claims that change how the reader judges the change, and prose carries everything else in as few words as it takes. The reader should answer "what changed and why" from the visuals alone without opening a diff. Line-level detail stays on GitHub. The actual code is the source of truth, and the PR description is reference material.
+Write for an impatient software engineer who does not know this project and has 5 to 10 minutes. The brief gets that reader into context and hands them back to the code, where line-level review happens and the code remains the source of truth.
 
-## Step 1: Resolve the change
+The brief succeeds when a reader who stops after the first two screens can say what the change does and where to start reviewing, and a reader who finishes can recover every externally visible behavior and contract change from the visuals alone. Claim a reason for the change only where the repository, PR, issue, ticket, or commit history provides evidence.
 
-Parse the invocation argument as one of: a PR number or GitHub PR URL, a commit range, or a branch name. With no argument, use the open PR of the current branch, otherwise the current branch against its merge-base with the default branch, otherwise the uncommitted working tree diff.
+## Resolve the change
 
-Record the base and head SHAs, the changed file list, the repository web URL, and the PR title and description when they exist.
+Parse the argument as a PR number or GitHub PR URL, commit range, or branch name. With no argument, use the current branch's open PR when one exists. Otherwise compare the branch with its merge-base against the default branch when committed changes exist, then fall back to the uncommitted working tree diff.
 
-Finish when the diff, both endpoint SHAs, and the source kind are stated.
+Record the comparison endpoint identities and their SHAs, changed files, repository web URL, and PR title and description when available.
 
-## Step 2: Explore through sub-agents
+## Explore the behavior
 
-Before dispatching, read the project's configuration for the facts an explorer would otherwise infer from code alone: the datastore and its configured modes, the runtime and framework, and the test runner. Put them in every brief, so every explorer reasons from the same ground truth and their findings compose.
+Group changed files into behavior clusters by intent, which organize exploration rather than the brief's sections. Explore independent clusters in parallel through read-only sub-agents when available, otherwise explore them in the main conversation.
 
-Group the changed files into behavior clusters by intent. Dispatch 1 to 3 read-only exploration sub-agents in parallel, each brief naming the files its cluster owns, and keep the main conversation for synthesis and rendering. Dispatch, then end the turn and wait for the completion notification, so every file stays with its explorer until the findings arrive. When delegation is unavailable, run the same exploration in the main conversation.
+For each cluster:
 
-Each exploration must:
+- Read the diff, both endpoint versions of its files, and the repository context needed to interpret them.
+- Trace changed symbols through callers and callees far enough to name the externally visible behavior.
+- Separate logic and contract changes from mechanical work.
+- Record the before behavior, after behavior, affected consumers, verification evidence, and source evidence as `path:line`.
+- Verify leads from the PR description against code, and record contradictions and evidence gaps.
 
-- Read the diff plus the base and head versions of its files.
-- Trace callers and callees of changed symbols until it can state the externally visible behavior change.
-- Classify each change as logic (behavior changed) or mechanical (rename, constant, config, import move, formatting).
-- Return per cluster: the intent, the before behavior, the after behavior, evidence as `path:line` at the head SHA, surprises, and any point where the code contradicts the PR description.
+Finish when every changed file has been examined and every externally visible change has evidence.
 
-Finish when every changed file belongs to a cluster whose behavior change or mechanical nature is stated with evidence.
+## Plan the brief
 
-## Step 3: Compose the sections
+Order the brief by what the reader needs in order to follow the next part, rather than by what matters most to a reviewer:
 
-Findings earn visuals. Give the reader the smallest set that changes how they judge this change.
+1. A plain-language summary of two or three sentences: what changed, for whom, and why when evidence exists. Use the domain words the reader already has, such as "campaigns can now be deleted, and only while no line item under them is running or has spent".
+2. Where to start reviewing: the one or two files that carry the behavior, plus the link to the PR Files changed view when a PR exists, otherwise the source diff.
+3. A mental model visual whenever the change depends on domain terms, entities, or state flags the reader must hold in mind, covering only the entities and states this change touches. It comes before the first visual that uses those terms.
+4. One section per externally visible behavior or contract change, each carrying one visual whose before and after are both visible.
+5. Reviewer-depth material last, under one heading: concurrency, lock ordering, tenancy, stubs, and verification gaps, one line each with a pointer, and only where it changes correctness, merge judgment, or the next review action.
 
-Two tests govern every candidate visual:
+Write every section title as a conclusion the reader can repeat, such as "Deleting a campaign is refused while any line item is running or has spend".
 
-- **It changes a judgment.** Take it away: when the reader would still decide the same thing about correctness, risk, or their own next action, its content belongs in a sentence or belongs nowhere. Whatever the reader reproduces in seconds from the PR page, such as diff statistics, the changed-file list, a signature the caller can read off the schema, or a mechanical rename, fails this test.
-- **Its claim is still unproven.** Each claim gets one visual, and the same mechanism drawn again from another angle is a cut.
+Report mechanical work such as fixtures, imports, and registrations as one count or one line, unless those files are themselves the subject.
 
-The changed-line total sets one ceiling for the whole document: at most 10 visuals up to 500 lines, at most 16 up to 2000, and above that group by subsystem and hold the ceiling. Sections and behavior groups compete for that ceiling rather than each drawing from it, so a change with five behavior groups spends most of its budget there and states the rest in prose.
+Budget: at most six visuals, and at most one code or diff excerpt cut to the smallest span that proves its claim. Exceeding either budget requires naming what was already cut and why the remainder still needs more.
 
-Compose from these sections, keeping the ones the findings fill:
+The plan is complete when the summary contains no file names and no symbol names, the mental model precedes the first use of every domain term, every section title is a conclusion sentence, and both budgets hold.
 
-1. **Bottom line**: one paragraph of intent and net effect, leading with the conclusion. Put the highest-impact risk in a callout. A number earns a card of its own only when that number is itself the finding.
-2. **Mental model**: the domain entities the change reasons about and the states it branches on, crossed against what the new code does with each, which a matrix usually carries best. A newcomer who reads this section should be able to predict the outcomes Behavior changes explains.
-3. **System orientation**: a 30-second introduction to the touched subsystem for a newcomer, and a visual of where the change lands when the layout is itself a finding, such as a change threading subsystems that rarely meet.
-4. **Behavior changes**: at most 5 groups organized by intent, never a per-file walk. Give every logic change that passes both tests a before and after contrast whose delta is visually loud, and keep unchanged context muted. A change that threads several files gets one overview contrast instead of per-file drawings. A new file gets an after view plus one line on its role, and a deleted file gets a before view plus what takes over. Mechanical changes and everything beyond the 5 groups reduce to one line of prose each.
-5. **Impact and risks**: each affected caller crossed against the change that reaches it and the action it must take, then compatibility and migration notes, all grounded in code that was read. When the code contradicts the PR description, add a callout stating what the description claims and what the code does. Close with the command or request that exercises the change, in prose unless it runs past a handful of lines.
+## Render the brief
 
-Prose describes the change, not the investigation that found it. Code snippets appear only when a snippet is the clearest proof of a claim, and never open a section. Link behavior evidence to the blob URL at the head SHA with a line anchor. Without a PR, keep evidence as plain `path:line` text. End the last section with a pointer to the PR Files changed tab for line-level review.
+Invoke `artifact-visualizer` with the completed plan as its caller contract: `audience`, `language`, document `title`, `lead` paragraph, section grouping, output path, closing link, and the ordered visuals, each with its `claim`, `source`, `relationship`, `content`, and `boundaries`. The visualizer owns component choice and rendering verification.
 
-Finish when the visual count is at or under the ceiling for the changed-line total, every visual passes both tests, and every claim carries evidence. Report the count alongside its ceiling.
+Set the output path to the directory `docs/ito-temp/diff/`. Set the language to the user's conversation language, and keep identifiers, code, and established technical terms in English inside localized prose.
 
-## Step 4: Render and deliver
+When the visualizer reports a claim it cannot render faithfully, revise the plan and render again.
 
-Invoke the artifact-visualizer skill with the composed sections in order, each carrying content, source, and a component hint, and state that the list is the document in full. Pass `docs/ito-temp/diff/NNN-<slug>.html` as the output path, incrementing the largest numeric prefix already in that directory and starting at `001`. Keep identifiers, code, and established technical terms in English inside the prose.
+## Audit the reading experience
 
-Deliver the local HTML file, and publish a shareable claude.ai Artifact only when the user asks.
+Run both stages with a fresh agent who did not explore the change. When delegation is unavailable, run them in the main conversation and report that fallback.
 
-Finish when the artifact path is reported along with any behavior the exploration could not verify.
+Stage 1, impatience. The auditor sees only the first two screens, roughly the first 1800 pixels at 1440 wide, with one minute of reading, then states what the change does and where they would start reviewing. A miss here means rewriting the top of the document before touching anything else.
+
+Stage 2, completeness. With section prose and captions hidden and labels inside visuals visible, the auditor restates every externally visible behavior and contract change, its before and after, and its main impact on consumers, correctness, or the next review action. Revise on any miss, then rerun this stage.
+
+## Deliver
+
+Report the local HTML path, both audit results, any behavior that could not be verified, any claimed reason whose evidence remains incomplete, and any budget overrun with its justification.
