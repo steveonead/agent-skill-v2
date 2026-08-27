@@ -1,6 +1,0 @@
-interface:
-  display_name: "artifact-visualizer"
-  short_description: "Render caller-supplied visual claims as a single-file HTML reference"
-  default_prompt: "Use $artifact-visualizer to turn this into a grounded single-file HTML reference I can browse."
-policy:
-  allow_implicit_invocation: true

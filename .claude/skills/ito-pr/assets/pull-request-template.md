@@ -19,7 +19,7 @@
 
 {主要變更 bullets，或編號區段（依勾選類型數量與規模升級）}
 
-<!-- 條件加入：## 操作流程與情境（UI 情境 trigger 命中時）-->
+<!-- 條件加入：## 操作流程與情境（UI 情境 trigger 命中時），以 mermaid 圖表示-->
 
 <!-- 條件加入：## Before / After（API/contract/output/config/CLI/payload/permissions/input trigger 命中時）-->
 

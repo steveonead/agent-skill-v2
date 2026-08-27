@@ -12,21 +12,21 @@ Treat harness-agnostic behavior as the default. Unless the user explicitly targe
 
 When the request includes the literal `--grill` flag, immediately invoke `batch-grilling` with the remaining request and current discussion as its subject. Its result must cover the relevant codebase and filesystem facts and every unresolved design decision. Wait for the user to confirm the shared understanding, then resume this workflow and treat the confirmed decisions as requirements.
 
-Read [`references/WRITING-PRINCIPLES.md`](references/WRITING-PRINCIPLES.md) in full before drafting. Resolve whether the request creates or edits a document, the target kind, and the absolute target path. Follow an explicit path first. Otherwise, derive the path from governing repository instructions and existing agent configuration, and ask only when multiple plausible targets remain or no target can be found.
+Read [`references/writing-principles.md`](references/writing-principles.md) in full before drafting. Resolve whether the request creates or edits a document, the target kind, and the absolute target path. Follow an explicit path first. Otherwise, derive the path from governing repository instructions and existing agent configuration, and ask only when multiple plausible targets remain or no target can be found.
 
-Read every governing repository instruction. For `SKILL.md`, also read [`references/SKILL-MECHANICS.md`](references/SKILL-MECHANICS.md) in full before deciding invocation or packaging. For an edit, read the complete target and every agent-facing file it directly points to.
+Read every governing repository instruction. For `SKILL.md`, also read [`references/skill-mechanics.md`](references/skill-mechanics.md) in full before deciding invocation or packaging. For an edit, read the complete target and every agent-facing file it directly points to.
 
-Derive decisions from the request and environment before asking questions. Without `--grill`, ask only about unresolved decisions whose answers materially change the result. Settle the intended purpose, applicable branches and scope, required outcomes and constraints, and, for a skill, its invocation. Treat a requested change as settled input. When the user reports misbehavior instead, diagnose it against every failure mode in `WRITING-PRINCIPLES.md`.
+Derive decisions from the request and environment before asking questions. Without `--grill`, ask only about unresolved decisions whose answers materially change the result. Settle the intended purpose, applicable branches and scope, required outcomes and constraints, and, for a skill, its invocation. Treat a requested change as settled input. When the user reports misbehavior instead, diagnose it against every failure mode in `writing-principles.md`.
 
 ## Draft the complete result
 
 Produce a complete, coherent version of every affected file. Preserve unrelated behavior and repository conventions, limiting edits to the requested changes and their necessary consequences.
 
-For a new skill, choose a lowercase hyphenated name unless the user supplied one. Draft `SKILL.md` and the applicable native companion metadata according to `SKILL-MECHANICS.md`, and include only the directly required references, scripts, or assets. For an existing skill, keep every affected native companion metadata file aligned when its name, purpose, or invocation changes.
+For a new skill, choose a lowercase hyphenated name unless the user supplied one. Draft `SKILL.md` and the applicable native companion metadata according to `skill-mechanics.md`, and include only the directly required references, scripts, or assets. For an existing skill, keep every affected native companion metadata file aligned when its name, purpose, or invocation changes.
 
 ## Review with fresh eyes
 
-When agent delegation is available, assign one holistic review to a fresh agent. Give that reviewer the complete candidate files, the user's intent and settled decisions, and the absolute path to `WRITING-PRINCIPLES.md`. Require the reviewer to read the principles in full, then:
+When agent delegation is available, assign one holistic review to a fresh agent. Give that reviewer the complete candidate files, the user's intent and settled decisions, and the absolute path to `writing-principles.md`. Require the reviewer to read the principles in full, then:
 
 - Run the no-op test on every sentence and return a keep-or-cut disposition for each sentence, with a reason for every cut.
 - Report duplication, sediment, sprawl, stale caches, weak context pointers, unnecessary procedural detail, avoidable negation, intent drift, contradictions, em dashes, and semicolons.

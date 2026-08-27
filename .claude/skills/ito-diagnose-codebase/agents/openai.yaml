@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-diagnose-codebase"
+  short_description: "Find and batch-grill deepening opportunities"
+  default_prompt: "Use $ito-diagnose-codebase to find deepening opportunities in this codebase."
+policy:
+  allow_implicit_invocation: false

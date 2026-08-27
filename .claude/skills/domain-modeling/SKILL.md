@@ -40,7 +40,7 @@ Complete this activity when every domain term currently under discussion is eith
 
 ### Record resolved terms
 
-Before editing a domain-context file, read [the shared domain-context rules](./references/DOMAIN-CONTEXT-FORMAT.md) in full. Preserve the language of an existing domain-context file. For a new domain-context file, read [the Traditional Chinese template](./references/DOMAIN-CONTEXT-FORMAT.zh-TW.md) when the user's primary language is Traditional Chinese, or [the English template](./references/DOMAIN-CONTEXT-FORMAT.en.md) when it is English. When the primary language is unclear or unsupported, ask the user to choose English or Traditional Chinese.
+Before editing a domain-context file, read [the shared domain-context rules](./references/domain-context-format.md) in full. Preserve the language of an existing domain-context file. For a new domain-context file, read [the Traditional Chinese template](./references/domain-context-format.zh-tw.md) when the user's primary language is Traditional Chinese, or [the English template](./references/domain-context-format.en.md) when it is English. When the primary language is unclear or unsupported, ask the user to choose English or Traditional Chinese.
 
 Update the applicable `DOMAIN-CONTEXT.md` as soon as a domain term resolves. When migrating a legacy `CONTEXT.md`, rename it and update every affected `CONTEXT-MAP.md` link in the same change. Update root `CONTEXT-MAP.md` when the resolution adds, renames, or moves a bounded context, or changes a relationship-defining domain event, published contract, synchronous API, or shared type.
 
@@ -73,7 +73,7 @@ When all six conditions pass, offer to create an ADR. Treat an explicit user req
 
 After authorization:
 
-1. Read [the shared ADR content rules](./references/ADR-FORMAT.md), then select the template from the user's primary language. Read [the Traditional Chinese template](./references/ADR-FORMAT.zh-TW.md) for Traditional Chinese. Read [the English template](./references/ADR-FORMAT.en.md) for English. When the primary language is unclear or unsupported, ask the user to choose English or Traditional Chinese.
+1. Read [the shared ADR content rules](./references/adr-format.md), then select the template from the user's primary language. Read [the Traditional Chinese template](./references/adr-format.zh-tw.md) for Traditional Chinese. Read [the English template](./references/adr-format.en.md) for English. When the primary language is unclear or unsupported, ask the user to choose English or Traditional Chinese.
 2. Place a system-wide ADR in root `docs/adr/`. Place a bounded-context ADR in that context's `docs/adr/`.
 3. Scan the selected directory for the highest sequential number and create `NNNN-short-slug.md` with the next number.
 4. Write the context, decision, and rationale explicitly. Use optional material only when it adds durable information.

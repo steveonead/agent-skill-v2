@@ -1,6 +1,6 @@
 interface:
   display_name: "ito-explain-pr"
-  short_description: "Explain a PR or diff as a visual brief for an impatient reviewer"
-  default_prompt: "Use $ito-explain-pr to build a visual brief that gets me into context on this pull request in a few minutes, before I review its code."
+  short_description: "Explain a PR to a newcomer in 3 to 10 minutes"
+  default_prompt: "Use $ito-explain-pr to explain this pull request to a newcomer as a focused Traditional Chinese HTML artifact."
 policy:
   allow_implicit_invocation: false

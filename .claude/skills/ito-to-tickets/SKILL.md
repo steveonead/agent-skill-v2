@@ -21,7 +21,7 @@ Finish when the requirement boundaries and settled decisions are sufficient for 
 
 ## Step 2: Design the graph
 
-Read [Contract-First Slicing](references/CONTRACT-FIRST-SLICING.md) in full before decomposing the requirement.
+Read [contract-first-slicing.md](references/contract-first-slicing.md) in full before decomposing the requirement.
 
 When no contract mechanism can be chosen reliably, include the unresolved options in the approval quiz.
 
