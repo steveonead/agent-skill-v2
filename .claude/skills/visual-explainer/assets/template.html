@@ -281,50 +281,17 @@
       font-size: var(--fs-section-intro);
     }
 
-    .thesis-grid,
-    .split,
-    .ledger,
-    .pillars,
-    .impact-grid,
-    .glossary {
+    .split {
       display: grid;
       gap: 16px;
-    }
-
-    .thesis-grid,
-    .split,
-    .ledger {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .pillars,
-    .impact-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .glossary {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    :where(
-      .thesis-grid,
-      .split,
-      .ledger,
-      .ledger-row,
-      .pillars,
-      .impact-grid,
-      .glossary,
-      .risk
-    ).is-stacked {
+    .split.is-stacked {
       grid-template-columns: minmax(0, 1fr);
     }
 
     .panel,
-    .thesis-item,
-    .pillar,
-    .impact-item,
-    .term,
-    .risk,
     .callout,
     .diagram,
     .code-frame {
@@ -333,27 +300,8 @@
       background: var(--surface);
     }
 
-    .panel,
-    .thesis-item,
-    .pillar,
-    .impact-item,
-    .term,
-    .risk {
+    .panel {
       padding: 26px;
-    }
-
-    .thesis-item {
-      border-top: 4px solid var(--rule);
-    }
-
-    .thesis-item.is-no {
-      border-top-color: var(--danger);
-      background: var(--cut-bg);
-    }
-
-    .thesis-item.is-yes {
-      border-top-color: var(--positive);
-      background: var(--keep-bg);
     }
 
     .panel.before {
@@ -362,31 +310,6 @@
 
     .panel.after {
       border-top: 4px solid var(--accent);
-    }
-
-    .ledger-column {
-      border-top: 1px solid var(--ink);
-    }
-
-    .ledger-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .ledger-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-      gap: 20px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .ledger-row p {
-      margin-bottom: 0;
-      font-size: var(--fs-small);
     }
 
     .map {
@@ -433,23 +356,6 @@
       font-family: var(--mono);
       font-size: var(--fs-lead);
       line-height: 1;
-    }
-
-    .pillar {
-      border-top: 4px solid var(--accent);
-    }
-
-    .icon-frame {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 28px;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-family: var(--mono);
-      font-size: var(--fs-body);
-      font-weight: 700;
     }
 
     .steps {
@@ -512,23 +418,6 @@
       white-space: pre-wrap;
     }
 
-    .risks {
-      display: grid;
-      gap: 12px;
-    }
-
-    .risk {
-      display: grid;
-      grid-template-columns: 140px minmax(0, 1fr) 180px;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .risk p {
-      margin-bottom: 0;
-      font-size: var(--fs-small);
-    }
-
     .status {
       display: inline-block;
       width: fit-content;
@@ -541,41 +430,210 @@
       font-weight: 700;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      border-top: 1px solid var(--ink);
-      border-bottom: 1px solid var(--ink);
+    .mock-frame {
+      position: relative;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--sunk);
     }
 
-    .stat {
-      padding: 26px 22px;
-      border-right: 1px solid var(--rule);
-    }
-
-    .stat:first-child {
-      padding-left: 0;
-    }
-
-    .stat:last-child {
-      border-right: 0;
-      padding-right: 0;
-    }
-
-    .stat-number {
-      display: block;
-      margin-bottom: 12px;
-      color: var(--ink);
+    .mock-chrome {
+      padding: 9px 14px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--rule);
       font-family: var(--mono);
-      font-size: var(--fs-display-number);
-      font-weight: 800;
-      line-height: 1;
+      font-size: var(--fs-micro);
+      color: var(--soft);
     }
 
-    .stat-label {
+    .mock-body {
+      position: relative;
+      height: 236px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mock-viewport {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .mock-rows-track {
+      position: absolute;
+      inset: 0;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .mock-rows-track.is-animated {
+      animation: mockScroll 7s ease-in-out infinite;
+    }
+
+    @keyframes mockScroll {
+      0%, 12% { transform: translateY(0); }
+      50%, 62% { transform: translateY(-132px); }
+      100% { transform: translateY(0); }
+    }
+
+    .mock-row {
+      flex-shrink: 0;
+      padding: 9px 11px;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      background: var(--paper);
+      font-family: var(--mono);
+      font-size: var(--fs-micro);
+      color: var(--text);
+    }
+
+    .mock-row.is-accent {
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+      background: var(--keep-bg);
+    }
+
+    .mock-scrollbar {
+      position: absolute;
+      top: 6px;
+      right: 4px;
+      width: 4px;
+      height: 34%;
+      border-radius: 2px;
+      background: var(--faint);
+    }
+
+    .mock-scrollbar.is-animated {
+      animation: mockScrollbarMove 7s ease-in-out infinite;
+    }
+
+    @keyframes mockScrollbarMove {
+      0%, 12% { top: 6px; }
+      50%, 62% { top: calc(66% - 6px); }
+      100% { top: 6px; }
+    }
+
+    .mock-cut-fade {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 42px;
+      background: linear-gradient(to bottom, transparent, var(--cut-bg) 78%);
+      pointer-events: none;
+    }
+
+    .mock-cut-label {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      z-index: 2;
+    }
+
+    .mock-footer {
+      flex-shrink: 0;
+      padding: 9px 14px;
+      border-top: 1px solid var(--rule);
+      background: var(--surface);
+    }
+
+    .mock-edge-hint {
+      position: absolute;
+      top: 0;
+      right: -1px;
+      bottom: 0;
+      width: 10px;
+      background: repeating-linear-gradient(
+        135deg,
+        var(--rule),
+        var(--rule) 4px,
+        transparent 4px,
+        transparent 8px
+      );
+      opacity: 0.6;
+    }
+
+    .numline {
+      display: flex;
+      height: 48px;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .numline-zone {
+      display: grid;
+      place-items: center;
+      flex: 1 1 0;
+      background: var(--surface);
+      font-family: var(--mono);
+      font-size: var(--fs-micro);
+      color: var(--text);
+    }
+
+    .numline-zone + .numline-zone {
+      border-left: 2px solid var(--ink);
+    }
+
+    .numline-zone.is-ok {
+      background: var(--keep-bg);
+      color: var(--positive);
+    }
+
+    .numline-zone.is-bad {
+      background: var(--cut-bg);
+      color: var(--danger);
+    }
+
+    .numline-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: var(--fs-micro);
       color: var(--soft);
-      font-size: var(--fs-small);
-      line-height: 1.6;
+    }
+
+    .matrix {
+      display: grid;
+      gap: 2px;
+      border: 1px solid var(--rule);
+      background: var(--rule);
+    }
+
+    .matrix > * {
+      display: grid;
+      place-items: center;
+      min-height: 44px;
+      padding: 6px 10px;
+      background: var(--surface);
+      font-family: var(--mono);
+      font-size: var(--fs-micro);
+      text-align: center;
+    }
+
+    .matrix .m-head {
+      background: var(--sunk);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .matrix .m-yes {
+      background: var(--keep-bg);
+      color: var(--positive);
+      font-weight: 700;
+    }
+
+    .matrix .m-no {
+      background: var(--cut-bg);
+      color: var(--danger);
+      font-weight: 700;
     }
 
     .diagram,
@@ -673,20 +731,6 @@
       display: none;
     }
 
-    .term dt {
-      margin-bottom: 10px;
-      color: var(--ink);
-      font-family: var(--mono);
-      font-size: var(--fs-body);
-      font-weight: 800;
-    }
-
-    .term dd {
-      margin: 0;
-      color: var(--text);
-      line-height: 1.55;
-    }
-
     .callout {
       display: grid;
       grid-template-columns: 180px minmax(0, 1fr);
@@ -744,30 +788,7 @@
       display: none;
     }
 
-    .evidence {
-      display: grid;
-      grid-template-columns: 220px minmax(0, 1fr);
-      gap: 40px;
-      padding-top: 34px;
-      color: var(--soft);
-    }
-
-    .evidence ul {
-      display: grid;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .evidence li {
-      color: var(--soft);
-      font-family: var(--mono);
-      font-size: var(--fs-micro);
-      overflow-wrap: anywhere;
-    }
-
-    .evidence a {
+    a {
       color: var(--accent);
       text-decoration: underline;
       text-underline-offset: 3px;
@@ -830,12 +851,6 @@
       </div>
     </section>
 
-    <footer class="evidence">
-      <p class="kicker">Evidence</p>
-      <ul>
-        <li>Replace with the smallest useful set of sources and assumptions.</li>
-      </ul>
-    </footer>
   </main>
 
   <script type="module">

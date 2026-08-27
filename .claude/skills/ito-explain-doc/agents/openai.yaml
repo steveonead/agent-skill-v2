@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-explain-doc"
+  short_description: "Turn a plan or spec into a visual explainer"
+  default_prompt: "Use $ito-explain-doc to turn this plan into a visual HTML explainer."
+policy:
+  allow_implicit_invocation: false

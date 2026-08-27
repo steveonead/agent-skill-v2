@@ -1,0 +1,224 @@
+<!--
+  Copyable patterns for visual-explainer.
+  Copy a snippet into the template body and swap the labels. Class contracts and
+  tokens live in template.html.
+-->
+
+<!-- Section shell. Every pattern below goes inside one of these. -->
+<section class="section">
+  <div class="section-heading">
+    <p class="kicker">01 / Topic</p>
+    <div>
+      <h2>What this section shows</h2>
+      <p>One sentence on why it matters.</p>
+    </div>
+  </div>
+  <!-- pattern here -->
+</section>
+
+<!-- Map: nodes and connectors, for dependency or dataflow. Stack map-rows for layers. -->
+<div class="map">
+  <div class="map-row">
+    <div class="node">Input</div>
+    <div class="connector">→</div>
+    <div class="node primary">Transform</div>
+    <div class="connector">→</div>
+    <div class="node unknown">Output?</div>
+  </div>
+</div>
+
+<!-- Steps: a numbered pipeline where order carries the meaning. -->
+<div class="steps">
+  <div class="step">
+    <span class="step-number">1</span>
+    <strong>Trigger</strong>
+    <p>What starts it.</p>
+  </div>
+  <div class="step">
+    <span class="step-number">2</span>
+    <strong>Effect</strong>
+    <p>What visibly changes.</p>
+  </div>
+</div>
+
+<!-- Timeline: phases in sequence. Set the column count to the phase count. -->
+<div class="timeline" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+  <div class="phase"><strong>Phase 1</strong><p>Draft</p></div>
+  <div class="phase"><strong>Phase 2</strong><p>Active</p></div>
+  <div class="phase"><strong>Phase 3</strong><p>Done</p></div>
+</div>
+
+<!-- Split: before/after or claim/actual comparison in two aligned frames. -->
+<div class="split">
+  <div class="panel before">
+    <p class="label">Before</p>
+    <p>Old behavior.</p>
+  </div>
+  <div class="panel after">
+    <p class="label">After</p>
+    <p>New behavior.</p>
+  </div>
+</div>
+
+<!-- Number line: numeric thresholds as zones. Zones share width equally so the
+     ticks land on the dividers. Unequal zones need matching tick positions. -->
+<div>
+  <div class="numline">
+    <div class="numline-zone is-bad">rejected</div>
+    <div class="numline-zone is-ok">accepted</div>
+    <div class="numline-zone">needs review</div>
+  </div>
+  <div class="numline-ticks">
+    <span>0</span><span>10,000</span><span>40,000</span><span>∞</span>
+  </div>
+</div>
+
+<!-- Matrix: a grid of yes/no cells, for who-can-do-what or feature-by-state.
+     Cells hold a mark or a word, never a sentence. -->
+<div class="matrix" style="grid-template-columns: 160px repeat(3, minmax(0, 1fr));">
+  <div class="m-head"></div>
+  <div class="m-head">draft</div>
+  <div class="m-head">active</div>
+  <div class="m-head">done</div>
+  <div>edit budget</div>
+  <div class="m-yes">✓</div>
+  <div class="m-no">✗</div>
+  <div class="m-no">✗</div>
+</div>
+
+<!-- Scope tree: containment and file/module structure. -->
+<pre class="scope-tree">
+app/
+├── routes/        ← changed
+│   └── orders.ts  ← new entry point
+└── lib/
+</pre>
+
+<!-- UI mockup: schematic frame for a user-visible interface. Use real region
+     and component names. `mock-edge-hint` marks an off-canvas element. The
+     scroll animation is tuned to a six-row track. -->
+<div class="split">
+  <div class="panel before">
+    <p class="label">Before</p>
+    <div class="mock-frame">
+      <div class="mock-chrome">Header · Tabs · ActionBar</div>
+      <div class="mock-body">
+        <div class="mock-viewport">
+          <div class="mock-rows-track">
+            <div class="mock-row">Row 1</div>
+            <div class="mock-row">Row 2</div>
+            <div class="mock-row">Row 3</div>
+            <div class="mock-row">Row 4</div>
+            <div class="mock-row">Row 5</div>
+            <div class="mock-row">Row 6</div>
+            <div class="mock-row is-accent">Pagination</div>
+          </div>
+          <div class="mock-cut-fade"></div>
+          <span class="mock-cut-label status">clipped</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel after">
+    <p class="label">After</p>
+    <div class="mock-frame">
+      <div class="mock-chrome">Header · Tabs · ActionBar</div>
+      <div class="mock-body">
+        <div class="mock-viewport">
+          <div class="mock-rows-track is-animated">
+            <div class="mock-row">Row 1</div>
+            <div class="mock-row">Row 2</div>
+            <div class="mock-row">Row 3</div>
+            <div class="mock-row">Row 4</div>
+            <div class="mock-row">Row 5</div>
+            <div class="mock-row">Row 6</div>
+          </div>
+          <div class="mock-scrollbar is-animated"></div>
+        </div>
+        <div class="mock-footer">
+          <div class="mock-row is-accent">Pagination (always visible)</div>
+        </div>
+      </div>
+      <div class="mock-edge-hint" title="sidebar slides in from here"></div>
+    </div>
+  </div>
+</div>
+
+<!--
+  Mermaid patterns. Verified for the pinned beautiful-mermaid 1.1.3:
+  flowchart, stateDiagram-v2, and erDiagram render, and classDef styling is
+  honored. Keep every node label short and on ONE line: <br/> collapses and a
+  source newline can create an extra node. erDiagram field comments never
+  appear. Never draw before/after as two parallel mermaid diagrams: they size
+  independently and misalign. Use the `split` panels instead.
+-->
+
+<!-- Branching flow with styled nodes. -->
+<div class="diagram js-mermaid">
+  <pre class="diagram-source">flowchart TD
+    A[Request] --> B{Cached?}
+    B -->|yes| C[Serve cache]
+    B -->|no| D[Fetch origin]
+    D --> E[Store + serve]
+    classDef hot fill:#dfe9e4,stroke:#2a5f4d
+    class C hot</pre>
+  <div class="diagram-output"></div>
+</div>
+
+<!-- State machine / lifecycle. -->
+<div class="diagram js-mermaid">
+  <pre class="diagram-source">stateDiagram-v2
+    [*] --> draft
+    draft --> active: submit
+    active --> paused: pause
+    paused --> active: resume
+    active --> done
+    done --> [*]</pre>
+  <div class="diagram-output"></div>
+</div>
+
+<!-- Data model / entity relationships. -->
+<div class="diagram js-mermaid">
+  <pre class="diagram-source">erDiagram
+    CAMPAIGN ||--o{ LINE_ITEM : contains
+    LINE_ITEM ||--o{ DELIVERY : schedules
+    LINE_ITEM {
+      int budget
+      string status
+    }</pre>
+  <div class="diagram-output"></div>
+</div>
+
+<!-- Code or diff evidence, highlighted by shiki. Escape the source text. -->
+<div class="code-frame js-shiki" data-lang="typescript">
+  <pre class="code-source">const result = explain(input);</pre>
+  <div class="code-output"></div>
+</div>
+
+<!-- Callout: the one caption a picture keeps, saying why it matters. -->
+<div class="callout">
+  <p class="label">Why it matters</p>
+  <p>One or two sentences the picture cannot carry.</p>
+</div>
+
+<!-- Disclosure: collapsed detail off the main path, for the appendix. -->
+<details class="disclosure">
+  <summary>Secondary detail</summary>
+  <div class="disclosure-body">
+    <p>Worth keeping, off the main path.</p>
+  </div>
+</details>
+
+<!-- Segmented toggle: switch between named views of the same subject. -->
+<div data-segment-group>
+  <div class="segmented">
+    <button class="segment is-active" data-segment="before">Before</button>
+    <button class="segment" data-segment="after">After</button>
+  </div>
+  <div data-panel="before">
+    <p>Before view.</p>
+  </div>
+  <div data-panel="after" hidden>
+    <p>After view.</p>
+  </div>
+</div>

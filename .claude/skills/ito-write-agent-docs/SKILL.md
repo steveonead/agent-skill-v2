@@ -26,7 +26,7 @@ For a new skill, choose a lowercase hyphenated name unless the user supplied one
 
 ## Review with fresh eyes
 
-When agent delegation is available, assign one holistic review to a fresh agent. Give that reviewer the complete candidate files, the user's intent and settled decisions, and the absolute path to `writing-principles.md`. Require the reviewer to read the principles in full, then:
+When agent delegation is available, MUST assign one holistic review to a fresh agent. Give that reviewer the complete candidate files, the user's intent and settled decisions, and the absolute path to `writing-principles.md`. Require the reviewer to read the principles in full, then:
 
 - Run the no-op test on every sentence and return a keep-or-cut disposition for each sentence, with a reason for every cut.
 - Report duplication, sediment, sprawl, stale caches, weak context pointers, unnecessary procedural detail, avoidable negation, intent drift, contradictions, em dashes, and semicolons.
