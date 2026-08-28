@@ -38,8 +38,26 @@ TEMPLATE_PLACEHOLDERS = (
     "Topic / context",
     "One clear idea",
     "State the conclusion",
+    "Overall mental model",
+    "Name what enters the sequence",
+    "Show the action that changes the outcome",
+    "State what becomes true at the end",
     "Show the relationship",
-    "Replace this starter component",
+    "Use a large, literal picture",
+    "Replace this starter section",
+)
+# Enforcement copy of the allowlist documented in assets/patterns.html, which
+# is the human-readable home. Update both when the renderer pin changes.
+SUPPORTED_MERMAID_HEADERS = frozenset(
+    {
+        "classDiagram",
+        "erDiagram",
+        "flowchart",
+        "graph",
+        "sequenceDiagram",
+        "stateDiagram-v2",
+        "xychart-beta",
+    }
 )
 
 
@@ -141,6 +159,15 @@ class ArtifactParser(HTMLParser):
             if frame and frame["wrapper"]:
                 return frame["wrapper"]
         return None
+
+
+def _mermaid_header(source):
+    """The first word of a Mermaid graph, which selects its diagram type."""
+    for line in source.strip().splitlines():
+        stripped = line.strip()
+        if stripped:
+            return re.split(r"[\s;]", stripped, maxsplit=1)[0]
+    return ""
 
 
 def _top_level_dynamic_imports(script):
@@ -299,6 +326,13 @@ def audit(path):
             minimum_token = wrapper["attributes"].get("data-mermaid-min-text-token", "")
             if minimum_token.lower() not in tokens:
                 errors.append(f"{label} needs a defined --fs-* minimum text token")
+
+            header = _mermaid_header("".join(wrapper["source_text"]))
+            if header and header not in SUPPORTED_MERMAID_HEADERS:
+                errors.append(
+                    f"{label} uses unsupported diagram type {header!r}: "
+                    f"the pinned renderer draws {', '.join(sorted(SUPPORTED_MERMAID_HEADERS))}"
+                )
 
     scripts = "\n".join(parser.scripts)
     if _top_level_dynamic_imports(scripts):

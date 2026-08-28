@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from validate_artifact import audit
+from validate_artifact import SUPPORTED_MERMAID_HEADERS, audit
 
 
 VALID_ARTIFACT = """<!doctype html>
@@ -87,6 +87,18 @@ class ArtifactAuditTest(unittest.TestCase):
             (' data-mermaid-min-text-token="--fs-micro"', ""),
             "minimum text token",
         )
+
+    def test_rejects_unsupported_mermaid_diagram_type(self):
+        self.assert_rejected(
+            ("flowchart LR; A --> B", "pie title Share"),
+            "unsupported diagram type 'pie'",
+        )
+
+    def test_accepts_every_supported_mermaid_diagram_type(self):
+        for header in SUPPORTED_MERMAID_HEADERS:
+            with self.subTest(header=header):
+                source = VALID_ARTIFACT.replace("flowchart LR", f"{header} LR")
+                self.assertEqual(self.audit_source(source), [])
 
     def test_rejects_direct_maple_font_on_non_code_text(self):
         self.assert_rejected(

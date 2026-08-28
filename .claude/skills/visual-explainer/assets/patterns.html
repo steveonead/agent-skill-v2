@@ -41,6 +41,50 @@
   </div>
 </div>
 
+<!-- User story: one story as role / capability / outcome plus its acceptance
+     criteria. Keep each slot to a phrase. `is-done` or `is-blocked` colors the
+     rail when it sits on both the card and its status. Add `is-stacked` to
+     `story-grid` for a single full-width story. -->
+<div class="story-grid">
+  <article class="story">
+    <div class="story-head">
+      <span class="story-id">US-04</span>
+      <span class="status">in review</span>
+    </div>
+    <div class="story-body">
+      <span class="story-slot">As a</span>
+      <p class="story-value">Returning reviewer</p>
+      <span class="story-slot">I want</span>
+      <p class="story-value">To resume where I stopped</p>
+      <span class="story-slot">So that</span>
+      <p class="story-value is-outcome">No file gets read twice</p>
+    </div>
+    <ul class="story-criteria">
+      <li><span class="ac-gate">Given</span><span>A review left open for a day</span></li>
+      <li><span class="ac-gate">When</span><span>The reviewer reopens the branch</span></li>
+      <li><span class="ac-gate">Then</span><span>Read files stay collapsed</span></li>
+    </ul>
+  </article>
+  <article class="story is-done">
+    <div class="story-head">
+      <span class="story-id">US-05</span>
+      <span class="status is-done">shipped</span>
+    </div>
+    <div class="story-body">
+      <span class="story-slot">As a</span>
+      <p class="story-value">Release manager</p>
+      <span class="story-slot">I want</span>
+      <p class="story-value">One page per release</p>
+      <span class="story-slot">So that</span>
+      <p class="story-value is-outcome">Approvals stop waiting on me</p>
+    </div>
+    <ul class="story-criteria">
+      <li><span class="ac-gate">Given</span><span>A tagged release</span></li>
+      <li><span class="ac-gate">Then</span><span>The page links every merged PR</span></li>
+    </ul>
+  </article>
+</div>
+
 <!-- Timeline: phases in sequence. Set the column count to the phase count. -->
 <div class="timeline" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
   <div class="phase"><strong>Phase 1</strong><p>Draft</p></div>
@@ -145,13 +189,18 @@ app/
 </div>
 
 <!--
-  Mermaid compatibility notes for the renderer pinned in template.html:
-  flowchart, stateDiagram-v2, and erDiagram render, and classDef styling is
-  honored. Keep every node label short and on one line: <br/> collapses and a
-  source newline can create an extra node. erDiagram field comments do not
-  appear. Draw before/after comparisons with `split` panels because parallel
-  Mermaid diagrams size independently and misalign. Keep the sizing attributes
-  on each wrapper so the validator can enforce the readability contract.
+  Mermaid compatibility: what the renderer pinned in template.html accepts.
+  Six headers render: flowchart (and graph), stateDiagram-v2, sequenceDiagram,
+  classDiagram, erDiagram, and xychart-beta. Any other header leaves the source
+  bare on the page, journey, pie, gantt, and mindmap included, so reach for a
+  timeline, matrix, or numline instead.
+
+  Keep every node label short and on one line: <br/> collapses and a source
+  newline can create an extra node. erDiagram field comments do not appear.
+  Draw before/after comparisons with `split` panels because parallel Mermaid
+  diagrams size independently and misalign. Keep `data-mermaid-max-scale` and
+  `data-mermaid-min-text-token` on every wrapper: they drive the readability
+  pass, and the validator requires both.
 -->
 
 <!-- Branching flow with styled nodes. -->
@@ -187,6 +236,49 @@ app/
       int budget
       string status
     }</pre>
+  <div class="diagram-output"></div>
+</div>
+
+<!-- Sequence: who calls whom, in order, when the message order is the point.
+     Keep participants to four or fewer. A wider diagram shrinks past reading size. -->
+<div class="diagram js-mermaid" data-mermaid-max-scale="1.35" data-mermaid-min-text-token="--fs-micro">
+  <pre class="diagram-source">sequenceDiagram
+    participant R as Reviewer
+    participant A as Agent
+    participant G as Repo
+    R->>A: request review
+    A->>G: read diff
+    G-->>A: changed files
+    A-->>R: findings</pre>
+  <div class="diagram-output"></div>
+</div>
+
+<!-- Class: types and what they own, for a code model rather than a data store.
+     Member rows render smaller than the class name, so this snippet needs
+     `max-scale` 1.5: at 1.35 the readability pass enlarges members past the
+     edge of their own box. -->
+<div class="diagram js-mermaid" data-mermaid-max-scale="1.5" data-mermaid-min-text-token="--fs-micro">
+  <pre class="diagram-source">classDiagram
+    class Explainer {
+      +String subject
+      +render()
+    }
+    class Pattern {
+      +String name
+    }
+    Explainer "1" --> "*" Pattern : composes</pre>
+  <div class="diagram-output"></div>
+</div>
+
+<!-- XY chart: measured values across a series. The output is wide and short, so
+     keep the `is-compact` wrapper and let the chart run full width. -->
+<div class="diagram is-compact js-mermaid" data-mermaid-max-scale="1.35" data-mermaid-min-text-token="--fs-micro">
+  <pre class="diagram-source">xychart-beta
+    title "Bundle size by release"
+    x-axis [v1, v2, v3, v4]
+    y-axis "KB" 0 --> 400
+    bar [320, 280, 210, 160]
+    line [320, 280, 210, 160]</pre>
   <div class="diagram-output"></div>
 </div>
 

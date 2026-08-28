@@ -425,6 +425,112 @@
       font-weight: 600;
     }
 
+    .story-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .story-grid.is-stacked {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .story {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--rule);
+      border-left: 5px solid var(--accent);
+      border-radius: 4px;
+      background: var(--surface);
+    }
+
+    .story.is-done {
+      border-left-color: var(--positive);
+    }
+
+    .story.is-blocked {
+      border-left-color: var(--danger);
+    }
+
+    .story-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--rule);
+      background: var(--sunk);
+    }
+
+    .story-id {
+      color: var(--soft);
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .story .status.is-done {
+      color: var(--positive);
+    }
+
+    .story .status.is-blocked {
+      color: var(--danger);
+    }
+
+    .story-body {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 12px 20px;
+      padding: 24px;
+    }
+
+    .story-slot {
+      color: var(--accent);
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+
+    .story-value {
+      margin: 0;
+      color: var(--ink);
+      font-size: var(--fs-component-title);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .story-value.is-outcome {
+      color: var(--positive);
+    }
+
+    .story-criteria {
+      margin: 0 24px 22px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .story-criteria li {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 20px;
+      align-items: baseline;
+      padding: 11px 0;
+      border-top: 1px solid var(--rule);
+      color: var(--text);
+      font-size: var(--fs-small);
+      line-height: 1.6;
+    }
+
+    .ac-gate {
+      color: var(--soft);
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+
     .mock-frame {
       position: relative;
       border: 1px solid var(--rule);
@@ -901,6 +1007,8 @@
         try {
           const markup = renderMermaidSVG(source.textContent.trim(), {
             ...themes["vitesse-light"],
+            // Arrow heads, highlights, and xychart series 0 follow the page accent.
+            accent: "#1a6379",
             font: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Noto Sans TC', sans-serif",
           });
           const localFontMarkup = markup.replace(
