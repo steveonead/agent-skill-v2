@@ -19,8 +19,21 @@ HIDDEN_DECLARATION = re.compile(
 )
 FS_TOKEN = re.compile(r"(--fs-[\w-]+)\s*:\s*([^;}{]+)", re.IGNORECASE)
 FONT_SIZE = re.compile(r"font-size\s*:\s*([^;}{]+)", re.IGNORECASE)
+FONT_WEIGHT = re.compile(r"font-weight\s*:\s*([^;}{]+)", re.IGNORECASE)
 TOKEN_REFERENCE = re.compile(r"^var\(\s*(--fs-[\w-]+)\s*\)$", re.IGNORECASE)
 CSS_RULE = re.compile(r"([^{}]+)\{([^{}]*)\}", re.DOTALL)
+MONO_FONT_DECLARATION = re.compile(
+    r"(?:^|;)\s*font(?:-family)?\s*:[^;}{]*var\(\s*--mono\s*\)", re.IGNORECASE
+)
+MAPLE_FONT_DECLARATION = re.compile(
+    r"(?:^|;)\s*font(?:-family)?\s*:[^;}{]*Maple Mono", re.IGNORECASE
+)
+CUSTOM_PROPERTY = re.compile(r"(--[\w-]+)\s*:\s*([^;}{]+)", re.IGNORECASE)
+SUPPORTED_FONT_WEIGHTS = {"400", "500", "600", "700"}
+CODE_SELECTOR = re.compile(
+    r"(?<![\w-])(?:code|pre)(?![\w-])|"
+    r"(?<![\w-])(?:\.mono|\.code-source|\.code-output|\.shiki|\.scope-tree|\.diagram-source)(?![\w-])"
+)
 TEMPLATE_PLACEHOLDERS = (
     "Topic / context",
     "One clear idea",
@@ -71,6 +84,7 @@ class ArtifactParser(HTMLParser):
             wrapper = {
                 "kind": kind,
                 "line": self.getpos()[0],
+                "attributes": attributes,
                 "has_source": False,
                 "has_output": False,
                 "source_hidden": False,
@@ -232,8 +246,27 @@ def audit(path):
         elif reference.group(1).lower() not in tokens:
             errors.append(f"font-size references undefined token {reference.group(1)}")
 
+    for match in FONT_WEIGHT.finditer(css):
+        value = re.sub(r"\s*!important\s*$", "", match.group(1), flags=re.IGNORECASE).strip().lower()
+        if value not in SUPPORTED_FONT_WEIGHTS:
+            errors.append(f"font-weight '{value}' must use 400, 500, 600, or 700")
+
+    for match in CUSTOM_PROPERTY.finditer(css):
+        name, value = match.group(1).lower(), match.group(2)
+        uses_mono = "maple mono" in value.lower() or re.search(
+            r"var\(\s*--mono\s*\)", value, re.IGNORECASE
+        )
+        if uses_mono and name != "--mono":
+            errors.append("define Maple Mono only in --mono")
+
     for match in CSS_RULE.finditer(css):
         selector, declarations = match.group(1), match.group(2)
+        if MONO_FONT_DECLARATION.search(declarations) or MAPLE_FONT_DECLARATION.search(declarations):
+            for branch in selector.split(","):
+                if not CODE_SELECTOR.search(branch):
+                    errors.append(
+                        "reserve --mono for code, commands, paths, file trees, and syntax highlighting"
+                    )
         if not HIDDEN_DECLARATION.search(declarations):
             continue
         for branch in selector.split(","):
@@ -254,6 +287,18 @@ def audit(path):
             errors.append(f"{label} hides its source fallback before rendering succeeds")
         if not wrapper["has_output"]:
             errors.append(f"{label} is missing its output element")
+        if wrapper["kind"] == "mermaid":
+            max_scale = wrapper["attributes"].get("data-mermaid-max-scale", "")
+            try:
+                max_scale_value = float(max_scale)
+            except ValueError:
+                max_scale_value = 0
+            if not 1 < max_scale_value <= 2:
+                errors.append(f"{label} needs data-mermaid-max-scale between 1 and 2")
+
+            minimum_token = wrapper["attributes"].get("data-mermaid-min-text-token", "")
+            if minimum_token.lower() not in tokens:
+                errors.append(f"{label} needs a defined --fs-* minimum text token")
 
     scripts = "\n".join(parser.scripts)
     if _top_level_dynamic_imports(scripts):

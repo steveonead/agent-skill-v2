@@ -34,9 +34,9 @@
       --fs-section-intro: 19px;
       --fs-component-title: 22px;
       --fs-lead: 23px;
-      --fs-section-title: 38px;
+      --fs-section-title: 34px;
       --fs-title: 46px;
-      --fs-display-number: 44px;
+      --fs-display-number: 40px;
       --lh-body: 1.85;
     }
 
@@ -70,6 +70,7 @@
     pre,
     .mono {
       font-family: var(--mono);
+      font-weight: 400;
     }
 
     :is(p, li, dd, td) code {
@@ -106,9 +107,8 @@
     .label {
       margin: 0;
       color: var(--accent);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
-      font-weight: 700;
+      font-weight: 600;
       line-height: 1.5;
       letter-spacing: 0;
       text-transform: uppercase;
@@ -126,7 +126,7 @@
       margin: 26px 0 30px;
       color: var(--ink);
       font-size: var(--fs-title);
-      font-weight: 760;
+      font-weight: 700;
       line-height: 1.28;
       letter-spacing: 0;
     }
@@ -135,7 +135,7 @@
       margin-bottom: 20px;
       color: var(--ink);
       font-size: var(--fs-section-title);
-      font-weight: 720;
+      font-weight: 600;
       line-height: 1.28;
       letter-spacing: 0;
     }
@@ -144,7 +144,7 @@
       margin-bottom: 12px;
       color: var(--ink);
       font-size: var(--fs-component-title);
-      font-weight: 720;
+      font-weight: 600;
       line-height: 1.45;
       letter-spacing: 0;
     }
@@ -231,9 +231,8 @@
       border-radius: 50%;
       background: var(--surface);
       color: var(--accent);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
-      font-weight: 700;
+      font-weight: 600;
       line-height: 1;
     }
 
@@ -334,9 +333,8 @@
       border-radius: 4px;
       background: var(--surface);
       color: var(--ink);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
-      font-weight: 700;
+      font-weight: 600;
       text-align: center;
     }
 
@@ -353,7 +351,6 @@
 
     .connector {
       color: var(--accent);
-      font-family: var(--mono);
       font-size: var(--fs-lead);
       line-height: 1;
     }
@@ -373,9 +370,8 @@
 
     .step-number {
       color: var(--accent);
-      font-family: var(--mono);
       font-size: var(--fs-display-number);
-      font-weight: 800;
+      font-weight: 700;
       line-height: 1;
     }
 
@@ -425,9 +421,8 @@
       border: 1px solid currentColor;
       border-radius: 2px;
       color: var(--warning);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .mock-frame {
@@ -442,7 +437,6 @@
       padding: 9px 14px;
       background: var(--surface);
       border-bottom: 1px solid var(--rule);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
       color: var(--soft);
     }
@@ -487,7 +481,6 @@
       border: 1px solid var(--rule);
       border-radius: 3px;
       background: var(--paper);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
       color: var(--text);
     }
@@ -572,7 +565,6 @@
       place-items: center;
       flex: 1 1 0;
       background: var(--surface);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
       color: var(--text);
     }
@@ -595,7 +587,6 @@
       display: flex;
       justify-content: space-between;
       margin-top: 8px;
-      font-family: var(--mono);
       font-size: var(--fs-micro);
       color: var(--soft);
     }
@@ -613,7 +604,6 @@
       min-height: 44px;
       padding: 6px 10px;
       background: var(--surface);
-      font-family: var(--mono);
       font-size: var(--fs-micro);
       text-align: center;
     }
@@ -621,7 +611,7 @@
     .matrix .m-head {
       background: var(--sunk);
       color: var(--ink);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .matrix .m-yes {
@@ -667,6 +657,7 @@
     }
 
     .diagram-output svg {
+      display: block;
       max-width: 100%;
       height: auto;
     }
@@ -696,6 +687,7 @@
       border-radius: 0;
       font-family: var(--mono);
       font-size: var(--fs-micro);
+      font-weight: 400;
       line-height: 1.8;
       overflow: auto;
     }
@@ -705,7 +697,7 @@
       color: var(--shiki-light) !important;
       background-color: var(--shiki-light-bg) !important;
       font-style: var(--shiki-light-font-style) !important;
-      font-weight: var(--shiki-light-font-weight) !important;
+      font-weight: 400 !important;
       text-decoration: var(--shiki-light-text-decoration) !important;
     }
 
@@ -721,7 +713,7 @@
         color: var(--shiki-dark) !important;
         background-color: var(--shiki-dark-bg) !important;
         font-style: var(--shiki-dark-font-style) !important;
-        font-weight: var(--shiki-dark-font-weight) !important;
+        font-weight: 400 !important;
         text-decoration: var(--shiki-dark-text-decoration) !important;
       }
     }
@@ -854,6 +846,40 @@
   </main>
 
   <script type="module">
+    function fitMermaidSVG(svg, output, maxScale, minimumTextToken) {
+      const viewBox = svg.viewBox.baseVal;
+      if (!viewBox.width || !viewBox.height || !output.clientWidth) return;
+
+      const targetWidth = Math.min(output.clientWidth, viewBox.width * maxScale);
+      const scale = targetWidth / viewBox.width;
+      svg.style.width = `${targetWidth}px`;
+      svg.style.height = `${viewBox.height * scale}px`;
+
+      const renderedScale = svg.getBoundingClientRect().width / viewBox.width;
+      const minimumTextSize = Number.parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(minimumTextToken),
+      );
+      if (!renderedScale || !minimumTextSize) {
+        throw new Error("Mermaid readability settings are invalid.");
+      }
+
+      for (const label of svg.querySelectorAll("text")) {
+        const authoredSize = Number.parseFloat(
+          label.getAttribute("font-size") || getComputedStyle(label).fontSize,
+        );
+        if (authoredSize && authoredSize * renderedScale < minimumTextSize) {
+          label.style.fontSize = `${minimumTextSize / renderedScale}px`;
+        }
+      }
+
+      const hasUnreadableLabel = Array.from(svg.querySelectorAll("text")).some((label) => {
+        const size = Number.parseFloat(getComputedStyle(label).fontSize);
+        return size && size * renderedScale + 0.1 < minimumTextSize;
+      });
+      if (hasUnreadableLabel) throw new Error("Mermaid labels remain below the minimum size.");
+      svg.setAttribute("data-visual-explainer-readable", "");
+    }
+
     async function renderMermaid(root = document) {
       const wrappers = root.querySelectorAll(".js-mermaid:not(.is-rendered)");
       if (wrappers.length === 0) return;
@@ -873,7 +899,10 @@
         if (!source || !output) continue;
 
         try {
-          const markup = renderMermaidSVG(source.textContent.trim(), themes["vitesse-light"]);
+          const markup = renderMermaidSVG(source.textContent.trim(), {
+            ...themes["vitesse-light"],
+            font: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Noto Sans TC', sans-serif",
+          });
           const localFontMarkup = markup.replace(
             /@import url\('https:\/\/fonts\.googleapis\.com[^']+'\);\s*/g,
             "",
@@ -885,9 +914,17 @@
           ) {
             throw new Error("Mermaid returned invalid SVG markup.");
           }
-          output.innerHTML = new XMLSerializer().serializeToString(svgDocument.documentElement);
+          const svg = document.importNode(svgDocument.documentElement, true);
+          output.replaceChildren(svg);
+          fitMermaidSVG(
+            svg,
+            output,
+            Number.parseFloat(wrapper.dataset.mermaidMaxScale),
+            wrapper.dataset.mermaidMinTextToken,
+          );
           wrapper.classList.add("is-rendered");
         } catch (error) {
+          output.replaceChildren();
           console.warn("Mermaid rendering failed. Plain source remains visible.", error);
         }
       }
@@ -940,6 +977,17 @@
           }
           for (const panel of group.querySelectorAll("[data-panel]")) {
             panel.hidden = panel.dataset.panel !== name;
+            if (!panel.hidden) {
+              for (const svg of panel.querySelectorAll(".diagram-output svg")) {
+                const wrapper = svg.closest(".js-mermaid");
+                fitMermaidSVG(
+                  svg,
+                  svg.closest(".diagram-output"),
+                  Number.parseFloat(wrapper.dataset.mermaidMaxScale),
+                  wrapper.dataset.mermaidMinTextToken,
+                );
+              }
+            }
           }
         });
       }

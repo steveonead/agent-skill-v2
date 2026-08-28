@@ -22,9 +22,15 @@ Two anti-patterns matter most:
 
 Match page length to the supplied reading budget, and honor a supplied main-path or appendix boundary. Skip glossaries, metadata records, and exhaustive inventories. Put worthwhile off-path detail in collapsed disclosures. Prefer a few large obvious shapes over many small nodes: the silhouette should reveal the structure before any label is read.
 
+## Make the hierarchy readable
+
+Give a primary diagram enough canvas to carry its section. Enlarge Mermaid output that leaves substantial unused space, with a scale cap that keeps a simple or narrow graph subordinate to the page. Diagram labels must render at least as large as `--fs-micro`. When that requires crowding, simplify the graph or use another pattern.
+
+Use the page sans-serif stack for prose, headings, labels, controls, and diagram text. Reserve Maple Mono for source code, commands, paths, file trees, and syntax highlighting. Choose weights the selected font files provide: 400 for regular text and 600 or 700 for emphasis. Keep adjacent heading levels visibly distinct without making section headings compete with the page title.
+
 ## Produce
 
-Start from [assets/template.html](assets/template.html): keep its tokens, base CSS, and loader script, replace all starter content, and set the requested language, or the source language otherwise. Every shape above has a copyable snippet in [assets/patterns.html](assets/patterns.html): copy it, swap the labels, and follow the comments. You will use a few of the patterns and never all of them, so add a section only when the explanation needs it, never to exercise a pattern. Add CSS only for a shape no snippet can express, using the existing `--fs-*` tokens for every font size. Escape all source text before inserting it into HTML.
+Start from [assets/template.html](assets/template.html): keep its tokens, base CSS, and loader script, replace all starter content, and set the requested language, or the source language otherwise. Every shape above has a copyable snippet in [assets/patterns.html](assets/patterns.html): copy it, swap the labels, and follow the comments. Select only the patterns the explanation needs. Add CSS only for a shape no snippet can express, using the existing `--fs-*` tokens for every font size. Escape all source text before inserting it into HTML.
 
 Write to the supplied destination, or to a writable temporary directory otherwise, and return the exact path. Overwrite any file already at the destination without reading it: an earlier artifact is stale, and its stylesheet can reintroduce components the template no longer defines. The page must stay understandable without JavaScript: a failed renderer leaves readable source in place.
 
