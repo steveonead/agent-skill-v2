@@ -1,0 +1,6 @@
+interface:
+  display_name: "ito-commit"
+  short_description: "Create confirmed atomic commits from the worktree"
+  default_prompt: "Use $ito-commit to review and commit all current worktree changes as confirmed atomic commits."
+policy:
+  allow_implicit_invocation: false
