@@ -1,6 +1,6 @@
 interface:
   display_name: "ito-explain-pr"
   short_description: "Explain a PR to a newcomer in 3 to 10 minutes"
-  default_prompt: "Use $ito-explain-pr to explain this pull request to a newcomer as a focused Traditional Chinese HTML artifact."
+  default_prompt: "Use $ito-explain-pr to explain this pull request to a newcomer as a focused HTML artifact, using Traditional Chinese unless another language is requested."
 policy:
   allow_implicit_invocation: false

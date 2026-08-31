@@ -1,6 +1,6 @@
 ---
 name: ito-explain-pr
-description: "Explain a pull request or committed branch diff as a disposable Traditional Chinese HTML artifact."
+description: "Explain a pull request or committed branch diff as a disposable HTML artifact in Traditional Chinese by default."
 argument-hint: "[PR URL | number | branch | base...head]"
 disable-model-invocation: true
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 Build a visual explanation for an impatient engineer who is new to the codebase. This is a comprehension aid, not a code review: the reader needs the main behavior changes, while line-level diff review stays on GitHub. Give the core reading path roughly 3 minutes for a small cohesive change, 5 minutes for a typical change, or up to 10 minutes for a change with several behavior paths. Keep exploration depth and artifact length proportional to that reading budget.
 
-Write the prose in zh-TW and set the HTML language to `zh-TW`. Keep code identifiers, product names, protocols, and established technical terms unchanged.
+Use the user's requested output language when supplied, and set the HTML `lang` attribute to match. Otherwise, write the prose in zh-TW and set `lang="zh-TW"`. Keep code identifiers, product names, protocols, and established technical terms unchanged.
 
 ## Fix the comparison
 
@@ -67,17 +67,17 @@ The core reading path must let a newcomer answer four questions: why the change 
 
 Use the real identifiers the reader will meet in the codebase, such as component names, props, and file names. Introduce existing behavior before its delta, and each codebase term at the point of first need. When several behavior paths change, make their distinctness visible.
 
-Mark agent inference as `推測` and a consequential evidence gap as `未知`. Present an intent-versus-code drift finding prominently: it is the analysis's independent value over the pull request body. Keep quality judgments, severity, requested fixes, approval recommendations, and coverage judgments in code review.
+Label agent inference and consequential evidence gaps in the output language, using `推測` and `未知` in zh-TW. Present an intent-versus-code drift finding prominently: it is the analysis's independent value over the pull request body. Keep quality judgments, severity, requested fixes, approval recommendations, and coverage judgments in code review.
 
 Keep secondary material such as grouped low-signal changes and changed-test facts out of the main path. A complete changed-file inventory is not worth the reader's time.
 
-Before visual production, pass a content gate: the comparison endpoints and measured scale are established, the one idea and the before-and-after mental model are explicit, and every material intent-versus-code difference is resolved or marked `未知`.
+Before visual production, pass a content gate: the comparison endpoints and measured scale are established, the one idea and the before-and-after mental model are explicit, and every material intent-versus-code difference is resolved or marked with the output language's unknown label.
 
 ## Produce the artifact
 
 Write under `docs/ito-temp/pr/` in the project root. Name a GitHub artifact `pr-<number>.html` and a local artifact `<repo>-<branch>.html`, using filesystem-safe lowercase segments. Overwrite only the artifact for the same target.
 
-After the content gate passes, call the Skill tool with `visual-explainer`, with this analysis as the supplied context, the resolved path as the destination, zh-TW as the language, and the reading budget with the appendix boundary as the density controls. Let it own composition, density, HTML production, and verification. When that skill is unavailable, produce and verify readable HTML to the same outcomes directly.
+After the content gate passes, call the Skill tool with `visual-explainer`, with this analysis as the supplied context, the resolved path as the destination, the output language, and the reading budget with the appendix boundary as the density controls. Let it own composition, density, HTML production, and verification. When that skill is unavailable, produce and verify readable HTML to the same outcomes directly.
 
 Finish only after the comparison snapshot and important unknowns are clear, the HTML exists at the resolved path, and the temporary worktree has been removed or its cleanup failure reported.
 

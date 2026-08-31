@@ -1,7 +1,7 @@
 ---
 name: ito-implement
-description: Implement a spec or ticket test-first, then review the result on standards and spec.
-argument-hint: "要實作什麼？給我 spec 檔案路徑、GitHub issue 編號，或直接講清楚要做的事。"
+description: Implement a spec or ticket test-first, review it on standards and spec, then audit its comments.
+argument-hint: "What should I implement? Provide a spec path, GitHub issue number, or a clear description of the work."
 disable-model-invocation: true
 ---
 
@@ -11,7 +11,7 @@ Use the invocation arguments and current conversation as the work request.
 
 Step 1 ends in the one planned stop. After the user confirms there, run through to the review without further checkpoints.
 
-Load `tdd` and `implement-review` with the Skill tool in this conversation, each at the step that reaches it. The spec, the seam list, and the fixed point stay in one context that way, so neither skill has to rediscover them.
+Apply `tdd`, `implement-review`, and `no-comments` in this conversation at the step that reaches each skill. Use the environment's skill-loading capability when available. Otherwise read and follow each skill directly. Keep the spec, seam list, fixed point, and review reports in this context so later stages can reuse them.
 
 ## Step 1: Pin the spec and the seams
 
@@ -19,8 +19,6 @@ Resolve the work request into one spec that the review stage can read:
 
 - **Supplied spec**: a path or an issue reference the user gave. Use its contents as-is.
 - **Verbal request**: draft a short spec covering the required behavior, the constraints, and the completion conditions. Write it under `.scratch/`.
-
-Keep the path or issue reference: the review stage reads the same one.
 
 Then load `tdd` and use its seam guidance to draft the seam list covering the behaviors this spec requires. Put the spec and the seam list to the user together, so the work needs one agreement pass instead of one per slice.
 
@@ -56,8 +54,14 @@ Finish when the suite is green apart from recorded pre-existing failures.
 
 Invoke `implement-review` with the fixed point SHA from Step 2 and the spec from Step 1, so it uses the confirmed spec rather than rediscovering one.
 
-Repair every finding the review labelled a hard violation. Leave the judgement calls exactly as the reviewer wrote them. Commit the repairs separately, marked as review fixes, and re-run the full suite.
+Repair every finding the review labelled a hard violation. Leave the judgement calls exactly as the reviewer wrote them. Run the affected tests and applicable self-run typecheck and lint commands, then commit the repairs separately as review fixes.
 
-Present both axis reports as `implement-review` returned them, then list the repairs you made and the judgement calls you left for the user. Run the review once, and report the remaining findings as they stand.
+After those repairs, invoke `no-comments` with the fixed-point diff and the Standards report's ordered source list. Keep the comment reviewer read-only. Repair every comment hard violation, leave its judgement calls unchanged, and run the affected tests and applicable self-run typecheck and lint commands. Commit comment repairs separately with a commit such as `refactor(review): 移除無意義註解`.
 
-Finish when both axes have reported, the reports are delivered, the repairs are committed, and the suite is green.
+When comment repairs were needed, send the repair diff and prior report back to the same reviewer for an incremental verification. Repeat repair and incremental verification until no comment hard violations remain. If reviewer follow-up is unavailable, give a fresh reviewer the prior report and repair diff instead of repeating the full fixed-point review.
+
+Run the full suite once after all review repairs only when they changed executable code, tests, configuration, a suppression, or a workaround. When review only removed ordinary comments, the affected tests and applicable self-run typecheck and lint are sufficient. A hook-covered check remains satisfied by the repair commits.
+
+Present the Standards and Spec reports as `implement-review` returned them. Then present the Comment report, the repairs, verification results, and every judgement call left for the user. Run `implement-review` once. The targeted comment verification does not rerun either axis.
+
+Finish when all three reports are delivered, every hard violation is repaired and committed, the final Comment report has no hard violations, and the required checks are green apart from recorded pre-existing failures.
