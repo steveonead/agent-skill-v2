@@ -1,7 +1,7 @@
 ---
 name: ito-to-tickets
 description: Turn a requirement, plan, spec, or conversation into an approved graph of Traditional Chinese GitHub tickets.
-argument-hint: "Provide an optional GitHub issue, local file, plan, spec, or inline requirement."
+argument-hint: "[GitHub issue、檔案、計畫、spec 或需求說明]"
 disable-model-invocation: true
 ---
 

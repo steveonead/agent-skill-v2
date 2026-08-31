@@ -1,7 +1,7 @@
 ---
 name: ito-to-prd
 description: Turn settled development decisions into a Traditional Chinese PRD and publish it as a GitHub issue or local Markdown file.
-argument-hint: "Provide an optional GitHub issue, local file, or inline description as source material."
+argument-hint: "[GitHub issue、檔案或需求說明]"
 disable-model-invocation: true
 ---
 

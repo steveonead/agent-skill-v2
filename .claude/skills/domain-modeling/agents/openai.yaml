@@ -1,6 +1,6 @@
 interface:
-  display_name: "domain-modeling(NOT INVOCABLE)"
+  display_name: "domain-modeling"
   short_description: "Sharpen domain language and durable decisions"
-  default_prompt: "用 $domain-modeling 把領域用語講清楚，也幫我判斷這個決定要不要寫成正式的架構決策紀錄（ADR）。"
+  default_prompt: "Use $domain-modeling to clarify domain language and decide whether to record an architectural decision."
 policy:
   allow_implicit_invocation: true

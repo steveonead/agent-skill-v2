@@ -1,6 +1,7 @@
 ---
 name: visual-explainer
 description: Create a disposable HTML visual explainer when the user or another workflow asks to visualize technical or structured information such as a diff, PR, spec, plan, architecture, or process.
+user-invocable: false
 ---
 
 # Visual explainer

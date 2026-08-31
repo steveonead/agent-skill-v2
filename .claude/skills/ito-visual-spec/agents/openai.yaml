@@ -1,6 +1,6 @@
 interface:
   display_name: "ito-visual-spec"
   short_description: "Interview to converge a requirement into a visual HTML spec"
-  default_prompt: "用 $ito-visual-spec 訪談我，把需求收斂成一份視覺化 spec。"
+  default_prompt: "Use $ito-visual-spec to interview me and turn the settled requirement into a visual specification."
 policy:
   allow_implicit_invocation: false

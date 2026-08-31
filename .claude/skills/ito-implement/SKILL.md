@@ -1,7 +1,7 @@
 ---
 name: ito-implement
 description: Implement a spec or ticket test-first, review it on standards and spec, then audit its comments.
-argument-hint: "What should I implement? Provide a spec path, GitHub issue number, or a clear description of the work."
+argument-hint: "[spec 路徑、GitHub issue 編號或工作說明]"
 disable-model-invocation: true
 ---
 

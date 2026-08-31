@@ -1,7 +1,7 @@
 ---
 name: ito-explain-code
 description: Explain how something works in this codebase by exploring code and producing a clear architectural explanation.
-argument-hint: "想搞懂哪個部分？講一個子系統、一段流程，或一個「當我按下去之後發生什麼事」的問題。"
+argument-hint: "[要理解的子系統、流程或問題]"
 disable-model-invocation: true
 ---
 

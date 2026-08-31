@@ -1,6 +1,6 @@
 interface:
   display_name: "ito-grill"
   short_description: "Stress-test a plan through a relentless interview"
-  default_prompt: "用 $ito-grill --batch 一次問一輪問題，狠狠考驗我的計畫。"
+  default_prompt: "Use $ito-grill --batch to stress-test my plan with a full round of questions."
 policy:
   allow_implicit_invocation: false

@@ -1,6 +1,6 @@
 interface:
   display_name: "ito-search"
   short_description: "Get concise research backed by authoritative sources"
-  default_prompt: "用 $ito-search 幫我查資料，並引用最可靠的來源。"
+  default_prompt: "Use $ito-search to research this question and cite the strongest available sources."
 policy:
   allow_implicit_invocation: false

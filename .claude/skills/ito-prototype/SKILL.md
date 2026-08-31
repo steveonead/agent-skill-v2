@@ -1,7 +1,7 @@
 ---
 name: ito-prototype
 description: Build throwaway code to answer one unresolved logic, state-model, or UI design question.
-argument-hint: "What design question should the prototype answer?"
+argument-hint: "[要驗證的設計問題]"
 disable-model-invocation: true
 ---
 

@@ -1,7 +1,6 @@
 ---
 name: grilling
 description: Grill the user one question at a time about a plan, decision, or idea. Use when the user asks to be grilled or wants their thinking stress-tested, and has not asked for questions in batches.
-argument-hint: "給我一個模糊的計畫或想法，我一次問一題，幫你釐清。"
 user-invocable: false
 ---
 

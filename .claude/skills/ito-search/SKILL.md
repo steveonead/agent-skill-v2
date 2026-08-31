@@ -1,7 +1,7 @@
 ---
 name: ito-search
 description: Get a concise, evidence-backed answer from authoritative sources, with optional codebase context.
-argument-hint: "你想研究什麼問題？想先讓我看過目前的 codebase，加上 --codebase 參數。"
+argument-hint: "[研究問題] [--codebase]"
 disable-model-invocation: true
 ---
 

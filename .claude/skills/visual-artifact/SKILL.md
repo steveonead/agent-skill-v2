@@ -1,6 +1,7 @@
 ---
 name: visual-artifact
 description: Transform agreed material into a single-file, network-backed visual HTML artifact with structured explanations, diagrams, code, and presentation interactions. Use when the user or another skill requests a visual explanation, an interactive single-file HTML document, a visual specification, or a browser-readable explanation of technical material.
+user-invocable: false
 ---
 
 # Visual Artifact

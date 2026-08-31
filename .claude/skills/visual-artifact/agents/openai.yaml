@@ -2,3 +2,6 @@ interface:
   display_name: "visual-artifact"
   short_description: "Turn agreed material into visual HTML artifacts"
   default_prompt: "Use $visual-artifact to turn this agreed material into a single visual HTML artifact."
+
+policy:
+  allow_implicit_invocation: true

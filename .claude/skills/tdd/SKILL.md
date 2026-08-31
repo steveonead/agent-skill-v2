@@ -1,7 +1,7 @@
 ---
 name: tdd
 description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
-argument-hint: "要用測試先行做哪個功能，或修哪個 bug？順便說一下想測在哪條接縫上。"
+user-invocable: false
 ---
 
 # Test-Driven Development

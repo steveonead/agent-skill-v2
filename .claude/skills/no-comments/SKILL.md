@@ -1,6 +1,7 @@
 ---
 name: no-comments
 description: Audit comments in a caller-supplied diff or file set. Use after implementation or review repairs to find redundant comments, suppressions, workarounds, and unenforced constraints without editing code.
+user-invocable: false
 ---
 
 # Audit comments

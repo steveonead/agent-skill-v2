@@ -1,7 +1,7 @@
 ---
 name: codebase-design
 description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.
-argument-hint: "要設計或改哪個模組的介面？也可以問某條接縫該畫在哪，或這段程式怎麼變得好測。"
+user-invocable: false
 ---
 
 # Codebase Design

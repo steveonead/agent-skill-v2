@@ -1,6 +1,7 @@
 ---
 name: ito-diagnose-codebase
 description: Scan a codebase for deepening opportunities, present them as a visual HTML report, then batch-grill through whichever one you pick.
+argument-hint: "[模組、子系統或架構痛點]"
 disable-model-invocation: true
 ---
 

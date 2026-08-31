@@ -1,6 +1,7 @@
 ---
 name: ito-debug
 description: Diagnose a reported bug through falsifiable hypotheses before repairing it or filing a GitHub issue.
+argument-hint: "[錯誤現象、預期行為或重現方式]"
 disable-model-invocation: true
 ---
 

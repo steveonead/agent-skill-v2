@@ -1,6 +1,7 @@
 ---
 name: ito-pr
 description: "Write, create, or refresh a pull request from the current branch's complete committed diff."
+argument-hint: "[--draft：建立草稿 PR]"
 disable-model-invocation: true
 ---
 

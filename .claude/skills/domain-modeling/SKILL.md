@@ -1,7 +1,6 @@
 ---
 name: domain-modeling
 description: Build and sharpen a project's domain model. Use when the user wants to resolve domain terminology or ubiquitous language, evaluate or record an architectural decision, or when another skill needs to add or change canonical terms, bounded contexts, or architectural decisions.
-argument-hint: "要釐清的名詞、要劃的範圍，或要記錄的技術決定是什麼？"
 user-invocable: false
 ---
 

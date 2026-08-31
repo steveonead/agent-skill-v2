@@ -1,7 +1,7 @@
 ---
 name: ito-grill-with-codebase
 description: Run a relentless interview to sharpen a plan or design. Pass `--batch` for a round of questions at a time.
-argument-hint: "給我一個模糊的計畫或想法，我幫你釐清"
+argument-hint: "[要釐清的計畫或想法] [--batch]"
 disable-model-invocation: true
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: ito-explain-doc
 description: "Turn a document into a disposable HTML visual explainer."
-argument-hint: "[document path / URL], or the latest document in the conversation"
+argument-hint: "[文件路徑、URL 或對話中的文件]"
 disable-model-invocation: true
 ---
 

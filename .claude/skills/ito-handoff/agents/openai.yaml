@@ -1,4 +1,7 @@
 interface:
   display_name: "ito-handoff"
   short_description: "Prepare focused handoffs for next sessions"
-  default_prompt: "使用 $ito-handoff 整理目前工作，讓下一個工作階段可以接手。"
+  default_prompt: "Use $ito-handoff to prepare the current work for the next session."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,7 +1,7 @@
 ---
 name: ito-explain-pr
 description: "Explain a pull request or committed branch diff as a disposable HTML artifact in Traditional Chinese by default."
-argument-hint: "[PR URL | number | branch | base...head]"
+argument-hint: "[PR URL、編號、分支或 base...head]"
 disable-model-invocation: true
 ---
 

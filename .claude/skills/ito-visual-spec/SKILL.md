@@ -1,7 +1,7 @@
 ---
 name: ito-visual-spec
 description: Interview the user to converge a requirement, then render the agreed material as an interactive visual HTML spec.
-argument-hint: "描述要做的功能。可附 issue 編號、檔案或既有 spec 路徑當種子，加 --batch 一次問一輪。"
+argument-hint: "[功能需求、issue 編號、檔案或 spec 路徑] [--batch]"
 disable-model-invocation: true
 ---
 
