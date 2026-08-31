@@ -29,7 +29,7 @@ If the repository root contains `CODING-STANDARD.md`, treat it as the standards 
 
 Validate each selected pointer before review. Record a missing or unreadable target as a hard Standards violation and leave it unresolved.
 
-When `CODING-STANDARD.md` is absent, discover anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+When `CODING-STANDARD.md` is absent, discover anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CODING_GUIDELINES.md`.
 
 On top of whatever the repo documents, the Standards axis always carries the **smell baseline** below: a fixed set of Fowler code smells (_Refactoring_, ch.3) that applies even when a repo documents nothing. Two rules bind it:
 
