@@ -10,12 +10,14 @@ Treat `SKILL.md`, references, scripts, and assets as shared artifacts governed b
 
 ## Invocation
 
-- A **model-invoked** skill is discoverable by the agent and by other skills. Its description is an always-loaded context pointer, so it earns concise trigger coverage for every distinct branch. Omit `disable-model-invocation` and allow implicit invocation in `agents/openai.yaml`.
-- A **user-invoked** skill is reached explicitly by the human. It spends cognitive load instead of permanent context load. Set `disable-model-invocation: true`, keep the description to a human-facing one-line summary, and set `policy.allow_implicit_invocation: false` in `agents/openai.yaml`.
+Determine whether the skill is **user-invoked** or **model-invoked** from the user's explicit choice or governing requirements, independent of the skill name or naming prefix. Confirm that choice before creating the skill or changing its invocation.
 
-Choose model invocation when the agent or another skill must discover the workflow autonomously. A user can still invoke a model-invoked skill explicitly.
+- A **user-invoked** skill is reached explicitly by the human. Set `disable-model-invocation: true` in `SKILL.md` and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`.
+- A **model-invoked** skill is discoverable by the agent and other skills. Set `user-invocable: false` in `SKILL.md` and keep `policy.allow_implicit_invocation: true` in `agents/openai.yaml`.
 
-Encode the invocation choice through each target harness's native controls. Use the mappings below where applicable, and derive additional mappings from governing instructions and current documentation.
+Codex has no documented metadata field that blocks explicit `$skill` invocation while allowing implicit invocation. For a model-invoked skill, `allow_implicit_invocation: true` records the intended policy but cannot enforce the human-invocation restriction in Codex.
+
+Before writing native metadata, check the current official specification for each target. Use only documented fields and preserve unrelated supported metadata.
 
 Split a model-invoked skill when a distinct leading word should trigger the new branch independently or another skill must reach it. Each split adds an always-loaded description, so independent reach must justify that load.
 
@@ -23,12 +25,21 @@ When many user-invoked skills become difficult to remember, create one user-invo
 
 ## Frontmatter
 
+Write `SKILL.md` frontmatter with fields supported by the current official specification. Keep `name` and `description` in English. Include optional fields only when the skill's behavior requires them.
+
+Include `argument-hint` only when the skill accepts invocation arguments. Write it in Traditional Chinese (zh-TW) as autocomplete placeholders rather than an instruction sentence:
+
+```yaml
+argument-hint: "[議題編號] [輸出格式]"
+```
+
 Use this shape for a model-invoked skill:
 
 ```yaml
 ---
 name: skill-name
 description: Leading-word description that names each trigger branch.
+user-invocable: false
 ---
 ```
 
@@ -42,15 +53,15 @@ disable-model-invocation: true
 ---
 ```
 
-Keep discovery triggers in the description. Reserve the body for post-invocation instructions.
+For a model-invoked skill, keep discovery triggers in the description. For a user-invoked skill, keep the description as a concise human-facing summary. Reserve the body for post-invocation instructions.
 
 ## `agents/openai.yaml` metadata
 
-Write `agents/openai.yaml` with quoted string values:
+Write `agents/openai.yaml` from the current official OpenAI specification. Use only documented fields and write every string value in English. Set `interface.display_name` to the exact `name` from `SKILL.md`. Quote string values:
 
 ```yaml
 interface:
-  display_name: "same-as-the-skill-name"
+  display_name: "skill-name"
   short_description: "A brief picker summary"
   default_prompt: "Use $skill-name to perform a representative task."
 ```
@@ -60,6 +71,13 @@ Add this block for a user-invoked skill:
 ```yaml
 policy:
   allow_implicit_invocation: false
+```
+
+Add this block for a model-invoked skill:
+
+```yaml
+policy:
+  allow_implicit_invocation: true
 ```
 
 Add icons, brand color, and dependencies when the user supplies them or the workflow requires them. Keep the display name, summary, prompt, and invocation policy aligned with `SKILL.md`.

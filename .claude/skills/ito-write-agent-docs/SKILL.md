@@ -1,10 +1,13 @@
 ---
 name: ito-write-agent-docs
 description: "Create or edit the documents a coding agent consumes: SKILL.md, AGENTS.md, CLAUDE.md, and the reference files they point to. Use when writing a new skill, revising an existing skill's purpose, behavior, description, or invocation, or when an agent document produces unreliable behavior. For human-facing README or product docs, write them directly instead."
-argument-hint: "想寫或改哪份文件？加 --grill 先釐清設計。"
+argument-hint: "[要建立或修改的文件與需求] [--grill]"
+disable-model-invocation: true
 ---
 
-Write `SKILL.md`, `AGENTS.md`, `CLAUDE.md`, `agents/openai.yaml`, and agent-facing reference files in English, regardless of the conversation language.
+Write the body of `SKILL.md`, its `name`, its `description`, `AGENTS.md`, `CLAUDE.md`, and agent-facing reference files in English, regardless of the conversation language. Write `SKILL.md` frontmatter according to the current official specification. Include `argument-hint` only when the skill accepts invocation arguments, and write its placeholder-style value in Traditional Chinese (zh-TW).
+
+Write `agents/openai.yaml` according to the current official OpenAI specification. Use only documented fields and write every string value in English. Set `interface.display_name` to the exact `name` from `SKILL.md`.
 
 Treat harness-agnostic behavior as the default. Unless the user explicitly targets one harness, write shared instructions entirely in terms of required capabilities and outcomes. Reserve product names, proprietary tool names, harness-specific invocation syntax, UI metadata, discovery metadata, and setup for native configuration. Define an outcome-preserving fallback for unavailable capabilities.
 
@@ -16,7 +19,7 @@ Read [`references/writing-principles.md`](references/writing-principles.md) in f
 
 Read every governing repository instruction. For `SKILL.md`, also read [`references/skill-mechanics.md`](references/skill-mechanics.md) in full before deciding invocation or packaging. For an edit, read the complete target and every agent-facing file it directly points to.
 
-Derive decisions from the request and environment before asking questions. Without `--grill`, ask only about unresolved decisions whose answers materially change the result. Settle the intended purpose, applicable branches and scope, required outcomes and constraints, and, for a skill, its invocation. Treat a requested change as settled input. When the user reports misbehavior instead, diagnose it against every failure mode in `writing-principles.md`.
+Derive decisions from the request and environment before asking questions. Without `--grill`, ask only about unresolved decisions whose answers materially change the result. Settle the intended purpose, applicable branches and scope, required outcomes and constraints. Before creating a skill or changing its invocation, confirm whether it is user-invoked or model-invoked from the user's explicit choice or governing requirements. Treat a requested change as settled input. When the user reports misbehavior instead, diagnose it against every failure mode in `writing-principles.md`.
 
 ## Draft the complete result
 

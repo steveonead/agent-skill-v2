@@ -1,4 +1,7 @@
 interface:
   display_name: "ito-write-agent-docs"
-  short_description: "Write portable, harness-agnostic agent documentation"
-  default_prompt: "用 $ito-write-agent-docs 寫或修改 harness-agnostic 的 agent 文件。"
+  short_description: "Create and revise agent-facing documentation"
+  default_prompt: "Use $ito-write-agent-docs to create or revise agent-facing documentation."
+
+policy:
+  allow_implicit_invocation: false
